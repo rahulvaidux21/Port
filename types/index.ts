@@ -12,6 +12,12 @@ export interface Project {
   color: string;
 }
 
+export interface CaseStudyImage {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
 export interface CaseStudy {
   id: string;
   project: string;
@@ -23,6 +29,7 @@ export interface CaseStudy {
   tags: string[];
   duration: string;
   team: string;
+  images?: CaseStudyImage[];
 }
 
 export interface Metric {

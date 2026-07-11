@@ -1,11 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import { Plus, Minus } from "lucide-react";
+import { Plus, Minus, X } from "lucide-react";
 import { projects, caseStudies } from "@/lib/data";
 import { SectionLabel } from "@/components/SectionLabel";
 import { EXPO_OUT, fadeUp } from "@/lib/motion";
+import type { CaseStudyImage } from "@/types";
 
 function ProjectMockup({ id, color }: { id: string; color: string }) {
   const configs: Record<string, React.ReactNode> = {
@@ -298,9 +300,17 @@ function ProjectMockup({ id, color }: { id: string; color: string }) {
 export function Work() {
   const rm = useReducedMotion();
   const [openStory, setOpenStory] = useState<string | null>(null);
+  const [lightbox, setLightbox] = useState<CaseStudyImage | null>(null);
+  const dialogRef = useRef<HTMLDialogElement>(null);
 
   const toggleStory = (id: string) =>
     setOpenStory((prev) => (prev === id ? null : id));
+
+  // Native <dialog> gives us focus trap, Escape handling, and backdrop for free
+  useEffect(() => {
+    const dialog = dialogRef.current;
+    if (lightbox && dialog && !dialog.open) dialog.showModal();
+  }, [lightbox]);
 
   return (
     <section
@@ -427,6 +437,40 @@ export function Work() {
                           <p className="text-lg font-semibold text-balance max-w-2xl">
                             {study.title}
                           </p>
+
+                          {/* Design images: horizontal snap strip, click to enlarge */}
+                          {study.images && study.images.length > 0 && (
+                            <div
+                              className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
+                              aria-label={`${study.project} design images`}
+                            >
+                              {study.images.map((img) => (
+                                <button
+                                  key={img.src}
+                                  type="button"
+                                  onClick={() => setLightbox(img)}
+                                  className="snap-start shrink-0 w-[85%] sm:w-[55%] lg:w-[42%] text-left group/img"
+                                  aria-label={`View larger: ${img.alt}`}
+                                >
+                                  <span className="relative block aspect-[16/10] rounded-xl overflow-hidden border border-border bg-surface">
+                                    <Image
+                                      src={img.src}
+                                      alt={img.alt}
+                                      fill
+                                      sizes="(min-width: 1024px) 42vw, 85vw"
+                                      className="object-cover object-top transition-transform duration-500 ease-expo-out group-hover/img:scale-[1.02] motion-reduce:transition-none"
+                                    />
+                                  </span>
+                                  {img.caption && (
+                                    <span className="mt-2 block text-xs text-muted-foreground">
+                                      {img.caption}
+                                    </span>
+                                  )}
+                                </button>
+                              ))}
+                            </div>
+                          )}
+
                           <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
                             <div>
                               <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
@@ -466,6 +510,44 @@ export function Work() {
           })}
         </div>
       </div>
+
+      {/* Lightbox */}
+      <dialog
+        ref={dialogRef}
+        onClose={() => setLightbox(null)}
+        onClick={(e) => {
+          if (e.target === dialogRef.current) dialogRef.current.close();
+        }}
+        className="m-auto w-[min(92vw,64rem)] rounded-2xl border border-border bg-card p-0 backdrop:bg-foreground/70"
+        aria-label="Design image viewer"
+      >
+        {lightbox && (
+          <figure>
+            <div className="relative w-full h-[70vh] bg-surface">
+              <Image
+                src={lightbox.src}
+                alt={lightbox.alt}
+                fill
+                sizes="92vw"
+                className="object-contain"
+              />
+            </div>
+            <figcaption className="flex items-center justify-between gap-4 px-5 py-4 border-t border-border">
+              <span className="text-sm text-foreground">
+                {lightbox.caption ?? lightbox.alt}
+              </span>
+              <button
+                type="button"
+                onClick={() => dialogRef.current?.close()}
+                className="shrink-0 w-11 h-11 rounded-full border border-border flex items-center justify-center text-muted-foreground hover:text-foreground hover:border-foreground transition-colors"
+                aria-label="Close image viewer"
+              >
+                <X size={16} aria-hidden="true" />
+              </button>
+            </figcaption>
+          </figure>
+        )}
+      </dialog>
     </section>
   );
 }

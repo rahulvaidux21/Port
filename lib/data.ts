@@ -146,6 +146,13 @@ export const caseStudies: CaseStudy[] = [
     tags: ["Gov-tech", "Dashboards", "Data Workflows"],
     duration: "2025",
     team: "MoSPI stakeholders, UX4G engagement",
+    images: [
+      {
+        src: "/case-studies/niri/public-dashboard.jpg",
+        alt: "MoSPI public dashboard showing project KPIs, sector-wise distribution, physical progress, and state-wise rankings",
+        caption: "The live public dashboard: KPI cards, sector distribution, and state-wise project rankings.",
+      },
+    ],
   },
   {
     id: "ebcas",
@@ -184,6 +191,13 @@ export const caseStudies: CaseStudy[] = [
     tags: ["Mobile UX", "Consumer App", "Design Language"],
     duration: "2026",
     team: "BharatNow product team, UX4G engagement",
+    images: [
+      {
+        src: "/case-studies/bharatnow/app-icons.png",
+        alt: "BharatNow app icon explorations in three color treatments",
+        caption: "App icon explorations for the BharatNow identity.",
+      },
+    ],
   },
   {
     id: "salonx",
