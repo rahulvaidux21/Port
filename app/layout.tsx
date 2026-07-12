@@ -56,9 +56,10 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
+  // Matches --background tokens: hsl(34 40% 97%) light, hsl(20 12% 8%) dark
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f9f5f0" },
-    { media: "(prefers-color-scheme: dark)", color: "#161210" },
+    { media: "(prefers-color-scheme: light)", color: "#FAF8F4" },
+    { media: "(prefers-color-scheme: dark)", color: "#171412" },
   ],
   width: "device-width",
   initialScale: 1,

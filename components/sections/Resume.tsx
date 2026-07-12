@@ -22,7 +22,7 @@ export function Resume() {
             <a
               href="/resume.pdf"
               download
-              className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors shrink-0 py-3 -my-3"
+              className="inline-flex items-center gap-1.5 text-xs font-semibold text-muted-foreground hover:text-foreground transition-colors shrink-0 min-h-11 -my-3"
             >
               <Download size={12} aria-hidden="true" />
               Download PDF
@@ -116,8 +116,14 @@ export function Resume() {
                     {exp.period}
                   </p>
                   <div className="mb-3">
-                    <h3 className="font-bold text-foreground text-base">{exp.role}</h3>
-                    <p className="text-sm text-accent font-semibold">{exp.company}</p>
+                    {/* Company inside the heading so screen-reader nav doesn't
+                        hear three identical "UI/UX Designer" headings */}
+                    <h3 className="text-base">
+                      <span className="block font-bold text-foreground">{exp.role}</span>
+                      <span className="block text-sm text-accent font-semibold">
+                        {exp.company}
+                      </span>
+                    </h3>
                   </div>
                   <p className="text-sm text-muted-foreground leading-relaxed mb-4">
                     {exp.description}

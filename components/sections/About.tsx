@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowUpRight } from "lucide-react";
 import { skills } from "@/lib/data";
@@ -35,7 +36,7 @@ export function About() {
             </motion.h2>
 
             <motion.div
-              className="space-y-4 text-[1.0625rem] leading-relaxed text-muted-foreground max-w-prose"
+              className="space-y-4 text-[1.0625rem] leading-relaxed text-muted-foreground max-w-prose [&>p]:text-pretty"
               variants={staggerContainer(rm)}
             >
               <motion.p variants={staggerItem(rm)}>
@@ -117,36 +118,15 @@ export function About() {
             viewport={{ once: true, margin: "-10%" }}
             transition={{ duration: rm ? 0 : 0.7, ease: EXPO_OUT, delay: rm ? 0 : 0.2 }}
           >
-            {/* Abstract portrait placeholder — swap for a real photo before launch */}
             <div className="relative aspect-[4/5] rounded-2xl overflow-hidden bg-muted">
-              <svg
-                viewBox="0 0 400 500"
-                fill="none"
-                xmlns="http://www.w3.org/2000/svg"
-                className="w-full h-full"
-                aria-hidden="true"
-              >
-                <rect width="400" height="500" fill="hsl(var(--muted))" />
-                <ellipse cx="200" cy="180" rx="90" ry="90" fill="hsl(var(--accent) / 0.15)" />
-                <ellipse cx="200" cy="180" rx="60" ry="60" fill="hsl(var(--accent) / 0.25)" />
-                <ellipse cx="200" cy="360" rx="140" ry="100" fill="hsl(var(--accent) / 0.1)" />
-                <line x1="0" y1="250" x2="400" y2="250" stroke="hsl(var(--accent) / 0.2)" strokeWidth="1" />
-                <line x1="200" y1="0" x2="200" y2="500" stroke="hsl(var(--accent) / 0.2)" strokeWidth="1" />
-                <circle cx="120" cy="80" r="8" fill="hsl(var(--accent) / 0.4)" />
-                <circle cx="320" cy="400" r="12" fill="hsl(var(--accent) / 0.3)" />
-                <text
-                  x="200"
-                  y="470"
-                  textAnchor="middle"
-                  fontSize="11"
-                  fontFamily="sans-serif"
-                  fill="hsl(var(--accent) / 0.5)"
-                  letterSpacing="3"
-                  fontWeight="600"
-                >
-                  RAHUL VAID
-                </text>
-              </svg>
+              <Image
+                src="/headshot.jpg"
+                alt="Rahul Vaid, outdoors in the mountains at sunset"
+                fill
+                priority
+                sizes="(min-width: 1024px) 40vw, 90vw"
+                className="object-cover"
+              />
             </div>
 
             {/* Quick facts */}

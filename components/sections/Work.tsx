@@ -7,101 +7,44 @@ import { Plus, Minus, X } from "lucide-react";
 import { projects, caseStudies } from "@/lib/data";
 import { SectionLabel } from "@/components/SectionLabel";
 import { EXPO_OUT, fadeUp } from "@/lib/motion";
-import type { CaseStudyImage } from "@/types";
+import type { CaseStudy, CaseStudyImage } from "@/types";
+
+// Projects with a real photo thumbnail instead of an illustrated SVG mockup.
+// object-contain + a fixed backdrop matching the source image's own
+// background, since these don't restyle for the site's light/dark toggle.
+const REAL_THUMBNAILS: Record<string, { src: string; alt: string; bg: string }> = {
+  ux4g: {
+    src: "/case-studies/ux4g/thumbnail.jpg",
+    alt: "UX4G Design System 3.0 listed on Figma Community: 462 likes, 9.8k users, with a UI kit preview panel",
+    bg: "hsl(20 12% 8%)",
+  },
+  "survey-setu": {
+    src: "/case-studies/survey-setu/app-screens.jpg",
+    alt: "Survey Setu app splash screen and dashboard for the Ministry of Tribal Affairs, showing the PVTG Household Survey with completed, reviewed, draft, and flagged counts",
+    bg: "rgb(247 255 242)",
+  },
+};
 
 function ProjectMockup({ id, color }: { id: string; color: string }) {
+  const realThumbnail = REAL_THUMBNAILS[id];
+  if (realThumbnail) {
+    return (
+      <div
+        className="relative w-full aspect-[3/2] rounded-xl overflow-hidden border border-border/60"
+        style={{ backgroundColor: realThumbnail.bg }}
+      >
+        <Image
+          src={realThumbnail.src}
+          alt={realThumbnail.alt}
+          fill
+          sizes="(min-width: 1024px) 58vw, 100vw"
+          className="object-contain"
+        />
+      </div>
+    );
+  }
+
   const configs: Record<string, React.ReactNode> = {
-    // Survey Setu: mobile-first field survey app with a supervisor dashboard behind it
-    "survey-setu": (
-      <svg viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
-        <rect width="480" height="320" rx="12" fill="hsl(34 30% 96%)" />
-        {/* Phone frame */}
-        <rect x="160" y="20" width="160" height="280" rx="24" fill="hsl(20 12% 11%)" />
-        <rect x="168" y="32" width="144" height="256" rx="16" fill="hsl(220 60% 16%)" />
-        {/* Progress bar */}
-        <rect x="176" y="40" width="128" height="4" rx="2" fill="hsl(220 40% 30%)" />
-        <rect x="176" y="40" width="84" height="4" rx="2" fill={color} />
-        {/* Question heading */}
-        <rect x="176" y="56" width="128" height="14" rx="3" fill="hsl(34 30% 96%)" opacity="0.9" />
-        <rect x="176" y="76" width="80" height="8" rx="2" fill="hsl(34 30% 96%)" opacity="0.4" />
-        {/* Survey answer rows */}
-        {[96, 124, 152, 180, 208].map((y, i) => (
-          <g key={y}>
-            <rect x="176" y={y} width="128" height="22" rx="6" fill="hsl(220 55% 24%)" />
-            <circle cx="188" cy={y + 11} r="5" fill={i === 1 ? color : "hsl(220 55% 24%)"} stroke="hsl(220 45% 45%)" strokeWidth="1.5" />
-            <rect x="198" y={y + 8} width={82 - i * 7} height="5" rx="2" fill="hsl(34 30% 96%)" opacity="0.7" />
-          </g>
-        ))}
-        {/* Submit button */}
-        <rect x="176" y="244" width="128" height="24" rx="12" fill={color} />
-        <rect x="216" y="253" width="48" height="6" rx="3" fill="hsl(34 30% 98%)" opacity="0.9" />
-        {/* Dashboard hints behind the phone */}
-        <g opacity="0.35">
-          <rect x="20" y="60" width="120" height="80" rx="10" fill="hsl(34 30% 99%)" />
-          <rect x="30" y="72" width="60" height="8" rx="2" fill="hsl(220 60% 40%)" opacity="0.6" />
-          {[0.5, 0.8, 0.35, 0.65].map((h, i) => (
-            <rect key={i} x={32 + i * 26} y={128 - h * 40} width="14" height={h * 40} rx="2" fill="hsl(220 60% 40%)" opacity={i === 1 ? "0.8" : "0.35"} />
-          ))}
-          <rect x="20" y="152" width="120" height="60" rx="10" fill="hsl(34 30% 99%)" />
-          {[164, 178, 192].map((y) => (
-            <rect key={y} x="30" y={y} width="100" height="6" rx="2" fill="hsl(220 20% 80%)" />
-          ))}
-        </g>
-        <g opacity="0.35">
-          <rect x="340" y="60" width="120" height="152" rx="10" fill="hsl(34 30% 99%)" />
-          <rect x="350" y="72" width="70" height="8" rx="2" fill="hsl(220 60% 40%)" opacity="0.6" />
-          {[92, 112, 132, 152, 172].map((y, i) => (
-            <g key={y}>
-              <rect x="350" y={y} width="8" height="8" rx="2" fill="hsl(220 60% 40%)" opacity={i < 3 ? "0.7" : "0.25"} />
-              <rect x="364" y={y + 1} width={82 - i * 6} height="5" rx="2" fill="hsl(220 20% 80%)" />
-            </g>
-          ))}
-        </g>
-      </svg>
-    ),
-    // UX4G Design System: a components board — swatches, buttons, inputs, tiles
-    ux4g: (
-      <svg viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
-        <rect width="480" height="320" rx="12" fill="hsl(34 40% 97%)" />
-        {/* Board header */}
-        <rect x="24" y="24" width="140" height="14" rx="4" fill="hsl(20 12% 15%)" />
-        <rect x="24" y="46" width="90" height="8" rx="3" fill="hsl(20 8% 60%)" />
-        {/* Color swatch row */}
-        {[
-          ["hsl(15 65% 45%)", 1], ["hsl(15 60% 58%)", 1], ["hsl(15 60% 88%)", 1],
-          ["hsl(20 12% 15%)", 1], ["hsl(30 15% 87%)", 1],
-        ].map(([fill], i) => (
-          <rect key={i} x={24 + i * 40} y="70" width="32" height="32" rx="8" fill={fill as string} />
-        ))}
-        {/* Buttons */}
-        <rect x="24" y="122" width="96" height="30" rx="15" fill={color} />
-        <rect x="52" y="133" width="40" height="7" rx="3" fill="hsl(34 30% 98%)" />
-        <rect x="130" y="122" width="96" height="30" rx="15" fill="none" stroke="hsl(30 15% 80%)" strokeWidth="1.5" />
-        <rect x="158" y="133" width="40" height="7" rx="3" fill="hsl(20 12% 25%)" />
-        {/* Input */}
-        <rect x="24" y="166" width="202" height="30" rx="8" fill="hsl(30 18% 93%)" stroke="hsl(30 15% 85%)" strokeWidth="1" />
-        <rect x="36" y="177" width="80" height="7" rx="3" fill="hsl(20 8% 62%)" />
-        {/* Toggle + checkbox */}
-        <rect x="24" y="210" width="44" height="24" rx="12" fill={color} />
-        <circle cx="56" cy="222" r="9" fill="hsl(34 30% 99%)" />
-        <rect x="80" y="212" width="20" height="20" rx="6" fill={color} />
-        <path d="M85 222 l4 4 l7 -8" stroke="hsl(34 30% 98%)" strokeWidth="2.5" fill="none" strokeLinecap="round" strokeLinejoin="round" />
-        {/* Component tiles column */}
-        {[24, 122, 220].map((y, i) => (
-          <g key={y}>
-            <rect x="260" y={y} width="196" height="84" rx="10" fill="hsl(34 30% 99%)" stroke="hsl(30 15% 87%)" strokeWidth="1" />
-            <circle cx="282" cy={y + 24} r="8" fill={color} opacity={0.25 + i * 0.25} />
-            <rect x="298" y={y + 18} width="90" height="9" rx="3" fill="hsl(20 12% 20%)" />
-            <rect x="272" y={y + 42} width="168" height="6" rx="2" fill="hsl(30 12% 82%)" />
-            <rect x="272" y={y + 56} width="130" height="6" rx="2" fill="hsl(30 12% 82%)" />
-          </g>
-        ))}
-        {/* Type specimen */}
-        <rect x="24" y="252" width="60" height="40" rx="6" fill="hsl(20 12% 15%)" />
-        <rect x="96" y="258" width="110" height="10" rx="3" fill="hsl(20 12% 25%)" />
-        <rect x="96" y="276" width="80" height="7" rx="3" fill="hsl(20 8% 60%)" />
-      </svg>
-    ),
     // SalonX: consumer booking web/mobile experience
     salonx: (
       <svg viewBox="0 0 480 320" fill="none" xmlns="http://www.w3.org/2000/svg" className="w-full h-full" aria-hidden="true">
@@ -297,11 +240,151 @@ function ProjectMockup({ id, color }: { id: string; color: string }) {
   );
 }
 
+// Static class lookup since Tailwind can't resolve a dynamic `sm:grid-cols-${n}`
+const METRIC_GRID: Record<number, string> = {
+  1: "sm:grid-cols-1",
+  2: "sm:grid-cols-2",
+  3: "sm:grid-cols-3",
+};
+
+const GALLERY_ASPECT: Record<string, { frame: string; width: string }> = {
+  wide: { frame: "aspect-[16/10]", width: "w-[85%] sm:w-[55%] lg:w-[42%]" },
+  portrait: { frame: "aspect-[3/4]", width: "w-[60%] sm:w-[38%] lg:w-[28%]" },
+  square: { frame: "aspect-square", width: "w-[70%] sm:w-[45%] lg:w-[34%]" },
+  landscape: { frame: "aspect-[16/9]", width: "w-[90%] sm:w-[65%] lg:w-[52%]" },
+  web: { frame: "aspect-[6/5]", width: "w-[85%] sm:w-[58%] lg:w-[46%]" },
+  // Full mobile viewport (~9:19.5, e.g. a splash or form screen)
+  mobile: { frame: "aspect-[9/19.5]", width: "w-[46%] sm:w-[28%] lg:w-[20%]" },
+  // Taller than a single viewport (a scrolling multi-section form)
+  tall: { frame: "aspect-[8/25]", width: "w-[50%] sm:w-[30%] lg:w-[22%]" },
+};
+
+function StoryGallery({
+  images,
+  project,
+  onSelect,
+}: {
+  images: CaseStudyImage[];
+  project: string;
+  onSelect: (img: CaseStudyImage) => void;
+}) {
+  return (
+    <div
+      className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
+      aria-label={`${project} design images`}
+    >
+      {images.map((img) => {
+        const { frame, width } = GALLERY_ASPECT[img.aspect ?? "wide"];
+        return (
+          <button
+            key={img.src}
+            type="button"
+            onClick={() => onSelect(img)}
+            className={`snap-start shrink-0 ${width} text-left group/img`}
+            aria-label={`View larger: ${img.alt}`}
+          >
+            <span className={`relative block ${frame} rounded-xl overflow-hidden border border-border bg-surface`}>
+              <Image
+                src={img.src}
+                alt={img.alt}
+                fill
+                sizes="(min-width: 1024px) 42vw, 85vw"
+                className="object-cover object-top transition-transform duration-500 ease-expo-out group-hover/img:scale-[1.02] motion-reduce:transition-none"
+              />
+            </span>
+            {img.caption && (
+              <span className="mt-2 block text-xs text-muted-foreground">{img.caption}</span>
+            )}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+/**
+ * Renders a case study's expanded content. Long-form narrative sections
+ * (see DESIGN.md "Case Study Narrative") take over when present; every
+ * other study falls back to the three-box Challenge/Approach/Outcome grid.
+ */
+function CaseStudyBody({
+  study,
+  onSelectImage,
+}: {
+  study: CaseStudy;
+  onSelectImage: (img: CaseStudyImage) => void;
+}) {
+  return (
+    <div className="space-y-6">
+      <h4 className="text-lg font-semibold text-balance max-w-2xl">{study.title}</h4>
+
+      {study.images && study.images.length > 0 && (
+        <StoryGallery images={study.images} project={study.project} onSelect={onSelectImage} />
+      )}
+
+      {study.narrative ? (
+        <div className="space-y-8">
+          {study.narrative.map((section) => (
+            <div
+              key={section.heading}
+              className="border-t border-border pt-6 first:border-t-0 first:pt-0"
+            >
+              <h5 className="text-base font-bold text-foreground mb-2 text-balance">
+                {section.heading}
+              </h5>
+              <p className="text-sm leading-relaxed text-foreground text-pretty max-w-prose">
+                {section.body}
+              </p>
+              {section.images && section.images.length > 0 && (
+                <div className="mt-5">
+                  <StoryGallery
+                    images={section.images}
+                    project={study.project}
+                    onSelect={onSelectImage}
+                  />
+                </div>
+              )}
+            </div>
+          ))}
+        </div>
+      ) : (
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <h5 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
+              Challenge
+            </h5>
+            <p className="text-sm leading-relaxed text-foreground text-pretty">{study.challenge}</p>
+          </div>
+          <div>
+            <h5 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
+              Approach
+            </h5>
+            <p className="text-sm leading-relaxed text-foreground text-pretty">{study.approach}</p>
+          </div>
+          <div>
+            <h5 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
+              Outcome
+            </h5>
+            <p className="text-sm leading-relaxed text-foreground text-pretty">{study.outcome}</p>
+          </div>
+        </div>
+      )}
+
+      <p className="text-xs text-muted-foreground">
+        {study.duration} · {study.team}
+      </p>
+    </div>
+  );
+}
+
 export function Work() {
   const rm = useReducedMotion();
   const [openStory, setOpenStory] = useState<string | null>(null);
   const [lightbox, setLightbox] = useState<CaseStudyImage | null>(null);
   const dialogRef = useRef<HTMLDialogElement>(null);
+
+  const featured = projects.filter((p) => p.featured);
+  const more = projects.filter((p) => !p.featured);
 
   const toggleStory = (id: string) =>
     setOpenStory((prev) => (prev === id ? null : id));
@@ -336,7 +419,7 @@ export function Work() {
         </motion.h2>
 
         <div className="space-y-20 lg:space-y-28">
-          {projects.map((project, i) => {
+          {featured.map((project, i) => {
             const study = caseStudies.find((cs) => cs.id === project.caseStudySlug);
             const storyOpen = openStory === project.id;
 
@@ -377,11 +460,11 @@ export function Work() {
                       </p>
                     </div>
 
-                    <h3 className="text-display-sm font-bold mb-2">{project.title}</h3>
+                    <h3 className="text-display-sm font-bold mb-2 text-balance">{project.title}</h3>
                     <p className="text-base text-muted-foreground mb-3 font-medium">
                       {project.subtitle}
                     </p>
-                    <p className="text-sm leading-relaxed text-muted-foreground mb-6">
+                    <p className="text-sm leading-relaxed text-muted-foreground mb-6 text-pretty">
                       {project.description}
                     </p>
 
@@ -401,7 +484,9 @@ export function Work() {
                 {study && (
                   <div className="mt-10 border-t border-border pt-8">
                     {/* Impact metrics: always visible, never behind a click */}
-                    <div className="grid grid-cols-1 sm:grid-cols-3 gap-y-6 sm:divide-x sm:divide-border">
+                    <div
+                      className={`grid grid-cols-1 ${METRIC_GRID[study.metrics.length] ?? "sm:grid-cols-3"} gap-y-6 sm:divide-x sm:divide-border`}
+                    >
                       {study.metrics.map((m) => (
                         <div key={m.label} className="sm:px-6 first:sm:pl-0 last:sm:pr-0">
                           <p className="text-3xl lg:text-4xl font-bold text-accent mb-1">
@@ -427,79 +512,14 @@ export function Work() {
 
                     <div
                       id={`story-${project.id}`}
-                      aria-hidden={!storyOpen}
+                      inert={!storyOpen}
                       className={`grid transition-[grid-template-rows] duration-500 ease-expo-out motion-reduce:transition-none ${
                         storyOpen ? "[grid-template-rows:1fr]" : "[grid-template-rows:0fr]"
                       }`}
                     >
                       <div className="overflow-hidden">
-                        <div className="pt-8 space-y-6">
-                          <p className="text-lg font-semibold text-balance max-w-2xl">
-                            {study.title}
-                          </p>
-
-                          {/* Design images: horizontal snap strip, click to enlarge */}
-                          {study.images && study.images.length > 0 && (
-                            <div
-                              className="flex gap-4 overflow-x-auto snap-x snap-mandatory pb-2"
-                              aria-label={`${study.project} design images`}
-                            >
-                              {study.images.map((img) => (
-                                <button
-                                  key={img.src}
-                                  type="button"
-                                  onClick={() => setLightbox(img)}
-                                  className="snap-start shrink-0 w-[85%] sm:w-[55%] lg:w-[42%] text-left group/img"
-                                  aria-label={`View larger: ${img.alt}`}
-                                >
-                                  <span className="relative block aspect-[16/10] rounded-xl overflow-hidden border border-border bg-surface">
-                                    <Image
-                                      src={img.src}
-                                      alt={img.alt}
-                                      fill
-                                      sizes="(min-width: 1024px) 42vw, 85vw"
-                                      className="object-cover object-top transition-transform duration-500 ease-expo-out group-hover/img:scale-[1.02] motion-reduce:transition-none"
-                                    />
-                                  </span>
-                                  {img.caption && (
-                                    <span className="mt-2 block text-xs text-muted-foreground">
-                                      {img.caption}
-                                    </span>
-                                  )}
-                                </button>
-                              ))}
-                            </div>
-                          )}
-
-                          <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
-                            <div>
-                              <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
-                                Challenge
-                              </h4>
-                              <p className="text-sm leading-relaxed text-foreground">
-                                {study.challenge}
-                              </p>
-                            </div>
-                            <div>
-                              <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
-                                Approach
-                              </h4>
-                              <p className="text-sm leading-relaxed text-foreground">
-                                {study.approach}
-                              </p>
-                            </div>
-                            <div>
-                              <h4 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-2">
-                                Outcome
-                              </h4>
-                              <p className="text-sm leading-relaxed text-foreground">
-                                {study.outcome}
-                              </p>
-                            </div>
-                          </div>
-                          <p className="text-xs text-muted-foreground">
-                            {study.duration} · {study.team}
-                          </p>
+                        <div className="pt-8">
+                          <CaseStudyBody study={study} onSelectImage={setLightbox} />
                         </div>
                       </div>
                     </div>
@@ -509,6 +529,100 @@ export function Work() {
             );
           })}
         </div>
+
+        {/* Compact rows: present without the scroll cost */}
+        {more.length > 0 && (
+          <div className="mt-24">
+            <h3 className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mb-6">
+              More work
+            </h3>
+            {more.map((project) => {
+              const study = caseStudies.find((cs) => cs.id === project.caseStudySlug);
+              const storyOpen = openStory === project.id;
+
+              return (
+                <article key={project.id} className="border-t border-border">
+                  <button
+                    type="button"
+                    onClick={() => toggleStory(project.id)}
+                    aria-expanded={storyOpen}
+                    aria-controls={`story-${project.id}`}
+                    className="w-full py-6 grid grid-cols-[auto_1fr_auto] items-center gap-4 sm:gap-6 text-left group min-h-11"
+                  >
+                    <span
+                      className="text-2xl font-extrabold leading-none text-accent/25 select-none"
+                      aria-hidden="true"
+                    >
+                      {project.number}
+                    </span>
+                    <span className="min-w-0">
+                      <span className="block text-base sm:text-lg font-bold text-foreground group-hover:text-accent transition-colors text-balance">
+                        {project.title}
+                      </span>
+                      <span className="block text-sm text-muted-foreground truncate">
+                        {project.subtitle}
+                      </span>
+                    </span>
+                    <span className="flex items-center gap-4 shrink-0">
+                      <span className="hidden sm:block text-xs text-muted-foreground">
+                        {project.year} · {project.role}
+                      </span>
+                      <span className="w-7 h-7 rounded-full border border-border flex items-center justify-center text-muted-foreground group-hover:border-accent group-hover:text-accent transition-colors">
+                        {storyOpen ? <Minus size={14} aria-hidden="true" /> : <Plus size={14} aria-hidden="true" />}
+                      </span>
+                    </span>
+                  </button>
+
+                  <div
+                    id={`story-${project.id}`}
+                    inert={!storyOpen}
+                    className={`grid transition-[grid-template-rows] duration-500 ease-expo-out motion-reduce:transition-none ${
+                      storyOpen ? "[grid-template-rows:1fr]" : "[grid-template-rows:0fr]"
+                    }`}
+                  >
+                    <div className="overflow-hidden">
+                      <div className="pb-8 space-y-6">
+                        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-10 items-start">
+                          <div className="lg:col-span-5">
+                            <ProjectMockup id={project.id} color={project.color} />
+                          </div>
+                          <div className="lg:col-span-7 space-y-4">
+                            <p className="text-sm leading-relaxed text-muted-foreground text-pretty">
+                              {project.description}
+                            </p>
+                            <div className="flex flex-wrap gap-1.5">
+                              {project.tags.map((tag) => (
+                                <span
+                                  key={tag}
+                                  className="px-2.5 py-1 rounded-full text-xs font-medium border border-border bg-muted/50 text-muted-foreground"
+                                >
+                                  {tag}
+                                </span>
+                              ))}
+                            </div>
+                            {study && (
+                              <div className="flex flex-wrap gap-x-8 gap-y-3 pt-2">
+                                {study.metrics.map((m) => (
+                                  <div key={m.label}>
+                                    <p className="text-2xl font-bold text-accent">{m.value}</p>
+                                    <p className="text-xs text-muted-foreground">{m.label}</p>
+                                  </div>
+                                ))}
+                              </div>
+                            )}
+                          </div>
+                        </div>
+
+                        {study && <CaseStudyBody study={study} onSelectImage={setLightbox} />}
+                      </div>
+                    </div>
+                  </div>
+                </article>
+              );
+            })}
+            <div className="border-t border-border" />
+          </div>
+        )}
       </div>
 
       {/* Lightbox */}

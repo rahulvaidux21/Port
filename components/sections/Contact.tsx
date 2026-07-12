@@ -48,9 +48,21 @@ export function Contact() {
     e.preventDefault();
     if (!validate()) return;
     setStatus("submitting");
-    // Replace with your actual form endpoint (Formspree, Netlify Forms, etc.)
-    await new Promise((r) => setTimeout(r, 1200));
-    setStatus("success");
+    try {
+      // Set your form ID from formspree.io — until then, submissions
+      // honestly fail and direct people to the email fallback.
+      const FORMSPREE_ID = "";
+      if (!FORMSPREE_ID) throw new Error("form endpoint not configured");
+      const res = await fetch(`https://formspree.io/f/${FORMSPREE_ID}`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json", Accept: "application/json" },
+        body: JSON.stringify(form),
+      });
+      if (!res.ok) throw new Error(`submit failed: ${res.status}`);
+      setStatus("success");
+    } catch {
+      setStatus("error");
+    }
   };
 
   const inputClass = (field: keyof FormData) =>
@@ -72,11 +84,10 @@ export function Contact() {
           <motion.div className="lg:col-span-5 space-y-8" {...fadeUp(rm)}>
             <div>
               <h2 className="text-display-md font-bold text-balance mb-4">
-                Let&apos;s make something worth using
+                Hiring for design systems, dashboards, or accessibility-critical work?
               </h2>
-              <p className="text-muted-foreground leading-relaxed">
-                Available for new projects, design partnerships, and the occasional consulting
-                engagement.
+              <p className="text-muted-foreground leading-relaxed text-pretty">
+                If you&apos;re hiring or want to talk through a project, my inbox is open.
               </p>
             </div>
 
@@ -106,12 +117,12 @@ export function Contact() {
                     href={href}
                     target={href.startsWith("http") ? "_blank" : undefined}
                     rel="noopener noreferrer"
-                    className="inline-flex items-center gap-1 text-sm font-medium text-foreground hover:text-accent transition-colors group"
+                    className="inline-flex items-center gap-1 py-3 -my-3 text-sm font-medium text-foreground hover:text-accent transition-colors group"
                   >
                     {value}
                     <ArrowUpRight
                       size={12}
-                      className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-all"
+                      className="opacity-0 group-hover:opacity-100 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 transition-[opacity,transform]"
                     />
                   </a>
                 </div>
@@ -135,13 +146,20 @@ export function Contact() {
 
           {/* Form */}
           <motion.div className="lg:col-span-7" {...fadeUp(rm, 0.15)}>
+            {/* Persistent live region: mounted before status changes, so SRs announce them */}
+            <p aria-live="polite" className="sr-only">
+              {status === "success"
+                ? "Message sent. I typically reply within 1 business day."
+                : status === "error"
+                  ? "Sending failed. Please email directly instead."
+                  : ""}
+            </p>
             {status === "success" ? (
               <motion.div
                 initial={{ opacity: rm ? 1 : 0, scale: rm ? 1 : 0.96 }}
                 animate={{ opacity: 1, scale: 1 }}
                 transition={{ duration: rm ? 0 : 0.4, ease: EXPO_OUT }}
                 className="rounded-2xl border border-border bg-card p-10 flex flex-col items-center text-center gap-4 h-full justify-center min-h-[420px]"
-                role="status"
               >
                 <CheckCircle2 size={40} className="text-success" strokeWidth={1.5} aria-hidden="true" />
                 <div>
@@ -155,7 +173,7 @@ export function Contact() {
                     setForm(INITIAL);
                     setStatus("idle");
                   }}
-                  className="text-sm text-accent hover:underline font-medium"
+                  className="text-sm text-accent hover:underline font-medium min-h-11 inline-flex items-center"
                 >
                   Send another message
                 </button>
@@ -261,7 +279,7 @@ export function Contact() {
                 </div>
 
                 {status === "error" && (
-                  <p className="text-sm text-destructive" role="status">
+                  <p className="text-sm text-destructive">
                     Something went wrong. Please email me directly at rahulvaidux@gmail.com
                   </p>
                 )}

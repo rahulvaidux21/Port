@@ -2,7 +2,7 @@
 name: Rahul Vaid — Portfolio
 description: Product/UI/UX designer portfolio. Precise, ambitious, grounded, warm.
 colors:
-  ember: "#BD4D28"
+  ember: "#B54A26"
   ember-light: "#D47454"
   ember-muted: "#FAEEEB"
   ink: "#1F1B19"
@@ -10,7 +10,7 @@ colors:
   parchment: "#F4F0EC"
   cloud: "#FDFDFC"
   stone: "#F0EDEA"
-  graphite: "#796D67"
+  graphite: "#746863"
   linen: "#E3DED9"
   coal: "#141211"
   chalk: "#F7F4F3"
@@ -134,7 +134,7 @@ What belongs: clear hierarchy, warm neutrals, one purposeful accent, generous sp
 A warm monochromatic ground with a single committed accent. Ember appears on ≤10% of any given screen; its rarity is what gives it authority.
 
 ### Primary
-- **Ember** (`#BD4D28` / `hsl(15 65% 45%)`): The sole accent. Section labels, CTA buttons, logo mark, active nav states, metric highlights in case studies, progress indicators. Used at full saturation only on text and small fills. Never as a large background wash.
+- **Ember** (`#B54A26` / `hsl(15 65% 43%)`): The sole accent. (Darkened from L 45% to 43% so Ember text passes WCAG AA on Parchment surface bands, not only on Archive Warm.) Section labels, CTA buttons, logo mark, active nav states, metric highlights in case studies, progress indicators. Used at full saturation only on text and small fills. Never as a large background wash.
 - **Pale Ember** (`#FAEEEB` / `hsl(15 60% 95%)`): The accent's resting surface. Metric cards in case studies, chip hover state, tag backgrounds on hover. Always paired with an Ember text element nearby.
 - **Ember Light** (`#D47454` / `hsl(15 60% 58%)`): Dark-mode variant of Ember. Slightly warmer and lighter to maintain contrast on the coal background.
 
@@ -143,7 +143,7 @@ A warm monochromatic ground with a single committed accent. Ember appears on ≤
 - **Cloud** (`#FDFDFC` / `hsl(34 30% 99%)`): Card and elevated surface background. Distinguishable from Archive Warm only through adjacency; the tonal difference is felt, not named.
 - **Parchment** (`#F4F0EC` / `hsl(34 25% 94%)`): Secondary surface. Section backgrounds (`bg-muted/40`) for process and contact sections to create rhythm without borders.
 - **Stone** (`#F0EDEA` / `hsl(30 18% 93%)`): Muted fills, tag backgrounds, input resting state.
-- **Graphite** (`#796D67` / `hsl(20 8% 44%)`): Secondary text, captions, metadata, placeholder text in inputs.
+- **Graphite** (`#746863` / `hsl(20 8% 42%)`): Secondary text, captions, metadata, placeholder text in inputs. (Darkened from L 44% to 42% so secondary text passes WCAG AA on Parchment surface bands.)
 - **Linen** (`#E3DED9` / `hsl(30 15% 87%)`): All borders and dividers. The system uses horizontal rules (`border-t`) extensively as section structure; Linen at this lightness creates rhythm without weight.
 - **Ink** (`#1F1B19` / `hsl(20 12% 11%)`): Primary text and primary button fill. The warm undertone (H=20) keeps it from reading as cold black.
 
@@ -275,6 +275,15 @@ The repeating section header pattern is distinctive and worth documenting.
 - **Placement:** `margin-bottom: 3rem` before section content. Left-aligned always.
 - **Never:** Use this pattern inside a card, nested inside another section label, or with any color other than Ember.
 - **Purpose:** Creates consistent rhythm across sections while giving the reader a fast-scan anchor. The label identifies the section; the horizontal rule tells the eye where the content begins.
+
+### Case Study Narrative (Long-form)
+
+Reserved for flagship case studies where the standard three-box Challenge/Approach/Outcome format can't carry the material. An optional, ordered list of named sections instead of three parallel boxes — used when a project's story has real sequential shape (constraints before foundations, foundations before patterns) that a side-by-side layout would flatten into a summary.
+
+- **Structure:** Each section is a heading (`text-base font-bold`, one to four words, no jargon) and a body paragraph (`text-sm leading-relaxed`, `max-w-prose`, `text-pretty`), separated by a `border-t border-border` rule. A section may carry its own image gallery, placed directly under that section rather than bundled into one top-of-story gallery — images stay next to the claim they support.
+- **When to use:** Only for a project explicitly designated as the deepest read on the page. Every other case study keeps the three-box format; do not convert a study to long-form just because more content exists. Three-box is the default; long-form is the exception that earns its own space.
+- **Never:** Long-form sections are not a substitute for editing. If a section's body runs past roughly 80 words, cut it — don't give it more room.
+- **Component:** `CaseStudyBody` in `components/sections/Work.tsx`, shared across the featured and compact rendering paths so the pattern isn't duplicated per call site.
 
 ## 6. Responsive Design
 

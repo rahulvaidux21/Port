@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence } from "framer-motion";
+import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
 import { Menu, X } from "lucide-react";
 import { ThemeToggle } from "@/components/ThemeToggle";
 import { navItems } from "@/lib/data";
@@ -12,7 +12,9 @@ export function Navbar() {
   const [mobileOpen, setMobileOpen] = useState(false);
   const [activeSection, setActiveSection] = useState("");
   const menuRef = useRef<HTMLDivElement>(null);
+  const headerRef = useRef<HTMLElement>(null);
   const toggleRef = useRef<HTMLButtonElement>(null);
+  const rm = useReducedMotion();
 
   useEffect(() => {
     const handleScroll = () => setScrolled(window.scrollY > 24);
@@ -66,7 +68,13 @@ export function Navbar() {
         return;
       }
       if (e.key !== "Tab" || !menu) return;
-      const focusables = menu.querySelectorAll<HTMLElement>("a, button");
+      // The header (logo, theme toggle, X) stays visible above the overlay,
+      // so the trap must cycle through it too — visible elements only
+      const header = headerRef.current;
+      const focusables = [
+        ...(header?.querySelectorAll<HTMLElement>("a, button") ?? []),
+        ...menu.querySelectorAll<HTMLElement>("a, button"),
+      ].filter((el) => el.offsetParent !== null);
       if (focusables.length === 0) return;
       const first = focusables[0];
       const last = focusables[focusables.length - 1];
@@ -92,8 +100,9 @@ export function Navbar() {
   return (
     <>
       <header
+        ref={headerRef}
         className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-all duration-300",
+          "fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300",
           scrolled
             ? "bg-background/90 backdrop-blur-md border-b border-border/60"
             : "bg-transparent"
@@ -176,10 +185,10 @@ export function Navbar() {
       <AnimatePresence>
         {mobileOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -8 }}
+            initial={{ opacity: rm ? 1 : 0, y: rm ? 0 : -8 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -8 }}
-            transition={{ duration: 0.2, ease: "easeOut" }}
+            exit={{ opacity: rm ? 1 : 0, y: rm ? 0 : -8 }}
+            transition={{ duration: rm ? 0 : 0.2, ease: "easeOut" }}
             className="fixed inset-0 z-40 bg-background pt-16"
           >
             <div ref={menuRef} className="section-padding py-8 flex flex-col gap-2">
@@ -187,9 +196,9 @@ export function Navbar() {
                 <motion.a
                   key={href}
                   href={href}
-                  initial={{ opacity: 0, x: -16 }}
+                  initial={{ opacity: rm ? 1 : 0, x: rm ? 0 : -16 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: i * 0.05, duration: 0.25, ease: "easeOut" }}
+                  transition={{ delay: rm ? 0 : i * 0.05, duration: rm ? 0 : 0.25, ease: "easeOut" }}
                   onClick={(e) => {
                     e.preventDefault();
                     handleNavClick(href);
@@ -204,9 +213,9 @@ export function Navbar() {
               ))}
               <motion.a
                 href="#contact"
-                initial={{ opacity: 0 }}
+                initial={{ opacity: rm ? 1 : 0 }}
                 animate={{ opacity: 1 }}
-                transition={{ delay: 0.3 }}
+                transition={{ delay: rm ? 0 : 0.3 }}
                 onClick={(e) => {
                   e.preventDefault();
                   handleNavClick("#contact");

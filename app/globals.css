@@ -13,11 +13,13 @@
     --surface: 34 25% 94%;
 
     --muted: 30 18% 93%;
-    --muted-foreground: 20 8% 44%;
+    /* L=42%: keeps AA (>=4.5:1) on --surface bands, not just --background */
+    --muted-foreground: 20 8% 42%;
 
     --border: 30 15% 87%;
 
-    --accent: 15 65% 45%;
+    /* L=43%: keeps AA on --surface bands, not just --background */
+    --accent: 15 65% 43%;
     --accent-foreground: 34 30% 98%;
     --accent-muted: 15 60% 95%;
 

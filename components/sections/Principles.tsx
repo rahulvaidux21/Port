@@ -25,7 +25,7 @@ export function Principles() {
             <h2 className="text-display-md font-bold text-balance">
               Four working principles, each earned on a real project
             </h2>
-            <p className="mt-4 text-muted-foreground leading-relaxed">
+            <p className="mt-4 text-muted-foreground leading-relaxed text-pretty">
               Not a diagram. These are the defaults I reach for when a project
               gets ambiguous, and the evidence for why they hold.
             </p>
@@ -51,11 +51,11 @@ export function Principles() {
                   {p.number}
                 </span>
                 <div>
-                  <h3 className="text-lg font-bold mb-2">{p.title}</h3>
-                  <p className="text-sm leading-relaxed text-muted-foreground mb-3 max-w-prose">
+                  <h3 className="text-lg font-bold mb-2 text-balance">{p.title}</h3>
+                  <p className="text-sm leading-relaxed text-muted-foreground mb-3 max-w-prose text-pretty">
                     {p.description}
                   </p>
-                  <p className="text-sm leading-relaxed text-foreground max-w-prose">
+                  <p className="text-sm leading-relaxed text-foreground max-w-prose text-pretty">
                     <span className="text-xs font-semibold uppercase tracking-widest text-muted-foreground mr-2">
                       In practice
                     </span>

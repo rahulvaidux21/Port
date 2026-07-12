@@ -25,7 +25,7 @@ export function Footer() {
               <p className="font-semibold text-sm leading-tight">Rahul Vaid</p>
               <a
                 href="mailto:rahulvaidux@gmail.com"
-                className="text-xs text-muted-foreground hover:text-accent transition-colors"
+                className="inline-flex items-center py-3 -my-3 text-xs text-muted-foreground hover:text-accent transition-colors"
               >
                 rahulvaidux@gmail.com
               </a>

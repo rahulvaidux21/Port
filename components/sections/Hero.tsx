@@ -53,7 +53,7 @@ export function Hero() {
             className="flex flex-col sm:flex-row sm:items-end gap-4 sm:gap-8 mb-10"
             {...fadeUpAnimate(rm, 0.35)}
           >
-            <p className="text-display-md font-light text-muted-foreground max-w-xl leading-tight tracking-tight">
+            <p className="text-display-md font-normal text-muted-foreground max-w-xl leading-tight tracking-tight">
               I design digital products at national scale.
             </p>
             <div className="hidden sm:block w-px h-14 bg-border shrink-0" />
