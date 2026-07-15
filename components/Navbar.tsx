@@ -2,6 +2,7 @@
 
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
+import Link from "next/link";
 import { Menu, X } from "lucide-react";
 import { IdBadge } from "@/components/IdBadge";
 import { TableLamp } from "@/components/TableLamp";
@@ -40,12 +41,12 @@ export function Navbar() {
       <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 pb-3 pt-6 md:px-8">
         <div className="flex items-center gap-2.5">
           <Image src="/logo.svg" alt="Rahul Vaid logo" width={30} height={30} className="rounded-full" />
-          <a
+          <Link
             href="/"
             className="font-sans text-[13px] font-medium tracking-wide text-stone-700 transition-colors hover:text-stone-900 dark:text-stone-300 dark:hover:text-white"
           >
             {hero.name}
-          </a>
+          </Link>
         </div>
 
         {/* Lanyard badge — strap starts at the very top edge, hanging in from
