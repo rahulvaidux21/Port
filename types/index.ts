@@ -1,75 +1,50 @@
-export interface Project {
-  id: string;
-  number: string;
-  title: string;
-  subtitle: string;
-  description: string;
-  tags: string[];
-  year: string;
-  role: string;
-  link?: string;
-  caseStudySlug?: string;
-  color: string;
-  /** Full-anatomy treatment in Work; false renders as a compact row */
-  featured?: boolean;
+export interface NavItem {
+  label: string;
+  href: string;
 }
 
-export interface CaseStudyImage {
-  src: string;
-  alt: string;
-  caption?: string;
-  /** Thumbnail aspect ratio; defaults to "wide" (16/10) */
-  aspect?: "wide" | "portrait" | "square" | "landscape" | "web" | "tall" | "mobile";
-}
-
-export interface CaseStudyNarrativeSection {
-  heading: string;
-  body: string;
-  images?: CaseStudyImage[];
+export interface SocialLink {
+  label: string;
+  href: string;
+  icon: "linkedin" | "behance" | "mail" | "file";
 }
 
 export interface CaseStudy {
   id: string;
-  project: string;
-  title: string;
-  challenge: string;
-  approach: string;
-  outcome: string;
-  metrics: Metric[];
+  year: string;
+  wordmark: string;
+  /** Right-aligned discipline label in the card's metadata row, e.g. "Design Systems". */
+  discipline: string;
+  heading: string;
+  /** Short, punchy statement headline (serif) — paraphrased from problem/result, not new claims. */
+  statement: string;
+  color: string;
+  colorDark: string;
   tags: string[];
-  duration: string;
-  team: string;
-  images?: CaseStudyImage[];
-  /** Long-form treatment for flagship studies; falls back to challenge/approach/outcome when absent */
-  narrative?: CaseStudyNarrativeSection[];
+  overview: string;
+  problem: string;
+  solution: string;
+  result: string;
+  /** Darker variants of color/colorDark, sized for use as text (WCAG AA against bg-surface). */
+  labelColor: string;
+  labelColorDark: string;
+  /** Which device chrome the screenshot(s) render inside. */
+  frame: "phone" | "browser";
+  /** Optional real screenshot/mockup — falls back to the placeholder panel when absent. */
+  image?: string;
+  /** Optional second real screenshot, shown overlapping the first. */
+  image2?: string;
 }
 
-export interface Metric {
-  value: string;
-  label: string;
-}
-
-export interface Skill {
-  category: string;
-  items: string[];
-}
-
-export interface Principle {
-  number: string;
-  title: string;
-  description: string;
-  evidence: string;
-}
-
-export interface Experience {
-  company: string;
+export interface ExperienceEntry {
   role: string;
-  period: string;
+  org: string;
+  dates: string;
   description: string;
-  highlights: string[];
+  tags: string[];
 }
 
-export interface NavItem {
-  label: string;
-  href: string;
+export interface Testimonial {
+  quote: string;
+  role: string;
 }

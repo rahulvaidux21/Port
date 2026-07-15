@@ -4,50 +4,45 @@
 
 brand
 
+## Platform
+
+web
+
 ## Users
 
-Four overlapping audiences, all arriving with limited attention:
-
-- **Hiring managers at tech companies** scanning 20+ portfolios. Need to understand competence and fit within 2 minutes. Will read one case study if the hook lands.
-- **Startup founders / early-stage teams** evaluating whether a designer can work at ambiguity and own end-to-end decisions. Want evidence of product thinking, not just craft.
-- **Agency and studio clients** looking for a collaborator who communicates clearly with non-designers and delivers production-ready output.
-- **Peers in the design community** comparing notes, looking for process thinking, accessibility rigour, and design-at-scale experience.
-
-All four care about impact and decision-making over aesthetics. None of them has patience for walls of text or screens-without-context.
+Two audiences read this site evenly, and neither is treated as primary: **hiring managers and recruiters** evaluating Rahul for a UI/UX role, and **freelance clients or startup founders** deciding whether to bring him onto a project. The former reads the Experience section and downloads the resume; the latter reads the case studies and the closing "Got a mess? Let's untangle it" pitch. Both arrive with the same underlying question — has this person actually shipped real, hard design work, or is this portfolio marketing filler?
 
 ## Product Purpose
 
-A portfolio for Rahul Vaid: Product/UI/UX Designer with 3+ years experience, currently working on UX4G (India's national design system) under NeGD/MeitY. UX4G underpins government platforms collectively reaching hundreds of millions of citizens — DigiLocker (70+ crore registered users), UMANG (8.71 crore registrations, 2,300+ services), CoWIN (220 crore vaccine doses), and DIKSHA (556 crore learning sessions), among others. End-to-end capabilities: user research, information architecture, interaction design, design systems, WCAG 2.1 accessibility, developer handoff, agile team collaboration with PMs, engineers, and senior government stakeholders.
+A personal portfolio for Rahul Vaid, UI/UX Designer. It exists to prove design competence through three real, evidence-backed case studies (a national design system spanning four frameworks, an offline-first field-survey app, and a five-role approval-workflow platform) rather than through claims alone. Success isn't gated behind one funnel: a visitor reaching out by email, downloading the resume, or simply finishing the case studies with a clear sense of how Rahul works are all treated as valid outcomes — the site runs all three in parallel instead of forcing a single conversion path.
 
-The portfolio's job is to make this specific background legible and compelling to private-sector hiring audiences who may be unfamiliar with the government design context. It must translate national-scale impact into language that lands in a startup or tech company interview.
+## Positioning
 
-Success looks like: a hiring manager understanding Rahul's scope, thinking style, and measurable impact within 2 minutes, then reading one full case study and feeling compelled to reach out.
+"I design products where complexity meets usability" — the site's job is to make that claim self-evident by showing the untangling itself: a four-framework design system reduced to one shared source of truth, a five-role approval maze reduced to a sentence anyone can explain, a survey tool that keeps working when the network doesn't.
+
+## Conversion & proof
+
+- Primary and secondary CTA: contact via email ("Let's Connect," in the Hero and the closing section) runs alongside resume download and case-study browsing as equally valid parallel paths — confirmed as "all three" rather than a single hard-gated funnel.
+- The line a visitor remembers after 10 seconds: *"I design products where complexity meets usability."*
+- Belief ladder: sees a named, specific case study with a real outcome (not a vague claim) → checks the Experience section and resume to confirm the work history is real and recent → trusts enough to reach out or download the CV.
+- Proof on hand: three real case studies with named results (UX4G Design System 3.0 — now the mandated standard across a portfolio of platforms; Survey Setu — live since April 2026, 50+ screens, zero data lost; NIRI Platform — a five-role approval chain reduced to one explainable path), plus a resume-sourced Experience section. The Testimonials section is explicitly marked in the codebase as illustrative, written in the voice of the people these projects were built for — not yet real, attributed quotes — and should stay flagged as such (or be swapped for real quotes) rather than presented as verified proof.
 
 ## Brand Personality
 
-Precise, Ambitious, Grounded, Warm.
-
-The tone is that of a designer who works at consequential scale and knows it, but doesn't need to perform it. Confident without posturing. The copy should show decision-making intelligence, not UX jargon.
+Derived from what's already built, not newly invented: **grounded and evidence-first** (a code comment in `lib/data.ts` explicitly instructs "no invented history" and colors are "deliberately muted/desaturated... rather than reading as bright marketing gradients"); **warm and a little playful without losing precision** (the speech-bubble "Hi, I'm Rahul Vaid" greeting, the casual "Got a mess? Let's untangle it" CTA, the hand-illustrated lanyard ID badge and pendant lamp theme toggle); **tactile and paper-like** rather than glossy-SaaS (dot-grid textures, ruler-tick measurements, a marquee chip strip styled like a printed band, rounded "soft plastic" card shapes). The voice reads like a designer who takes the work seriously but doesn't take himself too seriously.
 
 ## Anti-references
 
-- **Dribbble / Behance showcase**: screens without context, zero process, no impact numbers.
-- **Generic UX template**: cream background, Inter font, icon-plus-text feature grid, blue CTA. Indistinguishable from 300 other portfolios.
-- **Excessive animation or parallax**: motion that competes with the work.
-- **Dark cyberpunk aesthetic**: terminal fonts, neon glows, purple gradients. Wrong register entirely.
-- **Corporate report feel**: text-heavy, dense, no visual breathing room.
-- **Jargon without substance**: Double Diamond diagrams, empathy map screenshots, persona cards used to fill space rather than prove thinking.
-- **Device-frame maximalism**: every screen wrapped in a MacBook or iPhone bezel, making actual UI impossible to evaluate.
-- **Agency marketing site**: self-promotional tone, hero animations, "we craft experiences" copy voice.
+Not confirmed with the user — no specific anti-references have been discussed. What the current build visibly avoids, by observation rather than by stated rule: generic SaaS hero-metric templates, gradient-text flourishes, invented statistics, and a sterile all-business tone. Treat this as inferred, not settled; revisit if the site's direction changes.
 
 ## Design Principles
 
-1. **Impact before process.** Lead with what changed because of the work. Metrics, decisions, outcomes. Process earns its place only after the result has the reader's attention.
-2. **Earn the scroll.** Every section must justify its vertical real estate. If it doesn't help a hiring manager evaluate Rahul faster, it doesn't belong.
-3. **Government scale, private-sector craft.** The work context (national design system, 10+ crore users, NeGD/MeitY) is a rare differentiator. The portfolio should feel like the tools the audience uses every day (Linear, Vercel, Stripe), not like the clients Rahul has served.
-4. **Accessibility as fluency.** WCAG 2.1 expertise is a professional credential here, not a checkbox. The portfolio itself must model best practice: semantic HTML, keyboard navigation, contrast ratios, focus states done properly.
-5. **Show thinking, not artifacts.** Case studies should reveal how decisions were made and why, not just what was delivered. A redesign is only interesting if the reader understands the constraint it solved.
+- **Real evidence over invented metrics.** Every claim in a case study traces to something true; testimonials are explicitly flagged as illustrative rather than passed off as verified quotes.
+- **Motion always has a reduced-motion answer.** Nearly every animated component checks `useReducedMotion` and ships a static, still-complete fallback — motion is a layer on top of a working page, never a requirement for it.
+- **One recurring "stationery" system carries the personality**, instead of a different flourish per section: the dot-grid texture, ruler ticks, marquee strips, and the lanyard ID badge all share the same tactile, paper-and-plastic physical-object language.
+- **Dark mode is a designed second state, not an inverted filter.** Surfaces (the ID badge, the project-card bands) get their own dark-mode color instead of just flipping lightness, and the lamp toggle ties the mode switch to a literal "turning the light on" moment.
+- **One icon system.** Every icon in the project comes from `lucide-react`; no hand-drawn SVG paths or second icon library, so visual weight and style stay consistent everywhere an icon appears.
 
 ## Accessibility & Inclusion
 
-WCAG 2.1 AA minimum throughout. Rahul's professional background includes WCAG implementation at scale; the portfolio must reflect that expertise, not undermine it. Reduced-motion support required (Framer Motion `useReducedMotion`). All interactive elements keyboard-navigable with visible focus states. Color contrast ratios validated at both light and dark themes.
+Not formally confirmed to a specific WCAG level. What's implemented and observable: `prefers-reduced-motion` is honored throughout via `useReducedMotion` with static fallbacks (not just disabled animation, but genuinely complete alternate layouts, e.g. `ValueChips` and `Testimonials` render a wrapped static grid instead of a marquee); focus-visible outlines are defined globally; interactive controls carry `aria-label`, `aria-pressed`, and `aria-expanded` where relevant (the theme toggle, the mobile menu); the mobile nav traps focus and closes on `Escape`. Color contrast has not been formally audited against WCAG AA/AAA.

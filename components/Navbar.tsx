@@ -1,233 +1,141 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
-import { motion, AnimatePresence, useReducedMotion } from "framer-motion";
+import { useEffect, useRef, useState } from "react";
+import Image from "next/image";
 import { Menu, X } from "lucide-react";
-import { ThemeToggle } from "@/components/ThemeToggle";
-import { navItems } from "@/lib/data";
+import { IdBadge } from "@/components/IdBadge";
+import { TableLamp } from "@/components/TableLamp";
+import { hero, floatingNavItems } from "@/lib/data";
+import { useTheme } from "@/lib/useTheme";
 import { cn } from "@/lib/utils";
 
 export function Navbar() {
-  const [scrolled, setScrolled] = useState(false);
-  const [mobileOpen, setMobileOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState("");
+  const { isDark, toggle } = useTheme();
+  const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
-  const headerRef = useRef<HTMLElement>(null);
-  const toggleRef = useRef<HTMLButtonElement>(null);
-  const rm = useReducedMotion();
 
   useEffect(() => {
-    const handleScroll = () => setScrolled(window.scrollY > 24);
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+    if (!menuOpen) return;
 
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            setActiveSection(`#${entry.target.id}`);
-          }
-        });
-      },
-      { rootMargin: "-40% 0px -55% 0px" }
-    );
-
-    navItems.forEach(({ href }) => {
-      const el = document.querySelector(href);
-      if (el) observer.observe(el);
-    });
-
-    return () => observer.disconnect();
-  }, []);
-
-  useEffect(() => {
-    if (mobileOpen) {
-      document.body.style.overflow = "hidden";
-    } else {
-      document.body.style.overflow = "";
+    function handlePointerDown(event: PointerEvent) {
+      if (menuRef.current && !menuRef.current.contains(event.target as Node)) {
+        setMenuOpen(false);
+      }
     }
-    return () => {
-      document.body.style.overflow = "";
-    };
-  }, [mobileOpen]);
 
-  // Overlay focus management: move focus in, trap Tab, close on Escape,
-  // return focus to the toggle on close (WCAG 2.4.3)
-  useEffect(() => {
-    if (!mobileOpen) return;
+    function handleKeyDown(event: KeyboardEvent) {
+      if (event.key === "Escape") setMenuOpen(false);
+    }
 
-    const menu = menuRef.current;
-    menu?.querySelector<HTMLElement>("a, button")?.focus();
-
-    const handleKeyDown = (e: KeyboardEvent) => {
-      if (e.key === "Escape") {
-        setMobileOpen(false);
-        toggleRef.current?.focus();
-        return;
-      }
-      if (e.key !== "Tab" || !menu) return;
-      // The header (logo, theme toggle, X) stays visible above the overlay,
-      // so the trap must cycle through it too — visible elements only
-      const header = headerRef.current;
-      const focusables = [
-        ...(header?.querySelectorAll<HTMLElement>("a, button") ?? []),
-        ...menu.querySelectorAll<HTMLElement>("a, button"),
-      ].filter((el) => el.offsetParent !== null);
-      if (focusables.length === 0) return;
-      const first = focusables[0];
-      const last = focusables[focusables.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault();
-        last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault();
-        first.focus();
-      }
-    };
-
+    document.addEventListener("pointerdown", handlePointerDown);
     document.addEventListener("keydown", handleKeyDown);
-    return () => document.removeEventListener("keydown", handleKeyDown);
-  }, [mobileOpen]);
-
-  const handleNavClick = (href: string) => {
-    setMobileOpen(false);
-    const el = document.querySelector(href);
-    el?.scrollIntoView({ behavior: "smooth" });
-  };
+    return () => {
+      document.removeEventListener("pointerdown", handlePointerDown);
+      document.removeEventListener("keydown", handleKeyDown);
+    };
+  }, [menuOpen]);
 
   return (
-    <>
-      <header
-        ref={headerRef}
-        className={cn(
-          "fixed top-0 left-0 right-0 z-50 transition-[background-color,border-color,backdrop-filter] duration-300",
-          scrolled
-            ? "bg-background/90 backdrop-blur-md border-b border-border/60"
-            : "bg-transparent"
-        )}
-      >
-        <div className="content-grid section-padding">
-          <nav
-            className="flex items-center justify-between h-16"
-            aria-label="Main navigation"
+    <nav className="relative z-[100]">
+      <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 pb-3 pt-6 md:px-8">
+        <div className="flex items-center gap-2.5">
+          <Image src="/logo.svg" alt="Rahul Vaid logo" width={30} height={30} className="rounded-full" />
+          <a
+            href="/"
+            className="font-sans text-[13px] font-medium tracking-wide text-stone-700 transition-colors hover:text-stone-900 dark:text-stone-300 dark:hover:text-white"
           >
-            {/* Logo */}
-            <a
-              href="#"
-              className="flex items-center gap-2 group"
-              onClick={(e) => {
-                e.preventDefault();
-                window.scrollTo({ top: 0, behavior: "smooth" });
-              }}
-              aria-label="Rahul Vaid, back to top"
-            >
-              <span className="w-8 h-8 rounded-full bg-accent flex items-center justify-center text-accent-foreground text-xs font-bold tracking-tight">
-                RV
-              </span>
-              <span className="font-semibold text-sm hidden sm:block tracking-tight">
-                Rahul Vaid
-              </span>
-            </a>
-
-            {/* Desktop nav */}
-            <ul className="hidden md:flex items-center gap-1" role="list">
-              {navItems.map(({ label, href }) => (
-                <li key={href}>
-                  <a
-                    href={href}
-                    onClick={(e) => {
-                      e.preventDefault();
-                      handleNavClick(href);
-                    }}
-                    className={cn(
-                      "px-3.5 py-2 rounded-full text-sm font-medium transition-colors duration-150",
-                      activeSection === href
-                        ? "text-foreground bg-muted"
-                        : "text-muted-foreground hover:text-foreground hover:bg-muted/60"
-                    )}
-                  >
-                    {label}
-                  </a>
-                </li>
-              ))}
-            </ul>
-
-            {/* Actions */}
-            <div className="flex items-center gap-2">
-              <ThemeToggle />
-              <a
-                href="#contact"
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("#contact");
-                }}
-                className="hidden md:inline-flex items-center gap-1.5 px-4 py-2 rounded-full bg-foreground text-background text-sm font-medium hover:opacity-85 transition-opacity"
-              >
-                Let&apos;s talk
-              </a>
-              <button
-                ref={toggleRef}
-                onClick={() => setMobileOpen(!mobileOpen)}
-                className="md:hidden w-11 h-11 -mr-1.5 flex items-center justify-center text-muted-foreground hover:text-foreground transition-colors"
-                aria-label={mobileOpen ? "Close menu" : "Open menu"}
-                aria-expanded={mobileOpen}
-              >
-                {mobileOpen ? <X size={18} aria-hidden="true" /> : <Menu size={18} aria-hidden="true" />}
-              </button>
-            </div>
-          </nav>
+            {hero.name}
+          </a>
         </div>
-      </header>
 
-      {/* Mobile menu */}
-      <AnimatePresence>
-        {mobileOpen && (
-          <motion.div
-            initial={{ opacity: rm ? 1 : 0, y: rm ? 0 : -8 }}
-            animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: rm ? 1 : 0, y: rm ? 0 : -8 }}
-            transition={{ duration: rm ? 0 : 0.2, ease: "easeOut" }}
-            className="fixed inset-0 z-40 bg-background pt-16"
-          >
-            <div ref={menuRef} className="section-padding py-8 flex flex-col gap-2">
-              {navItems.map(({ label, href }, i) => (
-                <motion.a
-                  key={href}
-                  href={href}
-                  initial={{ opacity: rm ? 1 : 0, x: rm ? 0 : -16 }}
-                  animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: rm ? 0 : i * 0.05, duration: rm ? 0 : 0.25, ease: "easeOut" }}
-                  onClick={(e) => {
-                    e.preventDefault();
-                    handleNavClick(href);
-                  }}
-                  className="flex items-center justify-between py-4 border-b border-border text-xl font-medium text-foreground hover:text-accent transition-colors"
-                >
-                  <span>{label}</span>
-                  <span className="text-xs text-muted-foreground font-normal">
-                    {String(i + 1).padStart(2, "0")}
-                  </span>
-                </motion.a>
-              ))}
-              <motion.a
-                href="#contact"
-                initial={{ opacity: rm ? 1 : 0 }}
-                animate={{ opacity: 1 }}
-                transition={{ delay: rm ? 0 : 0.3 }}
-                onClick={(e) => {
-                  e.preventDefault();
-                  handleNavClick("#contact");
+        {/* Lanyard badge — strap starts at the very top edge, hanging in from
+            outside the frame. Sits right after the logo + name on desktop,
+            slides to the horizontal center on smaller screens. */}
+        <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 lg:left-[176px] lg:translate-x-0">
+          <IdBadge size="sm" className="xl:hidden" />
+          <IdBadge size="lg" className="hidden xl:block" />
+        </div>
+
+        <div className="flex items-center gap-1">
+          <div className="group relative flex items-center justify-center">
+            <button
+              type="button"
+              onClick={toggle}
+              aria-label="Toggle light / dark theme"
+              aria-pressed={isDark}
+              className="lamp-toggle relative flex items-center justify-center rounded-full p-1"
+            >
+              {/* Lamp switched on (dark mode): the shade's open bottom edge
+                  sits ~57% down the image — both glows are anchored there
+                  (top edge, not centred) so light reads as spilling out from
+                  under the shade rather than glowing from within it. */}
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "pointer-events-none absolute left-1/2 top-[54%] h-8 w-9 -translate-x-1/2 rounded-full blur-[2px] transition-opacity duration-500",
+                  isDark ? "opacity-100" : "opacity-0"
+                )}
+                style={{
+                  background:
+                    "radial-gradient(circle, rgba(253,230,138,0.95) 0%, rgba(253,224,138,0.45) 45%, transparent 75%)",
                 }}
-                className="mt-6 w-full py-4 rounded-full bg-foreground text-background text-center text-sm font-medium"
-              >
-                Let&apos;s talk
-              </motion.a>
+              />
+              <span
+                aria-hidden="true"
+                className={cn(
+                  "pointer-events-none absolute left-1/2 top-[58%] h-7 w-9 -translate-x-1/2 transition-opacity duration-700",
+                  isDark ? "opacity-80" : "opacity-0"
+                )}
+                style={{
+                  background:
+                    "linear-gradient(to bottom, rgba(253,224,138,0.55) 0%, rgba(253,224,138,0.15) 55%, transparent 85%)",
+                  clipPath: "polygon(30% 0, 70% 0, 100% 100%, 0% 100%)",
+                }}
+              />
+              <TableLamp size={40} priority className="lamp-img relative" />
+            </button>
+
+            <div className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
+              <span className="relative inline-flex flex-col items-center">
+                <span
+                  aria-hidden="true"
+                  className="-mb-1 h-2 w-2 rotate-45 border-l border-t border-editor-border bg-surface"
+                />
+                <span className="whitespace-nowrap rounded-full border border-editor-border bg-surface px-3 py-1 font-sans text-[11px] text-text-secondary shadow-sm">
+                  {isDark ? "Switch to light mode" : "Switch to dark mode"}
+                </span>
+              </span>
             </div>
-          </motion.div>
-        )}
-      </AnimatePresence>
-    </>
+          </div>
+
+          <div className="relative lg:hidden" ref={menuRef}>
+            <button
+              type="button"
+              onClick={() => setMenuOpen((prev) => !prev)}
+              aria-label="Toggle navigation menu"
+              aria-expanded={menuOpen}
+              className="flex items-center justify-center rounded-full p-2 text-text-primary transition-transform hover:scale-110"
+            >
+              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+            </button>
+
+            {menuOpen && (
+              <div className="absolute right-0 top-full mt-2 flex w-44 flex-col gap-1 rounded-2xl border border-editor-border bg-surface p-2 shadow-lg">
+                {floatingNavItems.map((item) => (
+                  <a
+                    key={item.href}
+                    href={item.href}
+                    onClick={() => setMenuOpen(false)}
+                    className="rounded-xl px-4 py-2 text-center font-sans text-sm text-text-secondary transition-colors hover:bg-stone-100 hover:text-text-primary dark:hover:bg-stone-800"
+                  >
+                    {item.label}
+                  </a>
+                ))}
+              </div>
+            )}
+          </div>
+        </div>
+      </div>
+    </nav>
   );
 }

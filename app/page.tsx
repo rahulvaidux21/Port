@@ -1,29 +1,32 @@
+import { IntroSplash } from "@/components/IntroSplash";
 import { Navbar } from "@/components/Navbar";
-import { Hero } from "@/components/sections/Hero";
-import { Work } from "@/components/sections/Work";
-import { About } from "@/components/sections/About";
-import { Principles } from "@/components/sections/Principles";
-import { Resume } from "@/components/sections/Resume";
-import { Contact } from "@/components/sections/Contact";
-import { Footer } from "@/components/sections/Footer";
+import { FloatingNav } from "@/components/FloatingNav";
+import { Hero } from "@/components/Hero";
+import { ValueChips } from "@/components/ValueChips";
+import { ProjectBrowser } from "@/components/ProjectBrowser";
+import { Experience } from "@/components/Experience";
+import { Testimonials } from "@/components/Testimonials";
+import { ClosingCta } from "@/components/ClosingCta";
+import { Footer } from "@/components/Footer";
 
 export default function Home() {
   return (
     <>
-      <a
-        href="#main"
-        className="sr-only focus:not-sr-only focus:fixed focus:top-4 focus:left-4 focus:z-[60] focus:px-4 focus:py-2 focus:rounded-full focus:bg-foreground focus:text-background focus:text-sm focus:font-medium"
-      >
-        Skip to content
-      </a>
+      <IntroSplash />
       <Navbar />
-      <main id="main">
-        <Hero />
-        <Work />
-        <About />
-        <Principles />
-        <Resume />
-        <Contact />
+      <FloatingNav />
+      <main>
+        {/* Hero + value chips share the first viewport so the chips sit
+            above the fold — the hero centres in the remaining space and the
+            marquee band pins to the bottom of the screen. */}
+        <div className="flex min-h-[calc(100svh-92px)] flex-col">
+          <Hero />
+          <ValueChips />
+        </div>
+        <ProjectBrowser />
+        <Experience />
+        <Testimonials />
+        <ClosingCta />
       </main>
       <Footer />
     </>

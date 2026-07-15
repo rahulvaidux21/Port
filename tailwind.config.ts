@@ -10,37 +10,23 @@ const config: Config = {
   theme: {
     extend: {
       colors: {
-        background: "hsl(var(--background))",
-        foreground: "hsl(var(--foreground))",
-        accent: {
-          DEFAULT: "hsl(var(--accent))",
-          foreground: "hsl(var(--accent-foreground))",
-          muted: "hsl(var(--accent-muted))",
+        paper: "var(--color-paper)",
+        surface: "var(--color-surface)",
+        text: {
+          primary: "var(--color-text-primary)",
+          secondary: "var(--color-text-secondary)",
+          muted: "var(--color-text-muted)",
         },
-        muted: {
-          DEFAULT: "hsl(var(--muted))",
-          foreground: "hsl(var(--muted-foreground))",
+        editor: {
+          border: "var(--color-editor-border)",
         },
-        border: "hsl(var(--border))",
-        success: "hsl(var(--success))",
-        destructive: "hsl(var(--destructive))",
-        card: {
-          DEFAULT: "hsl(var(--card))",
-          foreground: "hsl(var(--card-foreground))",
-        },
-        surface: "hsl(var(--surface))",
+        accent: "var(--color-accent)",
       },
       fontFamily: {
-        sans: ["var(--font-bricolage)", "system-ui", "sans-serif"],
-      },
-      fontSize: {
-        "display-xl": ["clamp(3.5rem,9vw,8rem)", { lineHeight: "0.95", letterSpacing: "-0.04em" }],
-        "display-lg": ["clamp(2.5rem,6vw,5.5rem)", { lineHeight: "1", letterSpacing: "-0.03em" }],
-        "display-md": ["clamp(1.75rem,3.5vw,3rem)", { lineHeight: "1.1", letterSpacing: "-0.025em" }],
-        "display-sm": ["clamp(1.25rem,2.5vw,2rem)", { lineHeight: "1.2", letterSpacing: "-0.02em" }],
-      },
-      spacing: {
-        section: "clamp(4rem,10vw,8rem)",
+        sans: ["var(--font-geist-sans)", "system-ui", "sans-serif"],
+        mono: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        type: ["var(--font-geist-mono)", "ui-monospace", "monospace"],
+        serif: ["var(--font-piazzolla)", "Georgia", "serif"],
       },
       borderRadius: {
         lg: "0.75rem",
@@ -48,17 +34,19 @@ const config: Config = {
         "2xl": "1.5rem",
         "3xl": "2rem",
       },
-      animation: {
-        "fade-up": "fade-up 0.6s cubic-bezier(0.16,1,0.3,1) forwards",
-      },
       keyframes: {
-        "fade-up": {
-          "0%": { opacity: "0", transform: "translateY(24px)" },
-          "100%": { opacity: "1", transform: "translateY(0)" },
+        marquee: {
+          "0%": { transform: "translateX(0)" },
+          "100%": { transform: "translateX(-50%)" },
+        },
+        float: {
+          "0%, 100%": { transform: "translateY(0)" },
+          "50%": { transform: "translateY(-8px)" },
         },
       },
-      transitionTimingFunction: {
-        "expo-out": "cubic-bezier(0.16,1,0.3,1)",
+      animation: {
+        marquee: "marquee 55s linear infinite",
+        float: "float 6s ease-in-out infinite",
       },
     },
   },
