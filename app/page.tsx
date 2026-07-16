@@ -1,4 +1,3 @@
-import { IntroSplash } from "@/components/IntroSplash";
 import { Navbar } from "@/components/Navbar";
 import { FloatingNav } from "@/components/FloatingNav";
 import { Hero } from "@/components/Hero";
@@ -12,7 +11,6 @@ import { Footer } from "@/components/Footer";
 export default function Home() {
   return (
     <>
-      <IntroSplash />
       <Navbar />
       <FloatingNav />
       <main>

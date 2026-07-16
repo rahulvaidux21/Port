@@ -27,9 +27,7 @@ export function IdBadge({ size = "lg", className }: IdBadgeProps) {
   useEffect(() => setMounted(true), []);
 
   const animate = mounted && !reduced;
-  // Hold the badge off-frame until the intro splash (~2.2s) has cleared, so
-  // the drop actually plays in view rather than behind the overlay.
-  const dropDelay = 2.3;
+  const dropDelay = 0.2;
 
   return (
     // Drop: the whole lanyard falls in from above the frame.
