@@ -3,10 +3,8 @@
 import { useEffect, useRef, useState } from "react";
 import Image from "next/image";
 import Link from "next/link";
-import { Menu, X } from "lucide-react";
-import { IdBadge } from "@/components/IdBadge";
-import { TableLamp } from "@/components/TableLamp";
-import { hero, floatingNavItems } from "@/lib/data";
+import { Menu, Moon, Sun, X } from "lucide-react";
+import { hero, navItems, socialLinks } from "@/lib/data";
 import { useTheme } from "@/lib/useTheme";
 import { cn } from "@/lib/utils";
 
@@ -14,6 +12,7 @@ export function Navbar() {
   const { isDark, toggle } = useTheme();
   const [menuOpen, setMenuOpen] = useState(false);
   const menuRef = useRef<HTMLDivElement>(null);
+  const email = socialLinks.find((link) => link.icon === "mail")?.href ?? "#";
 
   useEffect(() => {
     if (!menuOpen) return;
@@ -37,77 +36,47 @@ export function Navbar() {
   }, [menuOpen]);
 
   return (
-    <nav className="relative z-[100]">
-      <div className="relative mx-auto flex max-w-[1400px] items-center justify-between px-6 pb-3 pt-6 md:px-8">
-        <div className="flex items-center gap-2.5">
-          <Image src="/logo.svg" alt="Rahul Vaid logo" width={30} height={30} className="rounded-full" />
-          <Link
-            href="/"
-            className="font-sans text-[13px] font-medium tracking-wide text-stone-700 transition-colors hover:text-stone-900 dark:text-stone-300 dark:hover:text-white"
-          >
-            {hero.name}
-          </Link>
-        </div>
+    <div className="sticky top-4 z-[100] flex justify-center px-9 md:px-8">
+      <nav className="flex w-full max-w-[574px] items-center justify-between gap-2 rounded-lg border border-hairline/[0.08] bg-hairline/[0.08] p-[9px] shadow-lg backdrop-blur-md lg:h-[66px]">
+        <Link href="/" className="h-12 w-16 shrink-0 overflow-hidden rounded-lg border border-hairline/[0.08] p-px">
+          <Image
+            src="/avatar-crop.jpg"
+            alt={hero.name}
+            width={64}
+            height={48}
+            className="h-full w-full rounded-[11px] object-cover object-top"
+          />
+        </Link>
 
-        {/* Lanyard badge — strap starts at the very top edge, hanging in from
-            outside the frame. Sits right after the logo + name on desktop,
-            slides to the horizontal center on smaller screens. */}
-        <div className="absolute left-1/2 top-0 z-10 -translate-x-1/2 lg:left-[176px] lg:translate-x-0">
-          <IdBadge size="sm" className="xl:hidden" />
-          <IdBadge size="lg" className="hidden xl:block" />
-        </div>
-
-        <div className="flex items-center gap-1">
-          <div className="group relative flex items-center justify-center">
-            <button
-              type="button"
-              onClick={toggle}
-              aria-label="Toggle light / dark theme"
-              aria-pressed={isDark}
-              className="lamp-toggle relative flex items-center justify-center rounded-full p-1"
+        <div className="hidden items-center gap-1 lg:flex">
+          {navItems.map((item) => (
+            <a
+              key={item.href}
+              href={item.href}
+              className="rounded-lg px-4 py-3 font-sans text-sm uppercase tracking-wide text-text-primary/[0.88] transition-colors hover:text-text-primary"
             >
-              {/* Lamp switched on (dark mode): the shade's open bottom edge
-                  sits ~57% down the image — both glows are anchored there
-                  (top edge, not centred) so light reads as spilling out from
-                  under the shade rather than glowing from within it. */}
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "pointer-events-none absolute left-1/2 top-[54%] h-8 w-9 -translate-x-1/2 rounded-full blur-[2px] transition-opacity duration-500",
-                  isDark ? "opacity-100" : "opacity-0"
-                )}
-                style={{
-                  background:
-                    "radial-gradient(circle, rgba(253,230,138,0.95) 0%, rgba(253,224,138,0.45) 45%, transparent 75%)",
-                }}
-              />
-              <span
-                aria-hidden="true"
-                className={cn(
-                  "pointer-events-none absolute left-1/2 top-[58%] h-7 w-9 -translate-x-1/2 transition-opacity duration-700",
-                  isDark ? "opacity-80" : "opacity-0"
-                )}
-                style={{
-                  background:
-                    "linear-gradient(to bottom, rgba(253,224,138,0.55) 0%, rgba(253,224,138,0.15) 55%, transparent 85%)",
-                  clipPath: "polygon(30% 0, 70% 0, 100% 100%, 0% 100%)",
-                }}
-              />
-              <TableLamp size={40} priority className="lamp-img relative" />
-            </button>
+              {item.label}
+            </a>
+          ))}
+        </div>
 
-            <div className="pointer-events-none absolute left-1/2 top-full z-10 mt-2 -translate-x-1/2 opacity-0 transition-opacity duration-200 group-hover:opacity-100">
-              <span className="relative inline-flex flex-col items-center">
-                <span
-                  aria-hidden="true"
-                  className="-mb-1 h-2 w-2 rotate-45 border-l border-t border-editor-border bg-surface"
-                />
-                <span className="whitespace-nowrap rounded-full border border-editor-border bg-surface px-3 py-1 font-sans text-[11px] text-text-secondary shadow-sm">
-                  {isDark ? "Switch to light mode" : "Switch to dark mode"}
-                </span>
-              </span>
-            </div>
-          </div>
+        <div className="flex items-center gap-2">
+          <button
+            type="button"
+            onClick={toggle}
+            aria-label="Toggle light / dark theme"
+            aria-pressed={isDark}
+            className="flex h-8 w-8 items-center justify-center rounded-full border border-hairline/[0.08] bg-hairline/[0.04] text-text-secondary transition-colors hover:text-text-primary"
+          >
+            {isDark ? <Sun className="h-4 w-4" /> : <Moon className="h-4 w-4" />}
+          </button>
+
+          <a
+            href={email}
+            className="hidden items-center rounded-lg border border-accent-border bg-accent px-3 py-2 font-sans text-sm font-medium uppercase leading-4 tracking-wide text-accent-foreground shadow-[0_5px_30px_5px_rgba(0,85,254,0.32)] transition-opacity hover:opacity-90 sm:inline-flex"
+          >
+            Contact
+          </a>
 
           <div className="relative lg:hidden" ref={menuRef}>
             <button
@@ -115,28 +84,38 @@ export function Navbar() {
               onClick={() => setMenuOpen((prev) => !prev)}
               aria-label="Toggle navigation menu"
               aria-expanded={menuOpen}
-              className="flex items-center justify-center rounded-full p-2 text-text-primary transition-transform hover:scale-110"
+              className={cn(
+                "flex h-8 w-8 items-center justify-center rounded-full border border-hairline/[0.08] text-text-secondary transition-colors hover:text-text-primary",
+                menuOpen && "text-text-primary"
+              )}
             >
-              {menuOpen ? <X className="h-5 w-5" /> : <Menu className="h-5 w-5" />}
+              {menuOpen ? <X className="h-4 w-4" /> : <Menu className="h-4 w-4" />}
             </button>
 
             {menuOpen && (
-              <div className="absolute right-0 top-full mt-2 flex w-44 flex-col gap-1 rounded-2xl border border-editor-border bg-surface p-2 shadow-lg">
-                {floatingNavItems.map((item) => (
+              <div className="absolute right-0 top-full mt-2 flex w-48 flex-col gap-1 rounded-2xl border border-hairline/[0.08] bg-paper p-2 shadow-lg">
+                {navItems.map((item) => (
                   <a
                     key={item.href}
                     href={item.href}
                     onClick={() => setMenuOpen(false)}
-                    className="rounded-xl px-4 py-2 text-center font-sans text-sm text-text-secondary transition-colors hover:bg-stone-100 hover:text-text-primary dark:hover:bg-stone-800"
+                    className="rounded-xl px-4 py-2 text-center font-sans text-sm text-text-secondary transition-colors hover:bg-surface hover:text-text-primary"
                   >
                     {item.label}
                   </a>
                 ))}
+                <a
+                  href={email}
+                  onClick={() => setMenuOpen(false)}
+                  className="mt-1 rounded-xl bg-accent px-4 py-2 text-center font-sans text-sm font-medium text-accent-foreground"
+                >
+                  Contact
+                </a>
               </div>
             )}
           </div>
         </div>
-      </div>
-    </nav>
+      </nav>
+    </div>
   );
 }

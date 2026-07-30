@@ -1,141 +1,105 @@
 ---
-version: alpha
+version: beta
 name: Rahul Vaid Portfolio
-description: A warm, paper-and-plastic "stationery" design system for a UI/UX designer's portfolio — evidence-first case studies over marketing gloss.
+description: A dark-first, blue-accented portfolio design system — a faithful implementation of Rahul's own Figma design ("Portfolio Landing Page_Final"), built with his real content, photo, and work history.
 colors:
-  paper:
-    light: "#faf8f5"
-    dark: "#18181a"
-  surface:
-    light: "#ffffff"
-    dark: "#262624"
-  textPrimary:
-    light: "#1c1917"
-    dark: "#f5f5f4"
-  textSecondary:
-    light: "#57534e"
-    dark: "#b4b0aa"
-  textMuted:
-    light: "#78716c"
-    dark: "#a8a29e"
-  editorBorder:
-    light: "#e7e5e4"
-    dark: "#3a3936"
+  light:
+    paper: "#ffffff"
+    surface: "#f5f6f7"
+    textPrimary: "#0b0c0e"
+    textSecondary: "#4b4f57"
+    textMuted: "#7a7f87"
+    editorBorder: "#e3e4e7"
+    hairline: "#0b0c0e (used only with an opacity modifier — /8, /16, /32)"
+  dark:
+    paper: "#0b0c0e"
+    surface: "#17181b"
+    textPrimary: "#f6f3f0"
+    textSecondary: "#c2c2c2"
+    textMuted: "#7e7e7e"
+    editorBorder: "#24262b (case-study template only, see Note below)"
+    hairline: "#f6f3f0 (used only with an opacity modifier — /8, /16, /32)"
   accent:
-    light: "#d97706"
-    dark: "#f0b94d"
-  badge:
-    light: "#1c1917"
-    dark: "#2a2419"
-  bandBg:
-    light: "#f1ebe4"
-    dark: "#211f1a"
-  bandBorder:
-    light: "#c7bca8"
-    dark: "#3d382c"
+    default: "#0055fe"
+    border: "#3578ff"
+    glow: "#032d81 (dark) / #d1e0ff (light)"
+    foreground: "#ffffff"
+    role: "The site's one deliberate color moment — CTA buttons, active carousel arrows, testimonial card border/shadow, and the diffuse glow blobs behind the Experience and CTA cards. Pulled exactly from the source Figma, not an original choice this time."
+  note: "editor-border is a separate token from hairline. The case-study detail template (app/case-studies/[slug]) still relies on editor-border at full opacity and was NOT touched by the Figma rebuild — hairline exists so the new landing-page components can match Figma's translucent off-white dividers without changing the case-study template's borders."
 typography:
   sans:
-    family: "Geist Sans (var(--font-geist-sans))"
-    role: "All UI text — headings, body, labels, buttons"
+    family: "DM Sans (Google Fonts, free)"
+    role: "Every heading and body element site-wide — one family, not a display/body pair."
+    weights: [400, 500, 700]
   mono:
     family: "Geist Mono (var(--font-geist-mono))"
-    role: "Metadata, timestamps, small uppercase-tracked labels, ruler ticks"
+    role: "Small uppercase-tracked labels/captions only."
   serif:
     family: "Piazzolla (var(--font-piazzolla))"
-    role: "Case-study statement headlines only — the one deliberate accent pairing against the sans/mono system"
-    weights: [500, 600]
-    styles: [normal, italic]
+    role: "Case-study detail template's statement headline/pull-quotes only — untouched by this rebuild."
+  instrumentSerif:
+    family: "Instrument Serif italic (var(--font-instrument-serif))"
+    role: "The exact accent typeface from the Figma source — one italic word inside every landing-page section heading (\"Things *I've designed*\", \"Experience *I have*\", \"Collaboration *in their words*\", \"Your story, *well designed.*\")."
 rounded:
   pill: "9999px"
-  card: "1rem"
-  cardLg: "1.5rem"
+  card: "0.75rem (rounded-xl) — matches the Figma source's 12px card radius"
   section: "2rem"
-  flat: "0px"
 spacing:
   sectionY: "5rem (py-20, py-28 on md+)"
   pageX: "1.5rem (px-6, px-8 on md+)"
-  contentMax: "1140px"
-  sectionIntroMax: "42rem (max-w-2xl)"
-  navMax: "1400px"
+  contentMax: "1400px (landing page) — wider than the previous 1140px, matching the Figma frame's 1440px canvas"
+  navMax: "720px — the floating pill nav"
+motionStack:
+  framerMotion: "Section/card reveal-on-scroll (useRevealOnScroll)."
+  gsapSplitText: "Hero headline — splits into words, masks, and drops in on load."
+  cssTicker: "Hero's giant background name-wordmark, and the TrustedByMarquee logo strip — slow, continuous horizontal marquees (CSS animation, not scroll-linked)."
+  lenis: "Global smooth-scroll, ticked through GSAP's ticker (see components/SmoothScroll.tsx). Entirely skipped under prefers-reduced-motion — native scroll takes over."
+  swiper: "ProjectsCarousel, MoreWork, and TestimonialsCarousel — each a Swiper instance with prev/next arrow buttons + dot pagination."
 components:
   button:
-    shape: pill
-    fill: text-primary bg / paper text
-  chip:
-    shape: pill
-    border: editor-border
+    shape: "rounded-lg (8px), not pill — matches the Figma source"
+    fill: "solid bg-accent / text-accent-foreground with a colored glow shadow for primary actions; translucent bordered outline for secondary"
   card:
-    shape: rounded-2xl or rounded-[2rem]
-    border: editor-border
-    elevation: shadow-lg or flat
+    shape: rounded-xl
+    border: "hairline/16 (landing page) or editor-border (case-study template)"
+    glow: "Experience and CTA cards carry three blurred accent-glow blobs behind their content, matching the Figma source exactly"
 ---
 
 # Design System — Rahul Vaid Portfolio
 
 ## Overview
 
-This is a personal portfolio built as a warm, tactile "stationery" object rather than a glossy SaaS landing page: dot-grid textures, ruler-tick measurements, a lanyard ID badge, and a pendant lamp used as the dark-mode toggle all share one physical-object visual language. The palette is a muted cream-paper base with a single warm amber accent — deliberately desaturated so the three case-study accent colors (terracotta, muted blue, sage) can carry their own identity without competing for attention. The emotional target is *grounded confidence*: the design should read as evidence-first and quietly playful, never as marketing gloss or invented flash.
+The landing page is a direct implementation of Rahul's own Figma file (frame "Portfolio Landing Page_Final", file "MoTA-Survey-App", page "Dump") — pulled section-by-section via the Figma MCP `get_design_context` tool, not eyeballed from screenshots. Real content throughout:
 
-## Colors
+- **Real project screenshots** for the three featured case studies (IRCTC App Redesign, UX4G Design System 3.0, Survey Setu App), plus real company/ministry logos in the trusted-by marquee and Experience timeline.
+- **Real resume copy** in the Experience section (Netoyed, Skillfoundry, UnBoxing Community) — reused verbatim from Rahul's own Figma copy.
+- **No fabricated testimonial identities** — the Figma source's testimonial cards used Aluro-template stock photos and fictional names (Elise K., Daniel M., Lila R.); those were replaced with the site's existing real, role-attributed illustrative quotes inside the same card visual design.
+- **No Services/pricing section** — the source Figma frame doesn't have one; it goes straight from the trusted-by marquee into the work carousels.
 
-**Paper** (`--color-paper`) is the page background — off-white cream in light mode, near-black in dark mode — layered with a faint two-axis line-grid (`--grid-line`) to read as graph/engineering paper rather than a flat void.
+The case-study detail template (`app/case-studies/[slug]`) was **not** part of this rebuild's scope — it keeps its own layout, `editor-border` token, and Piazzolla accent untouched.
 
-**Surface** (`--color-surface`) is pure white (light) / warm charcoal (dark), used for cards sitting on top of paper: testimonial cards, the mobile nav dropdown, tooltips.
+## Page structure (top to bottom)
 
-**Text** uses a three-step scale — `text-primary` for headings and high-emphasis copy, `text-secondary` for body copy, `text-muted` for captions/timestamps/labels — each with its own light/dark value rather than a single color at different opacities.
+1. **Navbar** — floating pill, avatar-as-home-link, Work/Experience/Testimonials, theme toggle, solid blue Contact button.
+2. **Hero** — ticker wordmark background, 3-photo fanned print-stack portrait, headline below.
+3. **TrustedByMarquee** — real ministry/company logos, grayscale, ticking marquee.
+4. **ProjectsCarousel** ("Things I've designed") — the 3 primary case studies with real screenshots.
+5. **MoreWork** ("More work") — NIRI Platform (real screenshot), SALONX and UnBoxing Community (color-block fallback, no screenshot available yet).
+6. **Experience** ("Experience I have") — glow-card timeline, 3 real roles.
+7. **TestimonialsCarousel** ("Collaboration in their words") — glow-bordered active card, real illustrative quotes.
+8. **CtaBand** ("Your story, well designed.") — glow card, Let's Connect / View Case Studies.
+9. **Footer** — avatar, tagline, real social icons (LinkedIn/Behance/Gmail/Medium), Links column, copyright, bottom glow bar.
 
-**Accent** (`--color-accent`, amber `#d97706` light / warmer gold `#f0b94d` dark) is used sparingly: the speech-bubble border, focus rings, selection color, and detail-label colors inside case studies (each case study also gets its own muted HSL accent pair — `color`/`colorDark` — for its visual panel, kept desaturated so it sits inside the paper palette rather than reading as a bright marketing gradient).
-
-**Purpose-built surface tokens** exist for two recurring "object" components rather than reusing generic surface colors: `--color-badge` (the ID badge's plastic, brass-trimmed in dark mode) and `--color-band-bg`/`--color-band-border` (the cream "printed strip" bands — the value-chips marquee and the Experience frame). Both get genuinely different values per theme, not just an inverted lightness — dark mode is a designed second state.
-
-Gradients are avoided as decoration: the case-study visual panels use a solid brand color, not a gradient; the speech-bubble border is a solid accent stroke, not a moving gradient ring.
-
-## Typography
-
-Two-family system with one deliberate third-family accent:
-
-- **Geist Sans** carries everything — hero headline, section headings, body copy, buttons, nav. Headings are bold, sized on a fluid scale (`text-3xl` → `sm:text-4xl` → `md:text-5xl` for the hero `h1`; `text-3xl md:text-4xl` for section `h2`s).
-- **Geist Mono** is reserved for metadata: case-study wordmarks and discipline labels, detail-block labels ("Problem" / "Solution" / "Result"), ruler-tick numerals, footer copyright/credit lines — always small (9–13px), uppercase, wide letter-spacing.
-- **Piazzolla** (serif, italic) is used in exactly one place: the case-study statement headline inside each project card. It's a single-purpose contrast accent against the sans/mono system, not a site-wide type change — introducing it more broadly would dilute the pairing's impact.
-
-## Layout
-
-Content is capped at three widths depending on purpose: `max-w-[1400px]` for the nav bar, `max-w-2xl` for centered section intros (speech bubble + heading + one-line description), and `max-w-[1140px]` for main section content (project cards, the Experience frame). Page padding is `px-6` (mobile) stepping to `px-8` at `md`. Sections use a generous, consistent vertical rhythm — `py-20` stepping to `py-28` at `md` — so the page reads as a slow, single-column scroll rather than a dense dashboard.
-
-Hero and value-chips share the first viewport height deliberately (`min-h-[calc(100svh-92px)]`) so the "what I bring" strip is visible without scrolling.
-
-## Elevation & Depth
-
-Depth is mostly conveyed through borders and layering, not heavy shadow — most cards sit flat with a 1px `editor-border` rather than a drop shadow. Shadow is reserved for objects that are meant to feel physically present: `shadow-lg` on the stacked, sticky-scrolling project cards (which visually overlap as you scroll, reinforcing a "stack of papers" metaphor via z-index rather than shadow depth); `shadow-2xl` on the device-frame mockups inside case studies (phone/browser chrome resting on the colored panel); `shadow-inner` on the ID badge's fabric loop for a stitched, tactile dent. Flat sections (the value-chips band) intentionally skip both radius and shadow to read as a printed strip, not a floating card.
-
-## Shapes
-
-Two shape families coexist on purpose: **pills** (`rounded-full`) for anything clickable or chip-like — nav links, buttons, tags, the marquee chips — and **soft-rounded rectangles** for containers, on an escalating scale: `rounded-xl` (photo panels, browser-frame chrome), `rounded-2xl` (badge holder, testimonial cards, mobile dropdown), `rounded-[1.75rem]` (phone-frame device mockups), `rounded-[2rem]` (project cards, the Experience frame — the largest radius, reserved for the biggest "resting object" containers). The one deliberate flat exception is the value-chips band (`rounded-none`), styled like a printed strip rather than a card.
-
-## Components
-
-- **Buttons**: pill-shaped, solid `text-primary`-on-`paper` fill, a small leading status dot (pulsing) on the two "Let's Connect" CTAs.
-- **Chips / marquee strip**: pill chips inside a flat cream band, auto-scrolling (`animate-marquee`, duplicated content for a seamless loop), with a static wrapped fallback under reduced motion.
-- **Speech bubble**: a small pill callout with a solid accent-color border — no gradient, no tail — used as a recurring "kicker" above section headings.
-- **ID badge**: a physical lanyard object — strap, stitched loop, badge holder with diagonal glare — that drops in from above the frame on load (tangled, then straightens, then idles with a gentle sway), positioned beside the logo in the nav and re-centered on mobile.
-- **Lamp toggle**: the dark-mode switch is a pendant-lamp photo; hovering sways it gently, and switching to dark mode "turns it on" — a warm glow anchored at the shade's open bottom edge, plus a filter-based bulb-brightening effect.
-- **Project cards**: sticky-stacked case-study cards, each split into a content half (metadata row, serif statement headline, description, compact problem/solution/result) and a solid-color visual half (device-frame mockup(s) — phone chrome for mobile apps, browser chrome for web platforms — with a small dot-cluster accent at the card's outer corners).
-- **Testimonial cards**: same auto-scrolling marquee treatment as the value chips, for visual consistency between the two "strip" components.
-- **Experience frame**: a thick bordered cream frame with a dot-grid texture and ruler-tick rulers along the top/left edges, floating with a slow bob animation, containing stacked experience entries.
-- **Footer social icons**: bracket-text (`{LinkedIn}`) that swaps to a lucide icon on hover.
+`GridFrame`/`GridDivider` wrap the whole `<main>` with edge-to-edge vertical guide lines and horizontal section dividers (small square tick marks), matching the Figma source's own grid overlay.
 
 ## Do's and Don'ts
 
 **Do**
-- Keep every case-study claim traceable to something real; if content is illustrative (like the current testimonials), say so rather than presenting it as verified.
-- Pair every animation with a `prefers-reduced-motion` fallback that's a complete alternate layout, not just "animation off."
-- Keep all icons on `lucide-react` — no hand-drawn SVG paths, no second icon package, even for marks Lucide doesn't have natively (pick the closest semantic icon instead).
-- Give dark mode its own designed values for purpose-built surfaces (the ID badge, the cream bands) instead of just inverting lightness.
-- Reuse the existing "stationery" motifs (dot-grid, ruler ticks, marquee strips) when a new section needs texture, rather than inventing a new decorative language per section.
+- Keep every claim on the page traceable to something real — case-study results, experience copy, and trusted-by logos are all sourced from Rahul's actual work, not invented.
+- Pair every animation with a `prefers-reduced-motion` fallback that's a complete alternate state, not just "animation off."
+- Use `hairline` (not `editor-border`) for any new landing-page divider/border that should match the Figma source's translucent off-white lines.
 
 **Don't**
-- Don't add gradients as decoration (gradient text, moving gradient borders, gradient panel fills) — the system deliberately uses solid colors.
-- Don't introduce a second display/serif font — Piazzolla's role is intentionally narrow (case-study statement headlines only); broader use would blunt the contrast.
-- Don't invent metrics, quotes, or outcomes for case studies. If real data isn't available yet, mark content as illustrative in a code comment, as the testimonials already are.
-- Don't add a floating/bordered container around the top nav — it was deliberately removed in favor of an inline, borderless bar.
-- Don't reach for heavy drop shadows as a default; shadow is reserved for objects meant to feel physically "resting" on the page (device frames, stacked cards), not general-purpose card elevation.
+- Don't touch the case-study detail template's layout, `editor-border` usage, or Piazzolla accent as a side effect of landing-page work.
+- Don't reintroduce the fictional Aluro-template testimonial names/photos — the real, role-attributed quotes are the source of truth.
+- Don't add a Services/pricing section back in — the source Figma design doesn't have one.

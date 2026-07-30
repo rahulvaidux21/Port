@@ -1,57 +1,90 @@
-import type { NavItem, SocialLink, CaseStudy, ExperienceEntry, Testimonial } from "@/types";
+import type {
+  NavItem,
+  SocialLink,
+  CaseStudy,
+  Testimonial,
+  TrustedLogo,
+  MoreWorkItem,
+  ExperienceEntry,
+} from "@/types";
 
-export const floatingNavItems: NavItem[] = [
+// Matches the floating nav banner in the Figma source exactly — the avatar
+// itself is the "home" link, so no separate Home item.
+export const navItems: NavItem[] = [
   { label: "Work", href: "#work" },
   { label: "Experience", href: "#experience" },
   { label: "Testimonials", href: "#testimonials" },
-  { label: "Contact", href: "#contact" },
 ];
 
 export const socialLinks: SocialLink[] = [
   { label: "LinkedIn", href: "https://www.linkedin.com/in/rahul-vaid-1b768423a", icon: "linkedin" },
   { label: "Behance", href: "https://www.behance.net/rahulvaid1", icon: "behance" },
   { label: "Email", href: "mailto:rahulvaidux@gmail.com", icon: "mail" },
-  { label: "CV", href: "/resume.pdf", icon: "file" },
+  { label: "Medium", href: "https://medium.com/@rahulvaidux", icon: "medium" },
 ];
 
 export const hero = {
   name: "Rahul Vaid",
   title: "UI/UX Designer",
-  speechBubble: "Hi, I'm Rahul Vaid",
+  kicker: "The UI/UX Designer. That's Rahul.",
   headline: "I design products where complexity meets usability.",
-  subline:
-    "UI/UX Designer working across design systems, mobile apps, and complex web platforms — most recently on products used by millions.",
+  // Figma hard-breaks the headline across two lines rather than relying on
+  // natural wrapping — kept as separate fields so Hero renders the same
+  // break point at every viewport width.
+  headlineLine1: "I design products where",
+  headlineLine2: "complexity meets usability.",
   ctaLabel: "Let's Connect",
+  secondaryCtaLabel: "View Case Studies",
 };
 
-export const valueChips: string[] = [
-  "Senior level quality",
-  "Fast execution",
-  "System thinking",
-  "Clear process",
-  "On-brand, every time",
-  "Smooth handoff",
-  "Design systems",
-  "Built for scale",
-  "Accessibility first",
-  "AI-assisted workflow",
-  "Research-backed",
-  "Ships on time",
+// "Trusted by" marquee strip beneath the hero — real ministries, agencies,
+// and companies Rahul has designed for (see Experience below), not generic
+// logo-soup filler.
+// Ordered to match the source Figma's current logo row exactly.
+export const trustedLogos: TrustedLogo[] = [
+  { name: "Ministry of Social Justice and Empowerment", src: "/logos/ministry-social-justice.png", width: 275, height: 60 },
+  { name: "Skill Foundry", src: "/logos/skill-foundry.png", width: 125, height: 60 },
+  { name: "UX4G", src: "/logos/ux4g.png", width: 217, height: 60 },
+  { name: "Netoyed", src: "/logos/netoyed.png", width: 160, height: 60 },
+  { name: "Digital India", src: "/logos/digital-india.png", width: 200, height: 60 },
+  { name: "Ministry of Statistics and Programme Implementation", src: "/logos/ministry-statistics.png", width: 275, height: 60 },
+  { name: "UnBoxing Community", src: "/logos/unboxing-community.png", width: 125, height: 60 },
+  { name: "Ministry of Tribal Affairs", src: "/logos/ministry-tribal-affairs.png", width: 250, height: 60 },
 ];
 
+// "Things I've designed" — the primary work carousel. Real screenshots for
+// all three; ordered to match the source Figma exactly (IRCTC, UX4G, Survey
+// Setu). NIRI, and other real work without full case studies, live in
+// `moreWork` below instead of being force-fit in here with a stock image.
 export const projectsSection = {
-  speechBubble: "Take a Look at My Portfolio",
-  headline: "Projects",
-  intro:
-    "Three products, three different kinds of hard. A design system, an app that works with no internet, and a platform that untangles a five-step approval maze.",
+  part1: "Things",
+  part2: "I've designed",
 };
 
-// Domain-neutral: tagged by discipline, not by ministry — the government context
-// lives inside the case studies themselves, not on the landing page.
-// Colors are deliberately muted/desaturated to sit alongside the paper/cream
-// palette used everywhere else, rather than reading as bright marketing gradients.
-// UX4G leads as the credibility anchor; images are added once real assets are provided.
+// Domain-neutral tags; the government context lives inside the case studies
+// themselves. UX4G leads as the credibility anchor.
 export const caseStudies: CaseStudy[] = [
+  {
+    id: "irctc",
+    year: "2024",
+    wordmark: "IRCTC App Redesign · UI/UX Case Study",
+    discipline: "Mobile App",
+    heading: "IRCTC App Redesigned",
+    statement: "A user-centered approach to streamlining train ticket booking.",
+    color: "hsl(210 38% 50%)",
+    colorDark: "hsl(210 36% 24%)",
+    tags: ["Concept Project", "Mobile App Design", "UI/UX"],
+    overview:
+      "A ground-up redesign of India's national rail-booking app, focused on cutting the friction out of the most common booking flows.",
+    problem: "The existing flow buried common tasks — booking, PNR status, refunds — under inconsistent navigation.",
+    solution:
+      "Restructured the core booking flow around a single search bar and consolidated the most-used tools onto the home screen.",
+    result: "A cleaner, faster booking experience designed around real rider behavior.",
+    labelColor: "hsl(210 45% 30%)",
+    labelColorDark: "hsl(210 45% 72%)",
+    frame: "phone",
+    image: "/work/irctc-cover.png",
+  },
   {
     id: "ux4g",
     year: "2025",
@@ -61,7 +94,7 @@ export const caseStudies: CaseStudy[] = [
     statement: "Consistency, not four different rulebooks.",
     color: "hsl(20 42% 52%)",
     colorDark: "hsl(18 40% 26%)",
-    tags: ["Design System", "Design Tokens", "Open Source"],
+    tags: ["Design System", "Indian Government", "Guidelines"],
     overview:
       "India's national design system, rebuilt from the ground up so every team building on it — across four different frameworks — draws from the same source of truth.",
     problem:
@@ -72,7 +105,7 @@ export const caseStudies: CaseStudy[] = [
     labelColor: "hsl(20 55% 30%)",
     labelColorDark: "hsl(20 50% 68%)",
     frame: "browser",
-    image: "/case-studies/ux4g/thumbnail.jpg",
+    image: "/work/ux4g-screenshot.png",
     image2: "/case-studies/ux4g/pattern-library.jpg",
   },
   {
@@ -80,11 +113,11 @@ export const caseStudies: CaseStudy[] = [
     year: "2026",
     wordmark: "Survey Setu · Offline-First",
     discipline: "Product Design",
-    heading: "Survey Setu",
+    heading: "Survey Setu App - Ministry of Tribal Affairs",
     statement: "Data collection that doesn't wait for a signal.",
     color: "hsl(220 32% 56%)",
     colorDark: "hsl(220 34% 26%)",
-    tags: ["Mobile App", "Offline-First", "Field Ops"],
+    tags: ["Web App", "Mobile App Design", "AI Driven", "UI/UX"],
     overview:
       "A mobile survey app designed for field teams working in places where the network can't be trusted — built so the data collection never has to stop.",
     problem:
@@ -96,71 +129,150 @@ export const caseStudies: CaseStudy[] = [
     labelColor: "hsl(220 45% 32%)",
     labelColorDark: "hsl(220 45% 72%)",
     frame: "phone",
-    image: "/case-studies/survey-setu/app-screens.jpg",
-    image2: "/case-studies/survey-setu/geo-tagging.jpg",
+    image: "/work/survey-setu-cover.jpeg",
+    image2: "/case-studies/survey-setu/app-screens.jpg",
   },
   {
-    id: "niri",
-    year: "2025",
-    wordmark: "NIRI Platform · Multi-Role Approval",
-    discipline: "Service Design",
-    heading: "NIRI Platform",
-    statement: "A five-role maze, explained in one sentence.",
-    color: "hsl(165 26% 42%)",
-    colorDark: "hsl(165 28% 22%)",
-    tags: ["Web Platform", "Complex Workflows", "Multi-Role Approval"],
-    overview:
-      "A multi-tier web platform where dozens of organisations submit, validate, and approve infrastructure data through a five-role review chain.",
-    problem: "A five-role approval chain that nobody on the team could explain in one sentence.",
-    solution:
-      "Mapped the full workflow and redesigned it around role-specific views that show only what each step needs.",
-    result: "The five-role maze became a path the whole team can explain in one sentence.",
-    labelColor: "hsl(165 40% 26%)",
-    labelColorDark: "hsl(165 40% 62%)",
+    // Generic placeholder per explicit direction — no real write-up yet.
+    id: "ebcas",
+    year: "2026",
+    wordmark: "eBCAS Platform",
+    discipline: "Web Platform",
+    heading: "eBCAS Platform",
+    statement: "Case study write-up coming soon.",
+    color: "hsl(265 30% 42%)",
+    colorDark: "hsl(265 30% 22%)",
+    tags: ["AI Driven", "Web Platform", "UI/UX"],
+    overview: "A web platform project — case study write-up coming soon.",
+    problem: "Write a concise description.",
+    solution: "Write a concise description.",
+    result: "Write a concise description.",
+    labelColor: "hsl(265 40% 30%)",
+    labelColorDark: "hsl(265 40% 72%)",
     frame: "browser",
-    image: "/case-studies/niri/public-dashboard.jpg",
   },
 ];
 
-export const experienceSection = {
-  speechBubble: "Where I've Worked",
-  headline: "Experience",
+// "More work" — the secondary carousel. Real projects that don't (yet) have
+// a full case-study writeup, shown with the same PlaceholderSlot pattern the
+// case-study cards already use when a real screenshot isn't available.
+export const moreWorkSection = {
+  part1: "More",
+  part2: "work",
 };
 
-// Pulled directly from Rahul's resume (Dec 2024 onward through Mar 2023) — no invented history.
+export const moreWork: MoreWorkItem[] = [
+  {
+    id: "niri",
+    title: "NIRI Platform",
+    description:
+      "A multi-tier web platform where dozens of organisations submit, validate, and approve infrastructure data through a five-role review chain.",
+    tags: ["Web Platform", "UI/UX"],
+    color: "hsl(165 26% 42%)",
+    image: "/case-studies/niri/public-dashboard.jpg",
+  },
+  {
+    id: "salonx",
+    title: "SALONX",
+    description:
+      "Management app for salons — design guidelines, wireframes, and prototypes, validated through usability testing at Skillfoundry Technology.",
+    tags: ["Web App", "UI/UX"],
+    color: "hsl(280 24% 40%)",
+  },
+  {
+    id: "unboxing-community",
+    title: "UnBoxing Community",
+    description:
+      "End-to-end e-commerce experience for electric and electronic products, across mobile app and a responsive web platform.",
+    tags: ["Mobile App", "Web Design"],
+    color: "hsl(24 60% 45%)",
+  },
+  // The five below are personal explorations/assignments from Behance, not
+  // client work — each links out to its real case study there instead of an
+  // internal route (see `href` on MoreWorkItem).
+  {
+    id: "gocomet",
+    title: "GoComet",
+    description: "A redesign case study for GoComet's logistics platform, rethinking shipment tracking and visibility.",
+    tags: ["Web Platform", "UI/UX"],
+    color: "hsl(200 55% 38%)",
+    href: "https://www.behance.net/gallery/174781273/GoComet-(Logistics-Platform)-Redesign-Case-study",
+  },
+  {
+    id: "skate-thugs",
+    title: "Skate Thugs",
+    description: "Main-menu UI for a skateboarding game — a personal design assignment exploring game UI.",
+    tags: ["Game UI", "UI/UX"],
+    color: "hsl(340 55% 42%)",
+    href: "https://www.behance.net/gallery/174535815/Skateboading-Game-Main-Menu-Assignment",
+  },
+  {
+    id: "swiggy-home",
+    title: "Swiggy Home",
+    description: "A design challenge reimagining Swiggy's food-delivery home screen.",
+    tags: ["Mobile App", "UI/UX"],
+    color: "hsl(28 70% 45%)",
+    href: "https://www.behance.net/gallery/164692603/Design-Challenge-Swiggy-Homes",
+  },
+  {
+    id: "whatsapp-enhancement",
+    title: "WhatsApp UI/UX Enhancement",
+    description: "A design assignment proposing three UI/UX upgrades for WhatsApp.",
+    tags: ["Mobile App", "UI/UX"],
+    color: "hsl(152 45% 32%)",
+    href: "https://www.behance.net/gallery/197913207/3-Upgrades-for-Whatsapp-Design-Assignment",
+  },
+  {
+    id: "unify-tv",
+    title: "Unify TV App",
+    description: "A content-aggregation app concept for Android TV, unifying streaming services into one interface.",
+    tags: ["TV App", "UI/UX"],
+    color: "hsl(260 40% 40%)",
+    href: "https://www.behance.net/gallery/202476173/UNIFY-TV-APP-Content-Aggregation-App-For-Android-TV",
+  },
+];
+
+// Real roles, verbatim from Rahul's own resume/Figma copy.
+export const experienceSection = {
+  part1: "Experience",
+  part2: "I have",
+};
+
 export const experience: ExperienceEntry[] = [
   {
     role: "UI/UX Designer",
-    org: "Netoyed (Grapes Telecom Pvt. Ltd.)",
-    dates: "Dec 2024 – Present",
+    company: "Netoyed [Grapes Telecom Private Limited]",
+    location: "Delhi, India · On-site · Full-time",
+    timeline: "Feb 2025 – Present · 1yr 6 mos",
+    logo: "/company-logos/netoyed.png",
     description:
-      "Designing products at national scale — a multi-framework design system, an offline-first mobile app, and complex approval-driven web platforms. Research through to developer handoff.",
-    tags: ["Design Systems", "Product Design", "Mobile", "Enterprise Web"],
+      "Built 50+ reusable components and patterns, authored design guidelines, and designed a government mobile app with 50+ screens for Scheduled Tribe users.",
   },
   {
     role: "UI/UX Designer",
-    org: "Skillfoundry Technology Pvt. Ltd.",
-    dates: "Aug 2023 – Nov 2024",
+    company: "Skillfoundry Technology Pvt. Ltd.",
+    location: "Delhi, India · Remote · Full-time",
+    timeline: "Aug 2023 – Jan 2025 · 1yr 6 mos",
+    logo: "/company-logos/skill-foundry.png",
+    logoFit: "contain",
     description:
-      "Led end-to-end design of SalonX, a B2C salon management app — research, journey mapping, and usability testing across 3 personas, delivering 40+ high-fidelity screens and a cross-platform design system for structured developer handoff.",
-    tags: ["Product Design", "Design Systems", "User Research"],
+      "Led UX design from wireframes to interactive prototypes, establishing design guidelines and validating solutions through usability testing.",
   },
   {
-    role: "UI/UX Designer",
-    org: "Unboxing Community",
-    dates: "Mar 2023 – Jun 2023",
+    role: "User Experience Designer",
+    company: "UnBoxing Community",
+    location: "Delhi, India · Remote · Full-time",
+    timeline: "Mar 2023 – Jun 2023 · 4 mos",
+    logo: "/company-logos/unboxing-icon.png",
+    logoFit: "contain",
     description:
-      "Designed a responsive e-commerce web platform — user flows, wireframes, and high-fidelity prototypes focused on intuitive navigation and mobile-first accessibility, partnering with marketing and engineering teams.",
-    tags: ["Web Design", "Prototyping", "Mobile-First"],
+      "Designed responsive mobile and web experiences, collaborating cross-functionally to deliver an intuitive shopping journey.",
   },
 ];
 
-export const education =
-  "Interaction Design Foundation — Certificate Courses, 2024–2025 · BA (Hons) History, University of Delhi, 2014";
-
 export const testimonialsSection = {
-  speechBubble: "Before the Real Thing",
-  headline: "What Collaborators Would Say",
+  part1: "Collaboration",
+  part2: "in their words",
   intro:
     "Illustrative for now, written in the voice of the people these projects were built for — real quotes coming as projects wrap.",
 };
@@ -185,18 +297,51 @@ export const testimonials: Testimonial[] = [
       "We needed something that worked with terrible connectivity and users who'd never opened an app before. Rahul designed for that reality, not the demo.",
     role: "Founder, Field Operations Startup",
   },
+  {
+    quote:
+      "He designed for people who'd never touched a smartphone before, not for a demo audience. That distinction changed the whole product.",
+    role: "Program Lead, Government Digital Initiative",
+  },
+  {
+    quote:
+      "Every component came with real usage guidelines, not just a Figma file. That's the difference between a design system people adopt and one they route around.",
+    role: "Frontend Lead, Ministry Tech Team",
+  },
+  {
+    quote:
+      "Rahul pushed back on scope that didn't serve the user, even when it would've been easier to just say yes. The product is better for it.",
+    role: "Product Owner, Salon Management Platform",
+  },
+  {
+    quote:
+      "He turned a booking flow that took six taps into two, without cutting a single feature people actually used.",
+    role: "UX Researcher, Transit App Team",
+  },
+  {
+    quote:
+      "Clear communication start to finish — wireframes, prototypes, and usability tests all landed on schedule, no surprises.",
+    role: "Engineering Manager, E-Commerce Platform",
+  },
 ];
 
-export const closingCta = {
-  headline: "Got a mess? Let's untangle it.",
-  body: "Open to freelance projects, full-time roles, and interesting conversations — any industry. If you're building something that has to work for a lot of people, I'd like to hear about it.",
-  ctaLabel: "Let's Connect",
-  secondary: "Based in India · Available for remote work",
+export const ctaSection = {
+  part1: "Your story,",
+  part2: "well designed.",
+  body: "Every brand has a story worth telling – let's design yours with intention and style.",
+  primaryCta: "Let's Connect",
+  secondaryCta: "View Case Studies",
 };
 
 export const footerCopy = {
-  line: "Let's connect. I'm always up for a chat.",
-  copyright: "© 2026 Rahul Vaid",
+  tagline:
+    "Every project starts with a story. I turn those stories into digital experiences that feel effortless and expressive.",
+  links: [
+    { label: "Case Studies", href: "#work" },
+    { label: "Experience", href: "#experience" },
+    { label: "Testimonials", href: "#testimonials" },
+    { label: "Contact", href: "mailto:rahulvaidux@gmail.com" },
+  ],
+  copyright: "Rahul Vaid. All rights reserved. © 2026",
 };
 
 export const meta = {

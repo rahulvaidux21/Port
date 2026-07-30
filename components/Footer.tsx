@@ -1,55 +1,83 @@
 "use client";
 
+import Image from "next/image";
 import { motion, useReducedMotion } from "framer-motion";
-import { Linkedin, Mail, FileText, Palette } from "lucide-react";
 import { socialLinks, footerCopy, hero } from "@/lib/data";
+import { SocialIcon } from "@/components/SocialIcon";
 import { useRevealOnScroll } from "@/lib/motion";
-
-// Lucide has no Behance mark; Palette stands in as the closest semantic fit
-// (creative portfolio) so every icon in the project comes from one library.
-function SocialIcon({ icon }: { icon: "linkedin" | "behance" | "mail" | "file" }) {
-  if (icon === "linkedin") return <Linkedin className="w-4 h-4" />;
-  if (icon === "mail") return <Mail className="w-4 h-4" />;
-  if (icon === "file") return <FileText className="w-4 h-4" />;
-  return <Palette className="w-4 h-4" />;
-}
 
 export function Footer() {
   const reduced = useReducedMotion();
   const reveal = useRevealOnScroll(reduced);
 
   return (
-    <footer className="relative border-t border-editor-border/60">
-      <motion.div key={reveal.key} {...reveal.props}>
-        <div className="pt-12 text-center">
-          <p className="font-sans text-lg font-bold text-text-primary">{hero.name}</p>
-          <p className="mt-1 font-sans text-sm text-text-secondary">{footerCopy.line}</p>
+    <footer className="relative overflow-hidden bg-paper pb-20 pt-16 md:pb-40 md:pt-20">
+      <div
+        className="pointer-events-none absolute bottom-[-125px] left-1/2 h-[150px] w-[1368px] max-w-[95vw] -translate-x-1/2 rounded-t-full bg-gradient-to-r from-accent to-accent-glow blur-[38px]"
+        aria-hidden="true"
+      />
+
+      {/* `px-9 md:px-8` lives here, directly on the `mx-auto max-w-[1032px]`
+          box, matching CtaBand's structure exactly (one layer, padding and
+          centering on the same element) — not split across an outer
+          `<footer>` padding plus this box, which is what caused it to
+          misalign from every other section at desktop: `mx-auto` on a
+          max-width box re-centers to the same absolute position regardless
+          of an ancestor's padding, so padding the wrong element there did
+          nothing once this box's max-width constraint became active. */}
+      <motion.div
+        key={reveal.key}
+        {...reveal.props}
+        className="relative mx-auto flex max-w-[1032px] flex-col gap-16 px-9 md:gap-[120px] md:px-8"
+      >
+        <div className="grid grid-cols-1 gap-8 md:grid-cols-[1.5fr_1fr]">
+          <div className="flex flex-col items-start gap-8">
+            <div className="h-12 w-16 overflow-hidden rounded-lg border border-hairline/[0.08] p-px">
+              <Image
+                src="/avatar-crop.jpg"
+                alt={hero.name}
+                width={64}
+                height={48}
+                className="h-full w-full rounded-[11px] object-cover object-top"
+              />
+            </div>
+            <p className="max-w-[332px] font-sans text-sm text-text-primary/[0.64]">{footerCopy.tagline}</p>
+            <div className="flex flex-wrap items-center gap-2">
+              {socialLinks.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  target={link.icon === "linkedin" || link.icon === "behance" || link.icon === "medium" ? "_blank" : undefined}
+                  rel="noopener noreferrer"
+                  aria-label={link.label}
+                  className="flex h-10 w-10 items-center justify-center rounded-full border border-hairline/[0.08] bg-paper transition-colors hover:border-hairline/[0.16]"
+                >
+                  <SocialIcon icon={link.icon} />
+                </a>
+              ))}
+            </div>
+          </div>
+
+          <div className="flex flex-col items-start gap-6 md:items-end md:justify-self-end">
+            <p className="font-sans text-xs uppercase tracking-widest text-text-primary/[0.88]">Links</p>
+            <div className="flex flex-col items-start gap-4 md:items-end">
+              {footerCopy.links.map((link) => (
+                <a
+                  key={link.label}
+                  href={link.href}
+                  className="font-sans text-sm text-text-primary/[0.64] transition-colors hover:text-text-primary"
+                >
+                  {link.label}
+                </a>
+              ))}
+            </div>
+          </div>
         </div>
 
-        <div className="flex justify-center gap-6 pt-6 pb-2">
-          {socialLinks.map((link) => (
-            <a
-              key={link.label}
-              href={link.href}
-              target={link.icon === "linkedin" || link.icon === "behance" ? "_blank" : undefined}
-              rel="noopener noreferrer"
-              download={link.icon === "file" ? true : undefined}
-              className="group relative font-sans text-[14px] text-stone-500 hover:text-stone-800 dark:text-stone-400 dark:hover:text-stone-100 transition-colors flex items-center justify-center h-6 px-1"
-            >
-              <span className="transition-all duration-300 group-hover:opacity-0 group-hover:scale-75">
-                {`{${link.label}}`}
-              </span>
-              <span className="absolute inset-0 flex items-center justify-center opacity-0 scale-75 group-hover:opacity-100 group-hover:scale-100 transition-all duration-300">
-                <SocialIcon icon={link.icon} />
-              </span>
-            </a>
-          ))}
+        <div className="flex flex-col gap-8">
+          <div className="h-px w-full bg-hairline/[0.16]" aria-hidden="true" />
+          <p className="text-center font-sans text-sm text-text-primary/[0.64]">{footerCopy.copyright}</p>
         </div>
-
-        <p className="text-center pt-6 pb-2 font-mono text-xs text-text-muted">{footerCopy.copyright}</p>
-        <p className="text-center pb-12 font-mono text-xs text-text-muted">
-          Built with Claude Code · Vercel does the rest.
-        </p>
       </motion.div>
     </footer>
   );

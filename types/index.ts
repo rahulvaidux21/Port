@@ -6,7 +6,39 @@ export interface NavItem {
 export interface SocialLink {
   label: string;
   href: string;
-  icon: "linkedin" | "behance" | "mail" | "file";
+  icon: "linkedin" | "behance" | "mail" | "file" | "medium";
+}
+
+/** A logo in the "trusted by / worked with" marquee strip below the hero. */
+export interface TrustedLogo {
+  name: string;
+  src: string;
+  width: number;
+  height: number;
+}
+
+/** A lighter-weight project card for the secondary "More work" carousel —
+    same shape as CaseStudy's display fields, without requiring a full
+    case-study detail page. */
+export interface MoreWorkItem {
+  id: string;
+  title: string;
+  description: string;
+  tags: string[];
+  color: string;
+  image?: string;
+  href?: string;
+}
+
+/** A single role in the Experience timeline. */
+export interface ExperienceEntry {
+  role: string;
+  company: string;
+  location: string;
+  timeline: string;
+  logo: string;
+  logoFit?: "cover" | "contain";
+  description: string;
 }
 
 export interface CaseStudy {
@@ -36,15 +68,88 @@ export interface CaseStudy {
   image2?: string;
 }
 
-export interface ExperienceEntry {
-  role: string;
-  org: string;
-  dates: string;
-  description: string;
-  tags: string[];
-}
-
 export interface Testimonial {
   quote: string;
   role: string;
+}
+
+/** ---- Case study detail page (app/case-studies/[slug]) ---- */
+
+export interface MetaRow {
+  label: string;
+  value: string;
+}
+
+/** Icon name keyed against the small lucide registry in IconLabelList. */
+export interface IconLabelItem {
+  icon: "Clock" | "TrendingUp" | "Users" | "Layers" | "ShieldCheck" | "Globe2" | "SlidersHorizontal" | "Accessibility" | "Landmark" | "RefreshCw" | "BookOpen";
+  text: string;
+}
+
+export interface MediaItem {
+  src: string;
+  alt: string;
+  caption?: string;
+  width: number;
+  height: number;
+}
+
+export interface InsightItem {
+  title: string;
+  text: string;
+}
+
+export interface StatItem {
+  before: string;
+  after: string;
+  label: string;
+}
+
+export interface TradeoffItem {
+  title: string;
+  optionA: string;
+  optionB: string;
+  chosen: "a" | "b" | "both";
+  rationale: string;
+}
+
+export interface FlowItem {
+  audience: string;
+  steps: string[];
+}
+
+export interface CaseStudyDetail {
+  slug: string;
+  metaTitle: string;
+  metaDescription: string;
+  hero: {
+    wordmark: string;
+    discipline: string;
+    heading: string;
+    statement: string;
+    intro: string;
+    metaRows: MetaRow[];
+    image: MediaItem;
+  };
+  snapshot: MetaRow[];
+  problem: { paragraphs: string[] };
+  goals: { intro: string; items: string[] };
+  constraints: IconLabelItem[];
+  research: { paragraphs: string[]; media: MediaItem[] };
+  insights: InsightItem[];
+  opportunity: string;
+  principles: IconLabelItem[];
+  process: { paragraphs: string[]; media: MediaItem[] };
+  userFlow: FlowItem[];
+  finalDesign: { intro: string; bullets: string[]; media: MediaItem[] };
+  decisions: { label: string; text: string }[];
+  tradeoffs: TradeoffItem[];
+  collaboration: { paragraphs: string[] };
+  challenges: { title: string; text: string }[];
+  results: { stats: StatItem[]; paragraphs: string[] };
+  /** A real testimonial reused from the site-wide list, when it's specifically about this project. Keep the same illustrative framing as the source. */
+  featuredTestimonial?: { quote: string; role: string };
+  tools: string;
+  reflection: { items: string[] };
+  nextCaseStudySlug: string;
 }
