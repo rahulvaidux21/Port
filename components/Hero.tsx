@@ -179,7 +179,7 @@ export function Hero() {
         {/* Ticker and photo stack share one box so the wordmark's vertical
             center lines up with the portrait's, not a fixed offset from the
             section top. */}
-        <div className="relative mx-auto flex h-[300px] w-[225px] items-center justify-center">
+        <div className="relative mx-auto flex h-[260px] w-[195px] items-center justify-center">
           {/* Giant repeated name wordmark behind the portrait — decorative
               backdrop, not content (aria-hidden). Static under reduced
               motion instead of ticking. Escapes this box's own small width
@@ -218,7 +218,7 @@ export function Hero() {
                 src="/hero-portrait.jpg"
                 alt={hero.name}
                 fill
-                sizes="300px"
+                sizes="260px"
                 className="object-cover"
                 priority={i === STACK_ROTATIONS.length - 1}
               />
@@ -228,13 +228,13 @@ export function Hero() {
 
         <h1
           ref={headlineRef}
-          className="relative mx-auto mt-6 max-w-3xl font-display text-3xl font-medium leading-[1.15] tracking-[-2px] text-text-secondary sm:text-4xl md:text-[54px] md:leading-[1.2]"
+          className="relative mx-auto mt-10 max-w-3xl font-display text-3xl font-medium leading-[1.15] tracking-[-2px] text-text-secondary sm:text-4xl md:text-[54px] md:leading-[1.2]"
         >
           <span className="block">{hero.headlineLine1}</span>
           <span className="block">{hero.headlineLine2}</span>
         </h1>
 
-        <div className="relative mt-8 flex flex-wrap items-center justify-center gap-2">
+        <div className="relative mt-12 flex flex-wrap items-center justify-center gap-2">
           <a
             href={email}
             className="rounded-lg border border-accent-border bg-accent px-4 py-3 font-sans text-base font-medium text-accent-foreground shadow-[0_5px_30px_5px_rgba(0,85,254,0.32)] transition-opacity hover:opacity-90"
