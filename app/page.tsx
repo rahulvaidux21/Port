@@ -1,6 +1,6 @@
 import { Navbar } from "@/components/Navbar";
 import { Hero } from "@/components/Hero";
-import { TrustedByMarquee } from "@/components/TrustedByMarquee";
+import { Stats } from "@/components/Stats";
 import { ProjectsCarousel } from "@/components/ProjectsCarousel";
 import { MoreWork } from "@/components/MoreWork";
 import { Experience } from "@/components/Experience";
@@ -29,7 +29,7 @@ export default function Home() {
         <main>
           <Hero />
           <GridDivider />
-          <TrustedByMarquee />
+          <Stats />
           <GridDivider />
           <ProjectsCarousel />
           <GridDivider />

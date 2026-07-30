@@ -3,7 +3,7 @@ import type {
   SocialLink,
   CaseStudy,
   Testimonial,
-  TrustedLogo,
+  Stat,
   MoreWorkItem,
   ExperienceEntry,
 } from "@/types";
@@ -37,19 +37,21 @@ export const hero = {
   secondaryCtaLabel: "View Case Studies",
 };
 
-// "Trusted by" marquee strip beneath the hero — real ministries, agencies,
-// and companies Rahul has designed for (see Experience below), not generic
-// logo-soup filler.
-// Ordered to match the source Figma's current logo row exactly.
-export const trustedLogos: TrustedLogo[] = [
-  { name: "Ministry of Social Justice and Empowerment", src: "/logos/ministry-social-justice.png", width: 275, height: 60 },
-  { name: "Skill Foundry", src: "/logos/skill-foundry.png", width: 125, height: 60 },
-  { name: "UX4G", src: "/logos/ux4g.png", width: 217, height: 60 },
-  { name: "Netoyed", src: "/logos/netoyed.png", width: 160, height: 60 },
-  { name: "Digital India", src: "/logos/digital-india.png", width: 200, height: 60 },
-  { name: "Ministry of Statistics and Programme Implementation", src: "/logos/ministry-statistics.png", width: 275, height: 60 },
-  { name: "UnBoxing Community", src: "/logos/unboxing-community.png", width: 125, height: 60 },
-  { name: "Ministry of Tribal Affairs", src: "/logos/ministry-tribal-affairs.png", width: 250, height: 60 },
+// Stats band beneath the hero — replaces the old trusted-by logo marquee.
+// Every value here is pulled from a fact stated elsewhere on the page (the
+// UX4G/Survey Setu case studies and the Experience timeline), not a new
+// number invented for this section — see the design principle against
+// invented metrics in PRODUCT.md. The 70+ components/patterns figure also
+// updates the UX4G case-study card and Experience entry below, which
+// previously cited older (35 / 50+) counts — see the full UX4G case-study
+// detail page (lib/caseStudies/ux4g.ts) for the real breakdown this
+// summarizes: 77 production components + 36 service patterns.
+export const stats: Stat[] = [
+  { value: "3+", label: "Years of Experience" },
+  { value: "6", label: "Apps Designed" },
+  { value: "70+", label: "Components & Patterns Built for UX4G" },
+  { value: "20+", label: "Government Platforms Designed" },
+  { value: "200+", label: "Officials Trained (UX Workshop)" },
 ];
 
 // "Things I've designed" — the primary work carousel. Real screenshots for
@@ -100,7 +102,7 @@ export const caseStudies: CaseStudy[] = [
     problem:
       "Dozens of teams building on four frameworks, with no shared source of truth — inconsistency was multiplying fast.",
     solution:
-      "Rebuilt the system on design tokens from scratch and engineered 35 core components shared across every framework.",
+      "Rebuilt the system on design tokens from scratch and engineered 70+ components and patterns shared across every framework.",
     result: "Now the mandated design standard across a portfolio of large-scale platforms.",
     labelColor: "hsl(20 55% 30%)",
     labelColorDark: "hsl(20 50% 68%)",
@@ -246,7 +248,7 @@ export const experience: ExperienceEntry[] = [
     timeline: "Feb 2025 – Present · 1yr 6 mos",
     logo: "/company-logos/netoyed.png",
     description:
-      "Built 50+ reusable components and patterns, authored design guidelines, and designed a government mobile app with 50+ screens for Scheduled Tribe users.",
+      "Built 70+ reusable components and patterns for UX4G, authored design guidelines, and designed a government mobile app with 50+ screens for Scheduled Tribe users.",
   },
   {
     role: "UI/UX Designer",

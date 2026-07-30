@@ -2,7 +2,7 @@
  * Positions an element flush with the true vertical grid line, from INSIDE
  * a `max-w-[1032px] mx-auto` section (i.e. relative to that section's own
  * box, which is the nearest positioned ancestor for things like carousel
- * edge-fades and the marquee's edge-fades — not the true viewport).
+ * edge-fades and the Hero ticker's edge-fade — not the true viewport).
  *
  * `left-0` on such an element is only correct at desktop widths, where the
  * section's own centering margin already coincides with the grid line
@@ -25,9 +25,9 @@ export const EDGE_RIGHT =
 
 /**
  * A solid (non-gradient) opaque width spanning from a section's true edge
- * (x=0, where `w-screen`/full-bleed content like the Hero ticker or the
- * TrustedByMarquee logo track is actually clipped) up to the true grid
- * line. Needed alongside `EDGE_LEFT`/`EDGE_RIGHT`'s gradient fade, not
+ * (x=0, where `w-screen`/full-bleed content like the Hero ticker is
+ * actually clipped) up to the true grid line. Needed alongside
+ * `EDGE_LEFT`/`EDGE_RIGHT`'s gradient fade, not
  * instead of it: that fade starts AT the line and dissolves further
  * *inward* — it was never meant to cover the sliver *before* the line, and
  * doesn't, so full-bleed content sitting in that sliver (unlike carousel

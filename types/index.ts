@@ -9,12 +9,13 @@ export interface SocialLink {
   icon: "linkedin" | "behance" | "mail" | "file" | "medium";
 }
 
-/** A logo in the "trusted by / worked with" marquee strip below the hero. */
-export interface TrustedLogo {
-  name: string;
-  src: string;
-  width: number;
-  height: number;
+/** A single number+label pair in the Stats band below the hero — every
+    value here must trace back to something already stated as fact
+    elsewhere (a case study result, an Experience timeline span, a real
+    count), never a new, unsubstantiated claim. */
+export interface Stat {
+  value: string;
+  label: string;
 }
 
 /** A lighter-weight project card for the secondary "More work" carousel —

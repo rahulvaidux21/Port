@@ -90,8 +90,9 @@ export function MoreWork() {
             spaceBetween={16}
             // Long speed + near-zero delay + linear easing chains each hop
             // straight into the next with no pause or ease-out blip, so it
-            // reads as one continuous drift — like TrustedByMarquee's ticker
-            // — while manual speed (600ms) still applies to arrow/dot clicks.
+            // reads as one continuous drift — like Hero's background
+            // wordmark ticker — while manual speed (600ms) still applies to
+            // arrow/dot clicks.
             speed={4000}
             breakpoints={{
               640: { slidesPerView: 2.1, spaceBetween: 24 },

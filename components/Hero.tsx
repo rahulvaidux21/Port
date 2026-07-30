@@ -159,7 +159,7 @@ export function Hero() {
 
   return (
     <section id="hero" ref={sectionRef} className="relative overflow-hidden bg-paper">
-      <div className="relative mx-auto max-w-[1032px] scroll-mt-20 overflow-hidden px-9 pb-20 pt-8 text-center sm:pt-10 md:px-8 md:pb-24 md:pt-12">
+      <div className="relative mx-auto max-w-[1032px] scroll-mt-20 overflow-hidden px-9 pb-8 pt-8 text-center sm:pb-10 sm:pt-10 md:px-8 md:pb-12 md:pt-12">
         {/* Fades the ticker toward the background starting at the grid
             line, dissolving further inward — this div's own overflow-hidden
             clips the wordmark, but only at this wrapper's own edge, which
@@ -179,7 +179,7 @@ export function Hero() {
         {/* Ticker and photo stack share one box so the wordmark's vertical
             center lines up with the portrait's, not a fixed offset from the
             section top. */}
-        <div className="relative mx-auto flex h-[300px] w-[225px] items-center justify-center sm:h-[340px] sm:w-[255px]">
+        <div className="relative mx-auto flex h-[300px] w-[225px] items-center justify-center">
           {/* Giant repeated name wordmark behind the portrait — decorative
               backdrop, not content (aria-hidden). Static under reduced
               motion instead of ticking. Escapes this box's own small width
@@ -234,7 +234,7 @@ export function Hero() {
           <span className="block">{hero.headlineLine2}</span>
         </h1>
 
-        <div className="relative mt-4 flex flex-wrap items-center justify-center gap-2">
+        <div className="relative mt-8 flex flex-wrap items-center justify-center gap-2">
           <a
             href={email}
             className="rounded-lg border border-accent-border bg-accent px-4 py-3 font-sans text-base font-medium text-accent-foreground shadow-[0_5px_30px_5px_rgba(0,85,254,0.32)] transition-opacity hover:opacity-90"
