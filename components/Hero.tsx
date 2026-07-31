@@ -179,7 +179,7 @@ export function Hero() {
         {/* Ticker and photo stack share one box so the wordmark's vertical
             center lines up with the portrait's, not a fixed offset from the
             section top. */}
-        <div className="relative mx-auto flex h-[260px] w-[195px] items-center justify-center">
+        <div className="relative mx-auto flex h-[300px] w-[225px] items-center justify-center sm:h-[400px] sm:w-[300px]">
           {/* Giant repeated name wordmark behind the portrait — decorative
               backdrop, not content (aria-hidden). Static under reduced
               motion instead of ticking. Escapes this box's own small width
@@ -218,7 +218,7 @@ export function Hero() {
                 src="/hero-portrait.jpg"
                 alt={hero.name}
                 fill
-                sizes="260px"
+                sizes="(min-width: 640px) 300px, 225px"
                 className="object-cover"
                 priority={i === STACK_ROTATIONS.length - 1}
               />

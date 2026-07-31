@@ -155,7 +155,14 @@ function SquareTick({ position }: { position: string }) {
 
 export function GridDivider() {
   return (
-    <div className="relative h-px w-full bg-hairline/[0.16]" aria-hidden="true">
+    // `z-10` — same reason as GridFrame's vertical lines above: the ticks
+    // protrude past this div's own 1px height (5px tall, centered), so the
+    // bottom half sits geometrically inside the *next* section. Any section
+    // with its own opaque `bg-paper` (Hero, Stats) comes later in DOM order
+    // and paints on top by default, silently covering that protruding half
+    // — confirmed via elementFromPoint at the tick's bottom edge landing on
+    // the Stats section, not the tick itself, before this fix.
+    <div className="relative z-10 h-px w-full bg-hairline/[0.16]" aria-hidden="true">
       <SquareTick position={`-translate-x-1/2 ${LEFT}`} />
       <SquareTick position={`translate-x-1/2 ${RIGHT}`} />
     </div>
