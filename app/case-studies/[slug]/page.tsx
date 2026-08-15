@@ -194,16 +194,26 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </Shell>
 
         {/* ── Part 3 · Service Patterns ────────────────────────── */}
-        <Shell className="flex flex-col gap-block pb-section">
-          <PartOpener content={detail.patterns.opener} />
-          <Prose>{detail.patterns.intro}</Prose>
-          <BigStats stats={detail.patterns.stats} />
-          <PatternModel contrast={detail.patterns.contrast} groups={detail.patterns.groups} />
-          <Figure {...detail.patterns.image} frame />
+        {/* Parts 1 and 2's rhythm: the chapter head is one unit at 48px, and
+            the body a full section below it. Not 96px between all five —
+            these aren't five chapters, they're one argument, and the intro
+            and its counts belong to the opener that introduces them. */}
+        <Shell className="flex flex-col gap-section pb-section">
+          <div className="flex flex-col gap-block">
+            <PartOpener content={detail.patterns.opener} />
+            <Prose>{detail.patterns.intro}</Prose>
+            <BigStats stats={detail.patterns.stats} />
+          </div>
+          <div className="flex flex-col gap-block">
+            <PatternModel contrast={detail.patterns.contrast} groups={detail.patterns.groups} />
+            <Figure {...detail.patterns.image} frame />
+          </div>
         </Shell>
 
         {/* ── Part 4 · How teams get it ────────────────────────── */}
-        <Shell className="flex flex-col gap-block pb-section">
+        {/* Two children — the opener and the one block under it — so the
+            section gap is the whole rhythm here. */}
+        <Shell className="flex flex-col gap-section pb-section">
           <PartOpener content={detail.rollout.opener} />
           <ContentBlockView
             prefix=""
