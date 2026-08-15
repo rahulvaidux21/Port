@@ -1,47 +1,35 @@
 "use client";
 
-import type { CSSProperties, ReactNode } from "react";
+import type { ReactNode } from "react";
 import { motion, useReducedMotion } from "framer-motion";
 import { useRevealOnScroll } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 
 interface SectionProps {
-  index: string;
   title: string;
+  /** Small uppercase label above the title — used for the "Part 1" /
+      "Part 2" chapter markers in the richer UX4G case study, matching the
+      mono-uppercase eyebrow treatment already used elsewhere on the site. */
+  eyebrow?: string;
   id?: string;
-  accentColor: string;
-  accentColorDark: string;
-  /** Skip the `proseMax` (720px) cap for sections with grids/media that need the full column width. */
-  wide?: boolean;
   children: ReactNode;
   className?: string;
 }
 
-/** Left-aligned, mono-indexed section rhythm for the long-form case-study
-    scroll — see DESIGN.md "Case Study Detail Page". Distinct from the home
-    page's centered SpeechBubble + h2 kicker, which doesn't suit ~15
-    back-to-back sections. */
-export function Section({ index, title, id, accentColor, accentColorDark, wide, children, className }: SectionProps) {
+/** Plain heading-label + content block — the case-study template's actual
+    unit of rhythm per the Figma "Case study page template" reference (a
+    generic template frame, not project-specific): a "Heading 5" (28px
+    medium, no index number, no border, no card) followed directly by
+    prose/lists, spaced apart with padding alone. */
+export function Section({ title, eyebrow, id, children, className }: SectionProps) {
   const reduced = useReducedMotion();
   const reveal = useRevealOnScroll(reduced);
 
   return (
-    <motion.section
-      id={id}
-      key={reveal.key}
-      {...reveal.props}
-      className={cn("mx-auto max-w-[1140px] scroll-mt-24 px-6 py-12 md:px-8 md:py-16", className)}
-    >
-      <div className="mb-10 flex items-baseline gap-4 border-b border-editor-border pb-5">
-        <span
-          className="font-mono text-sm font-semibold uppercase tracking-widest"
-          style={{ "--l": accentColor, "--ld": accentColorDark } as CSSProperties}
-        >
-          <span className="text-[var(--l)] dark:text-[var(--ld)]">{index}</span>
-        </span>
-        <h2 className="font-display text-3xl font-semibold text-text-primary md:text-4xl">{title}</h2>
-      </div>
-      <div className={wide ? undefined : "max-w-[720px]"}>{children}</div>
+    <motion.section id={id} key={reveal.key} {...reveal.props} className={cn("pt-[34px] first:pt-0", className)}>
+      {eyebrow && <p className="mb-2 font-sans text-xs font-semibold uppercase tracking-widest text-text-muted">{eyebrow}</p>}
+      <h2 className="mb-3 font-sans text-2xl font-medium tracking-[-0.5px] text-text-primary md:text-[28px]">{title}</h2>
+      {children}
     </motion.section>
   );
 }

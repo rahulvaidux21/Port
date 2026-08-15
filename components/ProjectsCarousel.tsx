@@ -37,7 +37,7 @@ function ProjectCard({ study }: { study: CaseStudy }) {
           {study.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-lg bg-black/[0.64] px-3 py-2 font-sans text-sm text-accent-foreground backdrop-blur-[8px]"
+              className="rounded-[8px] bg-black/[0.64] px-3 py-2 font-sans text-sm text-[#f6f3f0] backdrop-blur-[8px]"
             >
               {tag}
             </span>
@@ -47,25 +47,21 @@ function ProjectCard({ study }: { study: CaseStudy }) {
         <div className="flex flex-col gap-3">
           <h3 className="font-display text-xl font-semibold text-text-primary">{study.heading}</h3>
           <p className="font-sans text-base text-text-secondary">{study.overview}</p>
-          {hasDetail && (
-            <span className="mt-1 inline-flex w-fit items-center gap-2 font-display text-xl font-semibold text-text-primary">
-              View Case study
-              <span className="flex h-8 w-8 items-center justify-center rounded-full border border-text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
-                <ArrowRight className="h-4 w-4" strokeWidth={2} />
-              </span>
+          <span className="mt-1 inline-flex w-fit items-center gap-2 font-display text-base font-semibold text-text-primary">
+            View Case study
+            <span className="flex h-6 w-6 items-center justify-center rounded-full border border-text-primary transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5">
+              <ArrowRight className="h-3 w-3" strokeWidth={2} />
             </span>
-          )}
+          </span>
         </div>
       </div>
     </div>
   );
 
-  return hasDetail ? (
-    <Link href={`/case-studies/${study.id}`} className="block">
+  return (
+    <Link href={hasDetail ? `/case-studies/${study.id}` : "/#work"} className="block">
       {content}
     </Link>
-  ) : (
-    content
   );
 }
 

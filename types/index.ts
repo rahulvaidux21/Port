@@ -81,12 +81,6 @@ export interface MetaRow {
   value: string;
 }
 
-/** Icon name keyed against the small lucide registry in IconLabelList. */
-export interface IconLabelItem {
-  icon: "Clock" | "TrendingUp" | "Users" | "Layers" | "ShieldCheck" | "Globe2" | "SlidersHorizontal" | "Accessibility" | "Landmark" | "RefreshCw" | "BookOpen";
-  text: string;
-}
-
 export interface MediaItem {
   src: string;
   alt: string;
@@ -95,28 +89,44 @@ export interface MediaItem {
   height: number;
 }
 
-export interface InsightItem {
+export interface TimelineStep {
+  date: string;
+  phase: string;
+  description: string;
+}
+
+/** One "Introducing — X" block: a heading, some running copy, an optional
+    bullet list, one or more plates, and an optional closing line. Every
+    Part 1–4 block in the Figma frame is this same shape, which is why they
+    all render through one component. Copy strings accept `**bold**`. */
+export interface ContentBlock {
   title: string;
-  text: string;
+  /** The frame sets most block headings as "Introducing – X"; a few are
+      just the bare noun. */
+  noPrefix?: boolean;
+  /** Paragraphs above the bullets. */
+  lead?: string[];
+  bullets?: string[];
+  images?: MediaItem[];
+  /** Paragraphs below the plate. */
+  outro?: string[];
+  /** Bullets that sit below the plate rather than above it. */
+  outroBullets?: string[];
 }
 
-export interface StatItem {
-  before: string;
-  after: string;
-  label: string;
+/** A big-number stat. `labelWidth` pins the caption's measure where the
+    frame gives it one, so it wraps on the same word. */
+export interface BigStat extends Stat {
+  labelWidth?: string;
 }
 
-export interface TradeoffItem {
+/** A chapter opener — "Part N" + a display title beside one plate. */
+export interface PartOpenerContent {
+  part: string;
   title: string;
-  optionA: string;
-  optionB: string;
-  chosen: "a" | "b" | "both";
-  rationale: string;
-}
-
-export interface FlowItem {
-  audience: string;
-  steps: string[];
+  image: MediaItem;
+  /** Part 2's plate sits on a purple field; Parts 3 and 4 sit on paper. */
+  tint?: string;
 }
 
 export interface CaseStudyDetail {
@@ -125,32 +135,46 @@ export interface CaseStudyDetail {
   metaDescription: string;
   hero: {
     wordmark: string;
-    discipline: string;
     heading: string;
-    statement: string;
-    intro: string;
-    metaRows: MetaRow[];
+    subtitleLead: string;
+    subtitleAccent: string;
+    tags: string[];
     image: MediaItem;
   };
-  snapshot: MetaRow[];
-  problem: { paragraphs: string[] };
-  goals: { intro: string; items: string[] };
-  constraints: IconLabelItem[];
-  research: { paragraphs: string[]; media: MediaItem[] };
-  insights: InsightItem[];
-  opportunity: string;
-  principles: IconLabelItem[];
-  process: { paragraphs: string[]; media: MediaItem[] };
-  userFlow: FlowItem[];
-  finalDesign: { intro: string; bullets: string[]; media: MediaItem[] };
-  decisions: { label: string; text: string }[];
-  tradeoffs: TradeoffItem[];
-  collaboration: { paragraphs: string[] };
-  challenges: { title: string; text: string }[];
-  results: { stats: StatItem[]; paragraphs: string[] };
-  /** A real testimonial reused from the site-wide list, when it's specifically about this project. Keep the same illustrative framing as the source. */
-  featuredTestimonial?: { quote: string; role: string };
-  tools: string;
-  reflection: { items: string[] };
-  nextCaseStudySlug: string;
+  /** The three chip rows under the hero — role, timeline, platforms. */
+  roleChips: string[];
+  timelineChips: string[];
+  platformChips: string[];
+  teamAndCollaboration: {
+    bullets: string[];
+    roles: Stat[];
+  };
+  /** "The Challenge" pills on the dark band. */
+  challenge: string[];
+  /** "The Impact" cards — the payoff stated once, early. */
+  impactTeaser: { lead: string; value: string; caption: string }[];
+  timeline: TimelineStep[];
+  /** Part 1 · New Foundations. */
+  foundations: ContentBlock[];
+  /** Part 2 · The component library. */
+  components: {
+    opener: PartOpenerContent;
+    stats: BigStat[];
+    blocks: ContentBlock[];
+  };
+  /** Part 3 · Service Patterns. */
+  patterns: {
+    opener: PartOpenerContent;
+    intro: string;
+    stats: BigStat[];
+    blocks: ContentBlock[];
+  };
+  /** Part 4 · How teams get it. */
+  rollout: {
+    opener: PartOpenerContent;
+    lead: string[];
+    bullets: string[];
+    image: MediaItem;
+  };
 }
+

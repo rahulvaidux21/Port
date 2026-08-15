@@ -23,7 +23,83 @@
   --color-accent-foreground: 255 255 255;
   --color-hairline: 11 12 14;
 
+  /* ── UX4G case-study ramp ──────────────────────────────────────────
+     The case study carries a brand palette the rest of the site doesn't:
+     an electric blue, a signal red, a service green and a violet, plus the
+     warm-dark and slate panel fills. These are the Figma frame's own
+     values, so the light theme matches the design exactly. The .dark block
+     re-points every one of them at a calmer step — the frame is authored
+     light-only, and dropping saturated brand colour straight onto a
+     near-black page glares. Nothing in the case study should use a raw hex;
+     it all reads from here. */
+
+  /* Blue — the divider, "Thank you", the Part 1 panel. */
+  --cs-blue: 0 48 246;
+  --cs-blue-ink: 0 48 246;
+  /* Violet — the Part opener eyebrows and the big stat numerals. Brighter
+     than the frame's #4a2bc2, which read dull once the page was rescaled. */
+  --cs-violet: 91 52 232;
+  --cs-violet-deep: 60 33 158;
+  /* Red — the audit eyebrow, the alert card, the Challenge pills. */
+  --cs-red: 237 47 47;
+  --cs-red-fill: 237 47 47;
+  --cs-red-ink: 162 7 7;
+  --cs-red-surface: 255 245 244;
+  --cs-red-border: 255 211 208;
+  /* Green — the Impact cards and the "How we rebuilt it" band. */
+  --cs-green: 32 107 2;
+  --cs-green-ink: 33 141 0;
+  --cs-green-surface: 221 255 208;
+  --cs-green-wash: 240 255 216;
+  --cs-green-deep: 0 45 1;
+  /* Neutrals the frame names explicitly. */
+  --cs-ink: 9 9 11;
+  --cs-body: 83 83 83;
+  --cs-chip: 241 239 247;
+  --cs-panel: 248 246 255;
+  /* Panel fills that stay dark in both themes — they are deliberately dark
+     showcase surfaces, not theme surfaces. */
+  --cs-plum: 40 29 35;
+  --cs-slate: 22 25 30;
+  /* Brand artwork — the bento's purple tiles and the device bezel carry the
+     UX4G mark and the national emblem, so they hold their colour in both
+     themes rather than following the surface. */
+  --cs-brand-from: 74 43 194;
+  --cs-brand-to: 35 20 92;
+  --cs-brand-deep: 34 4 116;
+  --cs-device: 30 64 175;
+  /* The benchmarking wall's plate. */
+  --cs-wall: 204 208 255;
+  /* Design-timeline ramp. Light is the frame's own set; dark drops each bar
+     to a deep tint of the same hue with light text, and the pillars become a
+     raised surface instead of a lighter-than-page wash. */
+  --cs-tl-yellow: 237 185 1;
+  --cs-tl-cyan: 80 223 255;
+  --cs-tl-teal: 6 216 179;
+  --cs-tl-orange: 232 115 49;
+  --cs-tl-pillar: 218 218 218;
+  --cs-tl-label: 29 29 29;
+
+  /* ── Corner radius scale ───────────────────────────────────────────
+     Radii are variables, not fixed utilities, because a 32px corner that
+     reads right on a 1120 card looks heavily rounded on a 350 phone card.
+     The media query below steps the whole scale down together, so every
+     surface keeps its relationship instead of each one being retuned. */
+  --r-chip: 16px;
+  --r-card: 24px;
+  --r-plate: 24px;
+  --r-tile: 32px;
+
   --font-dm-sans: "DM Sans", system-ui, sans-serif;
+}
+
+@media (max-width: 767px) {
+  :root {
+    --r-chip: 12px;
+    --r-card: 16px;
+    --r-plate: 16px;
+    --r-tile: 20px;
+  }
 }
 
 .dark {
@@ -45,6 +121,42 @@
      color (used only with an opacity modifier: /8, /16, /32). Separate from
      editor-border, which the case-study template still relies on solid. */
   --color-hairline: 246 243 240;
+
+  /* ── UX4G case-study ramp, dark ────────────────────────────────────
+     Same roles, calmer steps. Saturated fills become deep tints and the
+     inks become light tints of the same hue, so contrast comes from
+     lightness rather than raw chroma. */
+  --cs-blue: 138 163 255;
+  --cs-blue-ink: 160 181 255;
+  --cs-violet: 178 152 255;
+  --cs-violet-deep: 201 184 255;
+  --cs-red: 240 150 145;
+  --cs-red-fill: 106 30 30;
+  --cs-red-ink: 240 169 163;
+  --cs-red-surface: 43 28 27;
+  --cs-red-border: 91 43 40;
+  --cs-green: 154 218 124;
+  --cs-green-ink: 143 224 106;
+  --cs-green-surface: 22 33 15;
+  --cs-green-wash: 22 33 12;
+  --cs-green-deep: 12 33 14;
+  --cs-ink: 246 243 240;
+  --cs-body: 194 194 194;
+  --cs-chip: 23 24 27;
+  --cs-panel: 23 24 27;
+  --cs-plum: 40 29 35;
+  --cs-slate: 22 25 30;
+  --cs-brand-from: 74 43 194;
+  --cs-brand-to: 35 20 92;
+  --cs-brand-deep: 34 4 116;
+  --cs-device: 30 64 175;
+  --cs-wall: 24 26 53;
+  --cs-tl-yellow: 107 86 2;
+  --cs-tl-cyan: 29 95 110;
+  --cs-tl-teal: 10 90 75;
+  --cs-tl-orange: 107 53 23;
+  --cs-tl-pillar: 26 28 32;
+  --cs-tl-label: 246 243 240;
 }
 
 body {

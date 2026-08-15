@@ -107,7 +107,9 @@ export const caseStudies: CaseStudy[] = [
     labelColor: "hsl(20 55% 30%)",
     labelColorDark: "hsl(20 50% 68%)",
     frame: "browser",
-    image: "/work/ux4g-screenshot.png",
+    // The component-library spread, exported from the work-carousel card in
+    // Figma (node 2938:47578) — 1536x1024.
+    image: "/work/ux4g-components.png",
     image2: "/case-studies/ux4g/pattern-library.jpg",
   },
   {

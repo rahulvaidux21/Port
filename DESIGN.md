@@ -27,7 +27,7 @@ colors:
     foreground: "#ffffff"
     role: "The site's one deliberate color moment — CTA buttons, active carousel arrows, testimonial card border/shadow, and the diffuse glow blobs behind the Experience and CTA cards. Pulled exactly from the source Figma."
   gridTick: "#cecece — the small square marks at every grid-line/divider intersection (see Grid system below); a distinct, slightly gray value, not pure white."
-  note: "editor-border is a separate token from hairline. The case-study detail template (app/case-studies/[slug]) still relies on editor-border at full opacity and is NOT part of the Figma-synced landing page — hairline exists so landing-page components can match Figma's translucent off-white dividers without changing the case-study template's borders. Dark is the default theme (an anti-flash inline script in layout.tsx adds the `dark` class before paint unless localStorage says \"light\"); the Navbar's sun/moon toggle switches between the two and persists the choice."
+  note: "hairline is used site-wide, including the case-study detail template as of its Figma-matched rebuild (see below) — editor-border is now legacy/unused. Dark is the default theme (an anti-flash inline script in layout.tsx adds the `dark` class before paint unless localStorage says \"light\"); the Navbar's sun/moon toggle switches between the two and persists the choice."
 typography:
   sans:
     family: "DM Sans (Google Fonts, free)"
@@ -86,7 +86,7 @@ The landing page is a direct implementation of Rahul's own Figma file (frame "Po
 - **No fabricated testimonial identities** — quotes are attributed by role, not name, and the section intro says outright that they're illustrative until real quotes are collected.
 - **No Services/pricing section** — the source Figma frame doesn't have one; it goes straight from the Stats band into the work carousels.
 
-The case-study detail template (`app/case-studies/[slug]`) is **not** part of this Figma-sync scope — it keeps its own layout, `editor-border` token, and Piazzolla accent untouched.
+The case-study detail template (`app/case-studies/[slug]`) is now also Figma-synced, matched to a dedicated reference frame ("Case study page template" — a generic, project-agnostic template, not itself one of Rahul's case studies) rather than left as a bespoke bordered-card layout. See "Case-study detail template" below.
 
 ## Page structure (top to bottom)
 
@@ -103,6 +103,19 @@ The case-study detail template (`app/case-studies/[slug]`) is **not** part of th
 
 `GridFrame`/`GridDivider` wrap the whole `<main>` (plus Navbar and Footer) with edge-to-edge vertical guide lines and horizontal section dividers with corner tick marks — see `gridSystem` above for the exact formula and why it needs JS-level pixel snapping, not just CSS.
 
+## Case-study detail template
+
+Rebuilt to match the Figma "Case study page template" frame exactly, replacing an earlier bordered-card/numbered-index layout that had drifted from any real reference. Key differences from a typical card-based case-study template:
+
+- **Wrapped in the same `GridFrame`/`GridDivider` system as the landing page** — the case-study template previously had its own, unrelated 1140px layout with no grid lines at all.
+- **No bordered/shadowed cards anywhere.** `components/case-study/Section.tsx` is a plain heading (28px medium, no index number, no border) followed directly by prose — replaces the old numbered/accent-colored/bordered treatment.
+- **`ProseList`/`ProseParagraphs`/`ProseMeta`** (`components/case-study/ProseList.tsx`) render native disc-bullet lists and paragraphs, including a bold-lead-in-phrase pattern ("**Role:** ...") for label+text items — replaces `IconLabelList`, `InsightCard`, `StatCard`, and `TradeoffCard`, all deleted.
+- **`CaseStudyFigure`** — a real screenshot with a thin `hairline/[0.16]` border (`rounded-lg`, no shadow, no `bg-surface` fill) and an uppercase caption below. Replaces the old shadowed/bordered `MediaPanel`.
+- **`CaseStudyQuote`** — `font-instrument-serif` italic pull-quote with a small decorative quote-mark icon, no accent-colored border. Reused for both the Opportunity statement and a featured testimonial.
+- **`CaseStudyHero`** — project name + one-line description (`study.overview`) + a single full-bleed image with two floating tag pills top-right. Replaces the old device-chrome screenshot + colored-background panel + meta-row card grid; Role/Timeline/Team/Responsibilities moved into the page's first prose section as bullets instead.
+- **`MoreCases`** — up to 2 other case studies in the same tag-pill/gradient-overlay card language as the landing page's `ProjectsCarousel`, replacing the single-item `NextCaseStudy` teaser.
+- **`editor-border` and `font-serif` (Piazzolla) are now unused** — every border on this template uses `hairline`, matching the landing page. The tokens are still defined in `tailwind.config.ts` but nothing renders with them.
+
 ## Do's and Don'ts
 
 **Do**
@@ -113,7 +126,7 @@ The case-study detail template (`app/case-studies/[slug]`) is **not** part of th
 - When two elements are supposed to align (e.g. a card's edge and the vertical grid line), verify with real `getBoundingClientRect()` measurements at multiple viewport widths, not a single screenshot — several past bugs in this codebase only showed up between breakpoints or at specific device-pixel ratios.
 
 **Don't**
-- Don't touch the case-study detail template's layout, `editor-border` usage, or Piazzolla accent as a side effect of landing-page work.
+- Don't reintroduce `editor-border`, `bg-surface` cards, or numbered section indices in the case-study template — that treatment doesn't exist in the "Case study page template" reference and was deliberately replaced.
 - Don't reintroduce fabricated testimonial names/photos — role-attributed, explicitly-flagged-as-illustrative quotes are the source of truth until real ones exist.
 - Don't add a Services/pricing section back in — the source Figma design doesn't have one.
 - Don't rely on Swiper's own `loop` mode for any carousel — use the shared `useInfiniteCarousel` hook; native loop mode has confirmed slide-position corruption in this setup.

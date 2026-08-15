@@ -25,6 +25,42 @@ const config: Config = {
           border: "rgb(var(--color-editor-border) / <alpha-value>)",
         },
         hairline: "rgb(var(--color-hairline) / <alpha-value>)",
+        // UX4G case-study ramp — see the --cs-* block in globals.css. Light
+        // values are the Figma frame's own; dark re-points each role at a
+        // calmer step so the brand colours don't glare on a near-black page.
+        cs: {
+          blue: "rgb(var(--cs-blue) / <alpha-value>)",
+          "blue-ink": "rgb(var(--cs-blue-ink) / <alpha-value>)",
+          violet: "rgb(var(--cs-violet) / <alpha-value>)",
+          "violet-deep": "rgb(var(--cs-violet-deep) / <alpha-value>)",
+          red: "rgb(var(--cs-red) / <alpha-value>)",
+          "red-fill": "rgb(var(--cs-red-fill) / <alpha-value>)",
+          "red-ink": "rgb(var(--cs-red-ink) / <alpha-value>)",
+          "red-surface": "rgb(var(--cs-red-surface) / <alpha-value>)",
+          "red-border": "rgb(var(--cs-red-border) / <alpha-value>)",
+          green: "rgb(var(--cs-green) / <alpha-value>)",
+          "green-ink": "rgb(var(--cs-green-ink) / <alpha-value>)",
+          "green-surface": "rgb(var(--cs-green-surface) / <alpha-value>)",
+          "green-wash": "rgb(var(--cs-green-wash) / <alpha-value>)",
+          "green-deep": "rgb(var(--cs-green-deep) / <alpha-value>)",
+          ink: "rgb(var(--cs-ink) / <alpha-value>)",
+          body: "rgb(var(--cs-body) / <alpha-value>)",
+          chip: "rgb(var(--cs-chip) / <alpha-value>)",
+          panel: "rgb(var(--cs-panel) / <alpha-value>)",
+          plum: "rgb(var(--cs-plum) / <alpha-value>)",
+          slate: "rgb(var(--cs-slate) / <alpha-value>)",
+          "brand-from": "rgb(var(--cs-brand-from) / <alpha-value>)",
+          "brand-to": "rgb(var(--cs-brand-to) / <alpha-value>)",
+          "brand-deep": "rgb(var(--cs-brand-deep) / <alpha-value>)",
+          device: "rgb(var(--cs-device) / <alpha-value>)",
+          wall: "rgb(var(--cs-wall) / <alpha-value>)",
+          "tl-yellow": "rgb(var(--cs-tl-yellow) / <alpha-value>)",
+          "tl-cyan": "rgb(var(--cs-tl-cyan) / <alpha-value>)",
+          "tl-teal": "rgb(var(--cs-tl-teal) / <alpha-value>)",
+          "tl-orange": "rgb(var(--cs-tl-orange) / <alpha-value>)",
+          "tl-pillar": "rgb(var(--cs-tl-pillar) / <alpha-value>)",
+          "tl-label": "rgb(var(--cs-tl-label) / <alpha-value>)",
+        },
         accent: {
           DEFAULT: "rgb(var(--color-accent) / <alpha-value>)",
           border: "rgb(var(--color-accent-border) / <alpha-value>)",
@@ -46,12 +82,19 @@ const config: Config = {
         // Kept separate from `serif` (Piazzolla) so the case-study template,
         // which already relies on `font-serif`, is untouched.
         "instrument-serif": ["var(--font-instrument-serif)", "Georgia", "serif"],
+        // Handwritten accent — UX4G case-study chapter eyebrows only.
+        caveat: ["var(--font-caveat)", "cursive"],
       },
       borderRadius: {
         lg: "0.75rem",
         xl: "1rem",
         "2xl": "1.5rem",
         "3xl": "2rem",
+        // Responsive radius scale — see the --r-* block in globals.css.
+        chip: "var(--r-chip)",
+        card: "var(--r-card)",
+        plate: "var(--r-plate)",
+        tile: "var(--r-tile)",
       },
       keyframes: {
         float: {

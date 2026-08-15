@@ -1,17 +1,31 @@
-import type { CSSProperties } from "react";
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
-import { CaseStudyHero } from "@/components/case-study/CaseStudyHero";
-import { Section } from "@/components/case-study/Section";
-import { MediaPanel } from "@/components/case-study/MediaPanel";
-import { InsightCard } from "@/components/case-study/InsightCard";
-import { StatCard } from "@/components/case-study/StatCard";
-import { TradeoffCard } from "@/components/case-study/TradeoffCard";
-import { IconLabelList } from "@/components/case-study/IconLabelList";
-import { NextCaseStudy } from "@/components/case-study/NextCaseStudy";
-import { caseStudies } from "@/lib/data";
+import { BentoGrid } from "@/components/case-study/ux4g/BentoGrid";
+import { BenchmarkWall, CompetitiveAnalysisSheet } from "@/components/case-study/ux4g/BenchmarkWall";
+import {
+  Shell,
+  TitleBlock,
+  ChipGroup,
+  TeamAndCollaboration,
+  ChallengeBand,
+  ImpactBand,
+  DesignTimeline,
+  AuditSection,
+  WhyNobodyUsedIt,
+  HowWeRebuiltIt,
+  SectionHeading,
+  GatheringInsights,
+  SolutionDivider,
+  FoundationsOpener,
+  PartOpener,
+  BigStats,
+  ContentBlockView,
+  Prose,
+  ThankYou,
+} from "@/components/case-study/ux4g/sections";
+import { MoreCases } from "@/components/case-study/MoreCases";
 import { caseStudyDetails } from "@/lib/caseStudies";
 
 interface PageProps {
@@ -29,241 +43,166 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
   return { title: detail.metaTitle, description: detail.metaDescription };
 }
 
+/* The page follows the Figma frame "Case study - UX4G design system 3.0
+   Light" (node 2944:48094) top to bottom, section for section. The frame
+   ends on the Thank you block — there is no closing impact/reflection
+   chapter in it, so there is none here either. MoreCases stays because it
+   is site chrome, like the Navbar and Footer, rather than case-study
+   content the frame owns. */
 export default async function CaseStudyPage({ params }: PageProps) {
   const { slug } = await params;
   const detail = caseStudyDetails[slug];
-  const study = caseStudies.find((s) => s.id === slug);
 
-  if (!detail || !study) {
+  if (!detail) {
     notFound();
   }
 
-  const nextStudy = caseStudies.find((s) => s.id === detail.nextCaseStudySlug);
-  const accent = { accentColor: study.labelColor, accentColorDark: study.labelColorDark };
-  const labelStyle = { "--l": study.labelColor, "--ld": study.labelColorDark } as CSSProperties;
-
   return (
-    <>
+    <div className="relative overflow-x-clip bg-paper">
       <Navbar />
+      {/* Note: the Figma MCP reports `"opsz" 14` on every text node, but
+          Figma lays the text out at DM Sans's default optical size — forcing
+          the axis here made every string ~6% wider than the frame (measured:
+          "Service patterns" hugs 231 in Figma, 244 at opsz 14, 230 at the
+          default). So the axis is deliberately not set. */}
       <main>
-        <CaseStudyHero detail={detail} study={study} />
+        {/* The frame opens on the bento collage, not a conventional hero.
+            Every top-level section in the frame is separated by exactly
+            100px, and the first one sits 100px below the artboard top —
+            that constant is the page's whole vertical rhythm. */}
+        <Shell className="pt-12 md:pt-[72px]">
+          <BentoGrid />
+        </Shell>
 
-        <div className="mx-auto max-w-[1140px] px-6 md:px-8">
-          <div className="flex flex-wrap gap-x-10 gap-y-4 border-b border-editor-border pb-10">
-            {detail.snapshot.map((row) => (
-              <div key={row.label}>
-                <p className="font-mono text-[10px] uppercase tracking-widest text-text-muted">{row.label}</p>
-                <p className="mt-1 font-sans text-base text-text-primary">{row.value}</p>
-              </div>
-            ))}
-          </div>
+        <TitleBlock />
+
+        {/* §3 — the three chip groups are one section, 48px apart. */}
+        <Shell className="flex flex-col gap-10 pt-16 md:gap-8 md:pt-[72px]">
+          <ChipGroup title="My Role & Responsibilities" chips={detail.roleChips} />
+          <ChipGroup title="Timeline" chips={detail.timelineChips} />
+          <ChipGroup title="Platforms" chips={detail.platformChips} withIcons />
+        </Shell>
+
+        {/* §4 — its own section, so the frame's 100px gap applies. */}
+        <Shell className="pt-16 md:pt-[72px]">
+          <TeamAndCollaboration
+            bullets={detail.teamAndCollaboration.bullets}
+            roles={detail.teamAndCollaboration.roles}
+          />
+        </Shell>
+
+        {/* Two separate bands in the frame: the problem on its own dark
+            field, the payoff back on paper. */}
+        <div className="mt-16 md:mt-[72px]">
+          <ChallengeBand items={detail.challenge} />
         </div>
 
-        <Section index="01" title="Problem" {...accent}>
-          <div className="flex flex-col gap-4">
-            {detail.problem.paragraphs.map((p, i) => (
-              <p key={i} className="font-sans text-base leading-relaxed text-text-secondary">
-                {p}
-              </p>
-            ))}
-          </div>
-        </Section>
+        <div className="py-16 md:py-[72px]">
+          <ImpactBand items={detail.impactTeaser} />
+        </div>
 
-        <Section index="02" title="Goals & Constraints" {...accent} wide>
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2">
-            <div className="max-w-[520px]">
-              <p className="mb-4 font-sans text-base leading-relaxed text-text-secondary">{detail.goals.intro}</p>
-              <ul className="flex flex-col gap-3">
-                {detail.goals.items.map((item) => (
-                  <li key={item} className="flex gap-2.5 font-sans text-base leading-relaxed text-text-secondary">
-                    <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                    {item}
-                  </li>
-                ))}
-              </ul>
-            </div>
-            <IconLabelList items={detail.constraints} />
-          </div>
-        </Section>
+        <Shell>
+          <DesignTimeline />
+        </Shell>
 
-        <Section index="03" title="Research" {...accent} wide>
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-2 md:items-start">
-            <div className="flex max-w-[560px] flex-col gap-4">
-              {detail.research.paragraphs.map((p, i) => (
-                <p key={i} className="font-sans text-base leading-relaxed text-text-secondary">
-                  {p}
-                </p>
-              ))}
-            </div>
-            <div className="flex flex-col gap-6">
-              {detail.research.media.map((m) => (
-                <MediaPanel key={m.src} media={m} />
-              ))}
-            </div>
-          </div>
-        </Section>
+        <div className="mt-16 md:mt-[72px]">
+          <AuditSection />
+        </div>
 
-        <Section index="04" title="Key Insights" {...accent} wide>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2 lg:grid-cols-3">
-            {detail.insights.map((item, i) => (
-              <InsightCard key={item.title} item={item} index={i} {...accent} />
-            ))}
-          </div>
-        </Section>
+        {/* The 2.0 scoreboard — the same story in numbers, a real team, and
+            four live apps that all look like different systems. */}
+        <div className="py-16 md:py-[72px]">
+          <WhyNobodyUsedIt />
+        </div>
 
-        <Section index="05" title="Opportunity" {...accent}>
-          <blockquote className="rounded-2xl border border-editor-border bg-surface p-8">
-            <p className="font-serif text-xl italic leading-snug text-text-primary md:text-2xl">“{detail.opportunity}”</p>
-          </blockquote>
-        </Section>
+        <HowWeRebuiltIt />
 
-        <Section index="06" title="Design Principles" {...accent} wide>
-          <IconLabelList items={detail.principles} columns={3} />
-        </Section>
+        {/* Benchmarking → the competitive analysis that came out of it. */}
+        <Shell className="flex flex-col gap-16 py-16 md:gap-12 md:py-[72px]">
+          <SectionHeading eyebrow="First off" title="We Benchmarked" accent="18 design systems" />
+          <BenchmarkWall />
+          <SectionHeading eyebrow="Then started with" title="Competitive" accent="analysis" />
+          <CompetitiveAnalysisSheet />
+        </Shell>
 
-        <Section index="07" title="Process" {...accent} wide>
-          <div className="grid grid-cols-1 gap-10 md:grid-cols-[1.1fr_1fr] md:items-start">
-            <div className="flex max-w-[560px] flex-col gap-4">
-              {detail.process.paragraphs.map((p, i) => (
-                <p key={i} className="font-sans text-base leading-relaxed text-text-secondary">
-                  {p}
-                </p>
-              ))}
-            </div>
-            <div className="flex flex-col gap-6 sm:flex-row md:flex-col">
-              {detail.process.media.map((m) => (
-                <MediaPanel key={m.src} media={m} className="sm:flex-1" />
-              ))}
-            </div>
-          </div>
-        </Section>
+        <div className="pb-16 md:pb-[72px]">
+          <GatheringInsights />
+        </div>
 
-        <Section index="08" title="User Flow" {...accent} wide>
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-3">
-            {detail.userFlow.map((flow) => (
-              <div key={flow.audience} className="rounded-2xl border border-editor-border bg-surface p-6">
-                <p className="mb-4 font-mono text-[11px] font-semibold uppercase tracking-widest text-text-muted">
-                  {flow.audience} flow
-                </p>
-                <ol className="flex flex-col gap-2.5">
-                  {flow.steps.map((step, i) => (
-                    <li key={step} className="flex items-baseline gap-2 font-sans text-base leading-relaxed text-text-secondary">
-                      <span className="font-mono text-xs text-text-muted">{i + 1}.</span>
-                      {step}
-                    </li>
-                  ))}
-                </ol>
-              </div>
-            ))}
-          </div>
-        </Section>
+        {/* Outline behind, solid blue offset in front — one layered mark,
+            set to the same 1120 column as the collage it tucks behind. */}
+        <Shell>
+          <SolutionDivider />
+        </Shell>
 
-        <Section index="09" title="Final Design" {...accent} wide>
-          <p className="mb-6 max-w-[720px] font-sans text-base leading-relaxed text-text-secondary">{detail.finalDesign.intro}</p>
-          <ul className="mb-10 grid max-w-[900px] grid-cols-1 gap-3 sm:grid-cols-2">
-            {detail.finalDesign.bullets.map((b) => (
-              <li
-                key={b}
-                className="flex gap-2.5 rounded-xl border border-editor-border bg-surface p-4 font-sans text-base leading-relaxed text-text-secondary"
-              >
-                <span className="mt-2 h-1 w-1 shrink-0 rounded-full bg-accent" />
-                {b}
-              </li>
-            ))}
-          </ul>
-          <div className="grid grid-cols-1 gap-8 md:grid-cols-2">
-            {detail.finalDesign.media.map((m) => (
-              <MediaPanel key={m.src} media={m} />
-            ))}
-          </div>
-        </Section>
+        {/* ── Part 1 · New Foundations ─────────────────────────── */}
+        {/* No top padding at `lg` — the collage butts against the divider so
+            it can occlude it. Below `lg` that occlusion doesn't apply, so the
+            opener takes the normal section gap instead of sitting flush
+            against the headline. */}
+        <Shell className="flex flex-col gap-16 pb-16 pt-16 md:gap-12 md:pb-[72px] lg:pt-0">
+          <FoundationsOpener />
+          {detail.foundations.map((block) => (
+            <ContentBlockView key={block.title} block={block} />
+          ))}
+        </Shell>
 
-        <Section index="10" title="Design Decisions" {...accent}>
-          <div className="flex flex-col gap-6">
-            {detail.decisions.map((d) => (
-              <div key={d.label}>
-                <p className="mb-1 font-mono text-[10px] font-semibold uppercase tracking-widest" style={labelStyle}>
-                  <span className="text-[var(--l)] dark:text-[var(--ld)]">{d.label}</span>
-                </p>
-                <p className="font-sans text-base leading-relaxed text-text-secondary">{d.text}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
+        {/* ── Part 2 · The component library ───────────────────── */}
+        <Shell className="flex flex-col gap-16 pb-16 md:gap-12 md:pb-[72px]">
+          <PartOpener content={detail.components.opener} />
+          <BigStats stats={detail.components.stats} />
+        </Shell>
 
-        <Section index="11" title="Trade-offs" {...accent} wide>
-          <div className="grid grid-cols-1 gap-5 lg:grid-cols-2">
-            {detail.tradeoffs.map((t) => (
-              <TradeoffCard key={t.title} item={t} />
-            ))}
-          </div>
-        </Section>
+        {/* The library band runs full-bleed on #002d01 with 60px of padding;
+            both lines are set at 64px, the eyebrow in Caveat. */}
+        <section className="bg-cs-green-deep py-10 md:py-[44px]">
+          <Shell className="flex flex-col gap-4">
+            <p className="font-caveat text-[clamp(1.25rem,1.806vw,1.625rem)] leading-none text-white">
+              The Library
+            </p>
+            <h2 className="font-sans text-[clamp(1.5rem,2.361vw,2.125rem)] font-semibold leading-[1.2] text-white">
+              Built brand new design components library
+            </h2>
+          </Shell>
+        </section>
 
-        <Section index="12" title="Collaboration" {...accent}>
-          <div className="flex flex-col gap-4">
-            {detail.collaboration.paragraphs.map((p, i) => (
-              <p key={i} className="font-sans text-base leading-relaxed text-text-secondary">
-                {p}
-              </p>
-            ))}
-          </div>
-        </Section>
+        <Shell className="flex flex-col gap-16 py-16 md:gap-12 md:py-[72px]">
+          {detail.components.blocks.map((block) => (
+            <ContentBlockView key={block.title} block={block} />
+          ))}
+        </Shell>
 
-        <Section index="13" title="Challenges" {...accent} wide>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {detail.challenges.map((c) => (
-              <div key={c.title} className="rounded-2xl border border-editor-border bg-surface p-6">
-                <h3 className="mb-2 font-sans text-lg font-bold text-text-primary">{c.title}</h3>
-                <p className="font-sans text-base leading-relaxed text-text-secondary">{c.text}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
+        {/* ── Part 3 · Service Patterns ────────────────────────── */}
+        <Shell className="flex flex-col gap-16 pb-16 md:gap-12 md:pb-[72px]">
+          <PartOpener content={detail.patterns.opener} />
+          <Prose>{detail.patterns.intro}</Prose>
+          <BigStats stats={detail.patterns.stats} />
+          {detail.patterns.blocks.map((block) => (
+            <ContentBlockView key={block.title} block={block} />
+          ))}
+        </Shell>
 
-        <Section index="14" title="Results" {...accent} wide>
-          <div className="mb-8 grid grid-cols-2 gap-4 lg:grid-cols-4">
-            {detail.results.stats.map((s) => (
-              <StatCard key={s.label} stat={s} {...accent} />
-            ))}
-          </div>
-          <div className="mb-8 flex max-w-[720px] flex-col gap-4">
-            {detail.results.paragraphs.map((p, i) => (
-              <p key={i} className="font-sans text-base leading-relaxed text-text-secondary">
-                {p}
-              </p>
-            ))}
-          </div>
+        {/* ── Part 4 · How teams get it ────────────────────────── */}
+        <Shell className="flex flex-col gap-16 pb-16 md:gap-12 md:pb-[72px]">
+          <PartOpener content={detail.rollout.opener} />
+          <ContentBlockView
+            prefix=""
+            block={{
+              title: "",
+              lead: detail.rollout.lead,
+              bullets: detail.rollout.bullets,
+              images: [detail.rollout.image],
+            }}
+          />
+        </Shell>
 
-          {detail.featuredTestimonial && (
-            <blockquote className="mb-8 max-w-[720px] border-l-2 border-accent py-1 pl-6">
-              <p className="font-serif text-xl italic leading-snug text-text-primary">
-                “{detail.featuredTestimonial.quote}”
-              </p>
-              <footer className="mt-3 font-mono text-xs uppercase tracking-widest text-text-muted">
-                {detail.featuredTestimonial.role}
-              </footer>
-            </blockquote>
-          )}
+        <Shell className="pb-16 md:pb-[72px]">
+          <MoreCases currentSlug={slug} />
+        </Shell>
 
-          <p className="max-w-[720px] font-sans text-sm text-text-muted">
-            <span className="font-semibold text-text-secondary">Tools — </span>
-            {detail.tools}
-          </p>
-        </Section>
-
-        <Section index="15" title="Reflection" {...accent} wide>
-          <div className="grid grid-cols-1 gap-5 sm:grid-cols-2">
-            {detail.reflection.items.map((item, i) => (
-              <div key={i} className="rounded-2xl border border-editor-border bg-surface p-6">
-                <p className="font-sans text-base leading-relaxed text-text-secondary">{item}</p>
-              </div>
-            ))}
-          </div>
-        </Section>
-
-        {nextStudy && <NextCaseStudy next={nextStudy} />}
+        <ThankYou email="rahulvaidux@gmail.com" />
       </main>
       <Footer />
-    </>
+    </div>
   );
 }
