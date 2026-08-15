@@ -33,7 +33,7 @@ export function BentoGrid() {
     <div style={{ containerType: "inline-size" }}>
       <div className="grid grid-cols-1 gap-2.5 sm:grid-cols-2 md:relative md:block md:aspect-[1320/683]">
         {/* ── Tile 1 · title card ─────────────────────────────── */}
-        <div className="relative flex aspect-[391/310] flex-col justify-start gap-[3.5cqw] overflow-hidden rounded-tile bg-gradient-to-b from-cs-brand-from to-cs-brand-to p-5 sm:col-start-1 sm:row-start-1 md:absolute md:left-0 md:top-0 md:aspect-auto md:h-[45.388%] md:w-[29.621%] md:gap-[1.818cqw] md:p-[1.515cqw]">
+        <div className="relative flex aspect-[391/310] flex-col justify-start gap-[3.5cqw] overflow-hidden rounded-card bg-gradient-to-b from-cs-brand-from to-cs-brand-to p-5 sm:col-start-1 sm:row-start-1 md:absolute md:left-0 md:top-0 md:aspect-auto md:h-[45.388%] md:w-[29.621%] md:gap-[1.818cqw] md:p-[1.515cqw]">
           {/* 9.071px gap between the wordmark and "3.0". */}
           <div className="flex items-center gap-2 md:gap-[0.687cqw]">
             {/* Figma ships the wordmark as two separate vectors positioned
@@ -75,7 +75,11 @@ export function BentoGrid() {
         </div>
 
         {/* ── Tile 2 · national emblem ────────────────────────── */}
-        <div className="relative flex aspect-[422/310] items-center justify-center overflow-hidden rounded-tile bg-cs-brand-deep p-5 sm:col-start-1 sm:row-start-2 md:absolute md:left-[30.379%] md:top-0 md:aspect-auto md:h-[45.388%] md:w-[31.97%] md:p-0">
+        {/* 33.106%, not the frame's 31.97%: Figma stops this tile 15px short
+            of the wide tile below it, which left a 21px channel to the phone
+            here against 8.5px everywhere else on the board. Squaring it to
+            the kit tile's right edge puts every gutter on the same 8.5px. */}
+        <div className="relative flex aspect-[422/310] items-center justify-center overflow-hidden rounded-card bg-cs-brand-deep p-5 sm:col-start-1 sm:row-start-2 md:absolute md:left-[30.379%] md:top-0 md:aspect-auto md:h-[45.388%] md:w-[33.106%] md:p-0">
           {/* 158.279×275.267 centred — 88.8% of the tile's height. */}
           <div className="relative h-[89%] w-[36%] md:w-[11.991cqw]">
             <Image
@@ -89,7 +93,7 @@ export function BentoGrid() {
         </div>
 
         {/* ── Tile 3 · Figma community kit ────────────────────── */}
-        <div className="relative aspect-[838/363] overflow-hidden rounded-tile bg-gradient-to-b from-cs-brand-from to-cs-brand-to sm:col-span-2 sm:row-start-3 md:absolute md:left-0 md:top-[46.852%] md:aspect-auto md:h-[53.148%] md:w-[63.485%]">
+        <div className="relative aspect-[838/363] overflow-hidden rounded-card bg-gradient-to-b from-cs-brand-from to-cs-brand-to sm:col-span-2 sm:row-start-3 md:absolute md:left-0 md:top-[46.852%] md:aspect-auto md:h-[53.148%] md:w-[63.485%]">
           {/* 744×341 centred in 838×363 — 88.8% wide, 11px clear top and bottom. */}
           <Image
             src="/case-studies/ux4g/bento/figma-kit.png"
@@ -108,7 +112,7 @@ export function BentoGrid() {
             to contain it, which had left the device's rounded bottom jammed
             against the tile's edge instead of running cleanly past it. */}
         <div
-          className="relative aspect-[472/620] overflow-hidden rounded-tile bg-cs-chip sm:col-start-2 sm:row-start-1 sm:row-span-2 sm:aspect-auto md:absolute md:left-[64.242%] md:top-0 md:h-full md:w-[35.758%]"
+          className="relative aspect-[472/620] overflow-hidden rounded-card bg-cs-chip sm:col-start-2 sm:row-start-1 sm:row-span-2 sm:aspect-auto md:absolute md:left-[64.242%] md:top-0 md:h-full md:w-[35.758%]"
           style={{ containerType: "inline-size" }}
         >
           {/* 30px Bold, 44px leading, centred with its line box at y64 —
@@ -128,7 +132,13 @@ export function BentoGrid() {
             className="absolute left-1/2 top-[24%] w-[min(72%,244px)] -translate-x-1/2 sm:top-[17%] md:top-[26.271cqw] md:w-[80.64%]"
             style={{ containerType: "inline-size" }}
           >
-            <div className="overflow-hidden rounded-[12.8cqw] border-[2.134cqw] border-cs-device bg-white shadow-xl">
+            {/* Rounded on the top only, and no bottom bezel: the device runs
+                off the tile's bottom edge, and at 41px the bottom corners
+                curved back in well inside the 10px of bleed — so instead of
+                reading as a phone continuing past the crop, it read as a
+                whole phone with its base clipped. Square and open at the
+                bottom, it runs out of frame the way the mockup does. */}
+            <div className="overflow-hidden rounded-t-[12.8cqw] border-[2.134cqw] border-b-0 border-cs-device bg-white shadow-xl">
               <Image
                 src="/case-studies/ux4g/bento/signin-screen.jpg"
                 alt="The UX4G 3.0 sign-in screen rendered on a mobile device"

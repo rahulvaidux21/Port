@@ -85,6 +85,46 @@ export const ux4g: CaseStudyDetail = {
     { date: "Jun 2026", phase: "Rollout", description: "Docs, packages, Figma library. Phase 1 shipped 31 March 2026; Phase 2 shipped June 2026." },
   ],
 
+  /* ── The service-catalogue analysis ───────────────────────────────────
+     Sits with the benchmarking, not in the solution: this is how we found
+     out what to build, and Parts 1–4 are what we built. Figures are the
+     project's own — roughly 12,000 services, 14 categories, 72
+     sub-categories, 10 journey types. Written in "we" because the mapping
+     was joint work with the other designer on the system. */
+  serviceResearch: {
+    eyebrow: "Then we read the catalogue",
+    title: "12,000 services,",
+    accent: "10 shapes",
+    lead: [
+      "Benchmarking showed us what other design systems ship. It couldn't tell us what an Indian government service actually asks a citizen to do — so we read the whole catalogue.",
+    ],
+    note: "Read by hand from service catalogues, VLE onboarding kits and state e-District documentation — the portals block automated access.",
+    stats: [
+      { value: "12,000", label: "services read", labelWidth: "180px" },
+      { value: "14", label: "top-level categories" },
+      { value: "72", label: "sub-categories" },
+      { value: "10", label: "journey types" },
+    ],
+    // Each journey's steps are the recurring ones it contains. The matrix
+    // is what carries the finding: the same handful of steps keeps coming
+    // back, which is exactly why patterns are possible at all.
+    journeys: [
+      { name: "Apply", summary: "Asks for a certificate or registration, then waits on a decision", steps: ["aadhaar", "upload", "status"] },
+      { name: "Pay", summary: "Settles a bill or a fee", steps: ["payment"] },
+      { name: "Enrol", summary: "Signs up for a scheme or programme", steps: ["aadhaar"] },
+      { name: "Verify", summary: "Proves an identity or an eligibility", steps: ["aadhaar"] },
+      { name: "Update", summary: "Corrects something already on record", steps: ["aadhaar", "upload", "status"] },
+      { name: "Transact", summary: "Exchanges something of value with a department", steps: ["aadhaar", "payment"] },
+      { name: "Consult", summary: "Books time with someone who can advise", steps: ["booking"] },
+      { name: "Access", summary: "Looks something up, or pulls a document back out", steps: ["aadhaar"] },
+      { name: "Lodge", summary: "Raises a complaint and follows it", steps: ["upload", "status"] },
+      { name: "Assess", summary: "Sits a test or an inspection", steps: ["upload", "status", "booking"] },
+    ],
+    outro: [
+      "That repetition is the whole argument for patterns: if a step is the same shape in six different journeys, it gets solved once, not six times.",
+    ],
+  },
+
   /* ── Part 1 · New Foundations ─────────────────────────────────────── */
   foundations: [
     {
@@ -273,7 +313,13 @@ export const ux4g: CaseStudyDetail = {
     ],
   },
 
-  /* ── Part 3 · Service Patterns ────────────────────────────────────── */
+  /* ── Part 3 · Service Patterns ────────────────────────────────────
+     This has to read as the answer, not more analysis. Two earlier versions
+     failed at exactly that: both opened by restating the problem ("a handful
+     of steps kept turning up"), and the second drew its groups as the same
+     bar chart the research band uses — so it looked like a second findings
+     section. It now opens on the thing that was built, and the before/after
+     does the explaining. */
   patterns: {
     opener: {
       part: "Part 3",
@@ -286,32 +332,35 @@ export const ux4g: CaseStudyDetail = {
       },
     },
     intro:
-      "The part that changes what UX4G is. Components let you build a screen. Patterns let you build a service - 36 of them, across the nine journeys every government service is made of.",
+      "We built 36 patterns. A pattern is a finished piece of a service — not a button, but a whole step, with every screen it needs, every branch it can take and every way it can fail. Teams now assemble a service from these instead of designing each flow from scratch.",
     stats: [
-      { value: "9", label: "Groups" },
-      { value: "12", label: "Patterns in one apply journey" },
-      { value: "36", label: "0 → 36 Patterns" },
+      { value: "36", label: "patterns built" },
+      { value: "9", label: "groups they fall into" },
+      { value: "12", label: "patterns in one apply journey" },
     ],
-    blocks: [
-      {
-        title: "one level above components",
-        lead: [
-          "A component is a single part - a field, a button, a card. A pattern puts several of them together to solve one whole thing a citizen is trying to do: sign in, give consent, upload a document, track an application.",
-        ],
-        bullets: [
-          "Nine groups: identity and access (8) · consent and declaration (3) · application and submission (6) · status and tracking (3) · payments (1) · search and discovery (3) · dashboards and my applications (3) · notifications (5) · feedback and communication (4). → Built in the order the survey said was hardest — multi-step applications (32 of 47), document upload and verification (29), identity and authentication (28).",
-          "Teams stop re-deciding how a flow should work and start from one that has already been decided.",
-        ],
-        images: [
-          {
-            src: "/case-studies/ux4g/part3/patterns.png",
-            alt: "Pattern screens in sequence — profile completion, rating, conditional guidance, an applications dashboard, and an application form",
-            width: 1320,
-            height: 692,
-          },
-        ],
-      },
+    // Deliberately general. An earlier version built this around the Aadhaar
+    // sign-in, which made the whole section read as being about one pattern.
+    contrast: {
+      before: "Every service was drawn from scratch. The same steps — signing in, uploading proof, paying, tracking a request — ended up looking and behaving differently in each one.",
+      after: "Each of those steps now exists once, finished and documented. A team picks the patterns its journey needs and puts the service together from them.",
+    },
+    groups: [
+      { name: "Identity and access", count: 8 },
+      { name: "Application and submission", count: 6 },
+      { name: "Notifications", count: 5 },
+      { name: "Feedback and communication", count: 4 },
+      { name: "Consent and declaration", count: 3 },
+      { name: "Status and tracking", count: 3 },
+      { name: "Search and discovery", count: 3 },
+      { name: "Dashboards and my applications", count: 3 },
+      { name: "Payments", count: 1 },
     ],
+    image: {
+      src: "/case-studies/ux4g/part3/patterns.png",
+      alt: "Pattern screens in sequence — profile completion, rating, conditional guidance, an applications dashboard, and an application form",
+      width: 1320,
+      height: 692,
+    },
   },
 
   /* ── Part 4 · How teams get it ────────────────────────────────────── */

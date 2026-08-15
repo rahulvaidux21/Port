@@ -88,7 +88,21 @@
   --r-chip: 16px;
   --r-card: 24px;
   --r-plate: 24px;
-  --r-tile: 32px;
+
+  /* ── Spacing scale ─────────────────────────────────────────────────
+     One rhythm for the case study. Before this the page ran 17 different
+     gaps across 21 section boundaries (72 to 175px), because some sections
+     padded top, some bottom, some both — so wherever two padded sections
+     met, their padding summed. Spacing is now directional: a section pads
+     its *bottom* only, so two adjacent sections can't sum. Full-bleed
+     tinted bands are the exception on both sides — they pad symmetrically
+     to hold their background, and the section after one pads its own top,
+     since the band's padding sits inside the band, not outside it. Every
+     boundary then lands on exactly one value. */
+  --sp-section: 96px;
+  --sp-block: 48px;
+  --sp-element: 24px;
+  --sp-tight: 16px;
 
   --font-dm-sans: "DM Sans", system-ui, sans-serif;
 }
@@ -98,7 +112,11 @@
     --r-chip: 12px;
     --r-card: 16px;
     --r-plate: 16px;
-    --r-tile: 20px;
+
+    --sp-section: 64px;
+    --sp-block: 32px;
+    --sp-element: 20px;
+    --sp-tight: 12px;
   }
 }
 

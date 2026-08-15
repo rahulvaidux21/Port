@@ -16,10 +16,13 @@ import {
   WhyNobodyUsedIt,
   HowWeRebuiltIt,
   SectionHeading,
+  ServiceResearch,
   GatheringInsights,
   SolutionDivider,
   FoundationsOpener,
   PartOpener,
+  PatternModel,
+  Figure,
   BigStats,
   ContentBlockView,
   Prose,
@@ -70,21 +73,30 @@ export default async function CaseStudyPage({ params }: PageProps) {
             Every top-level section in the frame is separated by exactly
             100px, and the first one sits 100px below the artboard top —
             that constant is the page's whole vertical rhythm. */}
-        <Shell className="pt-12 md:pt-[72px]">
+        <Shell className="pb-section pt-section">
           <BentoGrid />
         </Shell>
 
         <TitleBlock />
 
         {/* §3 — the three chip groups are one section, 48px apart. */}
-        <Shell className="flex flex-col gap-10 pt-16 md:gap-8 md:pt-[72px]">
+        <Shell className="flex flex-col gap-block pb-section">
           <ChipGroup title="My Role & Responsibilities" chips={detail.roleChips} />
           <ChipGroup title="Timeline" chips={detail.timelineChips} />
           <ChipGroup title="Platforms" chips={detail.platformChips} withIcons />
         </Shell>
 
-        {/* §4 — its own section, so the frame's 100px gap applies. */}
-        <Shell className="pt-16 md:pt-[72px]">
+        {/* Every section pads its own bottom, including the ones before a
+            full-bleed band. Dropping it on the theory that "the background
+            change is the separator" was wrong: the band separates the two
+            regions, but the previous section's content then lands flush on a
+            hard colour edge with nothing under it.
+
+            The mirror of that holds too: a section that *follows* a band needs
+            its own `pt-section`. The band's `py-section` pads the inside of
+            the band, not the outside — without a top pad the next heading
+            starts on the colour edge. */}
+        <Shell className="pb-section">
           <TeamAndCollaboration
             bullets={detail.teamAndCollaboration.bullets}
             roles={detail.teamAndCollaboration.roles}
@@ -93,39 +105,48 @@ export default async function CaseStudyPage({ params }: PageProps) {
 
         {/* Two separate bands in the frame: the problem on its own dark
             field, the payoff back on paper. */}
-        <div className="mt-16 md:mt-[72px]">
-          <ChallengeBand items={detail.challenge} />
-        </div>
+        <ChallengeBand items={detail.challenge} />
 
-        <div className="py-16 md:py-[72px]">
+        <div className="pb-section pt-section">
           <ImpactBand items={detail.impactTeaser} />
         </div>
 
-        <Shell>
+        <Shell className="pb-section">
           <DesignTimeline />
         </Shell>
 
-        <div className="mt-16 md:mt-[72px]">
-          <AuditSection />
-        </div>
+        <AuditSection />
 
         {/* The 2.0 scoreboard — the same story in numbers, a real team, and
             four live apps that all look like different systems. */}
-        <div className="py-16 md:py-[72px]">
+        <div className="pb-section pt-section">
           <WhyNobodyUsedIt />
         </div>
 
         <HowWeRebuiltIt />
 
-        {/* Benchmarking → the competitive analysis that came out of it. */}
-        <Shell className="flex flex-col gap-16 py-16 md:gap-12 md:py-[72px]">
-          <SectionHeading eyebrow="First off" title="We Benchmarked" accent="18 design systems" />
-          <BenchmarkWall />
-          <SectionHeading eyebrow="Then started with" title="Competitive" accent="analysis" />
-          <CompetitiveAnalysisSheet />
+        {/* Benchmarking → the competitive analysis that came out of it. Two
+            separate sections, so they're two groups a full section gap apart:
+            48px binds a heading to the exhibit under it, 96px separates the
+            pairs. Run flat at 48px they read as one four-part list. */}
+        <Shell className="flex flex-col gap-section pb-section pt-section">
+          <div className="flex flex-col gap-block">
+            <SectionHeading eyebrow="First off" title="We Benchmarked" accent="18 design systems" />
+            <BenchmarkWall />
+          </div>
+          <div className="flex flex-col gap-block">
+            <SectionHeading eyebrow="Then started with" title="Competitive" accent="analysis" />
+            <CompetitiveAnalysisSheet />
+          </div>
         </Shell>
 
-        <div className="pb-16 md:pb-[72px]">
+        {/* Its own band, on the panel tint — the catalogue analysis is a
+            chapter of the research in its own right, not a tail on the
+            benchmarking. Still before the solution: Parts 1-4 are what we
+            built, this is how we knew what to build. */}
+        <ServiceResearch block={detail.serviceResearch} />
+
+        <div className="pb-section pt-section">
           <GatheringInsights />
         </div>
 
@@ -136,11 +157,17 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </Shell>
 
         {/* ── Part 1 · New Foundations ─────────────────────────── */}
-        {/* No top padding at `lg` — the collage butts against the divider so
-            it can occlude it. Below `lg` that occlusion doesn't apply, so the
-            opener takes the normal section gap instead of sitting flush
-            against the headline. */}
-        <Shell className="flex flex-col gap-16 pb-16 pt-16 md:gap-12 md:pb-[72px] lg:pt-0">
+        {/* No top padding from `md` — the collage butts against the divider so
+            it can occlude it. That switch has to sit on the same breakpoint as
+            the collage itself (`md:block` in FoundationsOpener); left at `lg`
+            it pushed the opener down through the whole md–lg range and the
+            headline stopped tucking. Below `md` there is no collage, so the
+            opener takes the normal section gap instead.
+
+            Blocks are a full section apart, not 48px: at 48 the gap between
+            two "Introducing – " chapters equalled the gap *inside* one, so
+            four separate topics read as a single run of text. */}
+        <Shell className="flex flex-col gap-section pb-section pt-section md:pt-0">
           <FoundationsOpener />
           {detail.foundations.map((block) => (
             <ContentBlockView key={block.title} block={block} />
@@ -148,42 +175,35 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </Shell>
 
         {/* ── Part 2 · The component library ───────────────────── */}
-        <Shell className="flex flex-col gap-16 pb-16 md:gap-12 md:pb-[72px]">
-          <PartOpener content={detail.components.opener} />
-          <BigStats stats={detail.components.stats} />
-        </Shell>
+        {/* One Shell, same rhythm as Part 1: opener and its stat row are one
+            unit at 48px, then each block a full section apart.
 
-        {/* The library band runs full-bleed on #002d01 with 60px of padding;
-            both lines are set at 64px, the eyebrow in Caveat. */}
-        <section className="bg-cs-green-deep py-10 md:py-[44px]">
-          <Shell className="flex flex-col gap-4">
-            <p className="font-caveat text-[clamp(1.25rem,1.806vw,1.625rem)] leading-none text-white">
-              The Library
-            </p>
-            <h2 className="font-sans text-[clamp(1.5rem,2.361vw,2.125rem)] font-semibold leading-[1.2] text-white">
-              Built brand new design components library
-            </h2>
-          </Shell>
-        </section>
-
-        <Shell className="flex flex-col gap-16 py-16 md:gap-12 md:py-[72px]">
+            The frame put a green "The Library / Built brand new design
+            components library" band between the stats and the blocks. It's
+            gone — the chapter opener directly above it already says "The
+            component library", so the band restated the heading and split the
+            chapter in two for nothing. */}
+        <Shell className="flex flex-col gap-section pb-section">
+          <div className="flex flex-col gap-block">
+            <PartOpener content={detail.components.opener} />
+            <BigStats stats={detail.components.stats} />
+          </div>
           {detail.components.blocks.map((block) => (
             <ContentBlockView key={block.title} block={block} />
           ))}
         </Shell>
 
         {/* ── Part 3 · Service Patterns ────────────────────────── */}
-        <Shell className="flex flex-col gap-16 pb-16 md:gap-12 md:pb-[72px]">
+        <Shell className="flex flex-col gap-block pb-section">
           <PartOpener content={detail.patterns.opener} />
           <Prose>{detail.patterns.intro}</Prose>
           <BigStats stats={detail.patterns.stats} />
-          {detail.patterns.blocks.map((block) => (
-            <ContentBlockView key={block.title} block={block} />
-          ))}
+          <PatternModel contrast={detail.patterns.contrast} groups={detail.patterns.groups} />
+          <Figure {...detail.patterns.image} frame />
         </Shell>
 
         {/* ── Part 4 · How teams get it ────────────────────────── */}
-        <Shell className="flex flex-col gap-16 pb-16 md:gap-12 md:pb-[72px]">
+        <Shell className="flex flex-col gap-block pb-section">
           <PartOpener content={detail.rollout.opener} />
           <ContentBlockView
             prefix=""
@@ -196,7 +216,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
           />
         </Shell>
 
-        <Shell className="pb-16 md:pb-[72px]">
+        <Shell className="pb-section">
           <MoreCases currentSlug={slug} />
         </Shell>
 

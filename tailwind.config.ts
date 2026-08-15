@@ -85,6 +85,14 @@ const config: Config = {
         // Handwritten accent — UX4G case-study chapter eyebrows only.
         caveat: ["var(--font-caveat)", "cursive"],
       },
+      // Spacing scale — see the --sp-* block in globals.css. Usable as
+      // pb-section, py-section, gap-block, gap-element, gap-tight.
+      spacing: {
+        section: "var(--sp-section)",
+        block: "var(--sp-block)",
+        element: "var(--sp-element)",
+        tight: "var(--sp-tight)",
+      },
       borderRadius: {
         lg: "0.75rem",
         xl: "1rem",
@@ -94,7 +102,6 @@ const config: Config = {
         chip: "var(--r-chip)",
         card: "var(--r-card)",
         plate: "var(--r-plate)",
-        tile: "var(--r-tile)",
       },
       keyframes: {
         float: {

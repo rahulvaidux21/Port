@@ -1,7 +1,16 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
-import type { BigStat, ContentBlock, MediaItem, PartOpenerContent, Stat } from "@/types";
+import type {
+  BigStat,
+  ContentBlock,
+  MediaItem,
+  PartOpenerContent,
+  PatternGroup,
+  ResearchBlock,
+  ServiceJourney,
+  Stat,
+} from "@/types";
 
 /* ────────────────────────────────────────────────────────────────────
    Type scale, lifted from the Figma frame "Case study - UX4G design
@@ -113,7 +122,7 @@ export function Shell({ children, className }: { children: ReactNode; className?
     section gap. */
 export function TitleBlock() {
   return (
-    <Shell className="pt-12 md:pt-[100px]">
+    <Shell className="pb-section">
       <div className="flex flex-col gap-4 pt-4">
         <h1 className={cn(DISPLAY_XL, "font-sans text-cs-ink")}>
           Rebuilding India&apos;s National Design System
@@ -133,7 +142,7 @@ export function TitleBlock() {
         height={831}
         priority
         sizes="(min-width: 1360px) 1320px, 100vw"
-        className="mt-8 h-auto w-full"
+        className="mt-block h-auto w-full"
       />
     </Shell>
   );
@@ -228,8 +237,8 @@ export function TeamAndCollaboration({
   roles: Stat[];
 }) {
   return (
-    <div className="flex flex-col gap-10 lg:flex-row lg:items-stretch lg:gap-[3.939%]">
-      <div className="flex flex-col gap-4 lg:w-[44.697%] lg:shrink-0">
+    <div className="flex flex-col gap-block md:flex-row md:items-stretch md:gap-[3.939%]">
+      <div className="flex flex-col gap-element md:w-[44.697%] md:shrink-0">
         <h2 className={cn(DISPLAY, "leading-[1]", "font-sans text-cs-ink")}>
           Team And Collaboration
         </h2>
@@ -246,7 +255,7 @@ export function TeamAndCollaboration({
           ))}
         </ul>
       </div>
-      <div className="flex flex-col gap-4 rounded-card bg-cs-panel p-5 lg:w-[50.303%]">
+      <div className="flex flex-col gap-4 rounded-card bg-cs-panel p-5 md:w-[50.303%]">
         {roles.map((role) => (
           <div key={role.label} className="flex flex-1 items-center justify-between gap-4 md:gap-6">
             <div className="flex flex-col gap-2">
@@ -266,7 +275,7 @@ export function TeamAndCollaboration({
                 blew the square past the viewport on a phone. The panel's
                 height now follows the squares, and `items-stretch` brings the
                 prose column level with it. */}
-            <div className="aspect-square w-20 shrink-0 overflow-hidden rounded-card bg-paper sm:w-24 lg:w-[120px]">
+            <div className="aspect-square w-20 shrink-0 overflow-hidden rounded-card bg-paper sm:w-24 md:w-[88px] lg:w-[120px]">
               <Image
                 src="/case-studies/ux4g/team-placeholder.svg"
                 alt={`${role.label} — photo to come`}
@@ -289,8 +298,8 @@ export function TeamAndCollaboration({
     there and only hold single-line from `md` up. */
 export function ChallengeBand({ items }: { items: string[] }) {
   return (
-    <section className="bg-cs-plum py-12 md:py-[52px]">
-      <Shell className="flex flex-col gap-6 md:gap-8">
+    <section className="bg-cs-plum py-section">
+      <Shell className="flex flex-col gap-block">
         <h2 className={cn(DISPLAY, "leading-[1]", "font-sans text-white")}>The Challenge</h2>
         <ul className="flex flex-wrap gap-3 md:gap-4">
           {items.map((item) => (
@@ -427,7 +436,7 @@ const pct = (n: number) => `${(n / BOARD_W) * 100}%`;
 
 export function DesignTimeline() {
   return (
-    <div className="flex flex-col gap-10 md:gap-[60px]">
+    <div className="flex flex-col gap-block">
       <div className="flex flex-col gap-2">
         <h2 className={cn(DISPLAY, "leading-[1.3333]", "font-sans text-cs-ink")}>
           Design Timeline
@@ -535,13 +544,17 @@ export function AuditSection() {
   return (
     // Same warm near-black as the Challenge band above it — the frame runs
     // one colour across both, not #09090b.
-    <section className="bg-cs-plum py-20 md:py-[4.5vw]">
-      <Shell className="flex flex-col gap-10 md:gap-[2.5vw]">
+    <section className="bg-cs-plum py-section">
+      <Shell className="flex flex-col gap-block">
         <div className="flex flex-col gap-4">
           <Eyebrow className="text-cs-red">Problems in the</Eyebrow>
           <h2 className={cn(DISPLAY, LEADING_AUTO, "font-sans text-white")}>UX4G 2.0 design system</h2>
         </div>
-        <div className="flex flex-col gap-8 md:gap-[2vw]">
+        {/* Square corners and a flat 24px between exhibits, both straight from
+            the frame — these are annotated screenshots, not cards, and the
+            radius token would have rounded them and stepped the gap to 20 on
+            a phone. */}
+        <div className="flex flex-col gap-6">
           {AUDIT_EXHIBITS.map((ex) => (
             <Image
               key={ex.src}
@@ -550,7 +563,7 @@ export function AuditSection() {
               width={1320}
               height={ex.height}
               sizes="(min-width: 1360px) 1320px, 100vw"
-              className="h-auto w-full rounded-plate"
+              className="h-auto w-full"
             />
           ))}
         </div>
@@ -563,7 +576,11 @@ export function AuditSection() {
 export function PartOpener({ content }: { content: PartOpenerContent }) {
   const { part, title, image, tint } = content;
   return (
-    <div className={cn("grid grid-cols-1 overflow-hidden md:grid-cols-2", tint && "rounded-card")}>
+    // The tinted field runs square — it's a full-width plate the chapter sits
+    // on, and rounding it made it read as a card floating in the chapter
+    // rather than as the chapter's own ground. The kit shot inside keeps its
+    // own radius.
+    <div className="grid grid-cols-1 overflow-hidden md:grid-cols-2">
       <div className="flex flex-col justify-center gap-4 bg-paper py-8 md:py-12 md:pr-8">
         <Eyebrow className="text-cs-violet">{part}</Eyebrow>
         <p className={cn(PART_TITLE, "font-sans text-text-primary")}>{title}</p>
@@ -726,8 +743,9 @@ function BaselineCard({
     <div
       className={cn(
         // 304px tall on a 24px radius with 32px of padding, exactly as the
-        // frame draws it.
-        "flex min-h-[180px] flex-1 flex-col justify-between gap-8 overflow-hidden rounded-card p-6 md:min-h-[304px] md:p-8",
+        // frame draws it. min-height is a floor, not the height — the card is
+        // a grid item and stretches to its row.
+        "flex min-h-[180px] flex-col justify-between gap-8 overflow-hidden rounded-card p-6 md:min-h-[304px] md:p-8",
         tone === "alert" ? "bg-cs-red-fill" : "bg-cs-slate"
       )}
     >
@@ -765,53 +783,53 @@ function BaselineCard({
 
 export function WhyNobodyUsedIt() {
   return (
-    <Shell className="flex flex-col gap-12 md:gap-[3vw]">
+    <Shell className="flex flex-col gap-block">
       <h2 className={cn(DISPLAY_XL, "text-center font-sans text-cs-ink")}>
         Everyone had the design system{" "}
         <span className="text-cs-red">Why did nobody use it? </span>
         An outcome of a library, not a system.
       </h2>
 
-      {/* Three columns of two stacked cards; the middle column's top card is
-          the photograph, so the row reads 34 / a real team / 1 platform. */}
-      {/* Three columns from `md` — the frame's composition, scaled down,
-          rather than a 2-up that loses it. */}
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-3">
-        <div className="flex flex-col gap-2">
-          <BaselineCard value="34" label="COMPONENTS" />
-          <BaselineCard value="1" label="Theme" />
-        </div>
-        <div className="flex flex-col gap-2">
-          <div className="relative flex min-h-[280px] flex-1 items-center overflow-hidden rounded-card">
-            <Image
-              src="/case-studies/ux4g/dept-team.jpg"
-              alt="A government department product team at work"
-              fill
-              sizes="(min-width: 1024px) 434px, 100vw"
-              className="object-cover"
-            />
-            <div className="absolute inset-0 bg-black/50" />
-            <div className="relative flex flex-col gap-4 p-6 md:p-8">
-              <p className="font-sans text-[clamp(1.25rem,2.22vw,2rem)] font-bold leading-tight text-white">
-                A department product team
-              </p>
-              <p className="font-sans text-[clamp(0.9rem,1.39vw,1.25rem)] leading-relaxed text-white">
-                Building a scheme portal on a three-month deadline. Told to use UX4G. Detached the
-                components in week two.
-              </p>
-            </div>
-          </div>
-          <BaselineCard
-            value="0"
-            description="Only introduced Primitive tokens, which are just values"
-            label="Semantic Tokens"
-            tone="alert"
+      {/* Six cards on a 3x2 grid, the frame's composition scaled down. The
+          middle column's top card is the photograph, so the top row reads
+          34 / a real team / 1 platform and the bottom row 1 / 0 / 0.
+
+          Every card is a direct grid item rather than three columns of two,
+          which is what keeps the rows level. As nested flex columns each
+          column split its own height independently, so the taller copy in the
+          Semantic Tokens card pushed its own boundary up and the middle
+          column's seam sat ~17px off the other two. Two 1fr rows give the
+          whole board one shared seam and six identical cards. */}
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-3 md:grid-rows-2">
+        <BaselineCard value="34" label="COMPONENTS" />
+        <div className="relative flex min-h-[280px] items-center overflow-hidden rounded-card">
+          <Image
+            src="/case-studies/ux4g/dept-team.jpg"
+            alt="A government department product team at work"
+            fill
+            sizes="(min-width: 1024px) 434px, 100vw"
+            className="object-cover"
           />
+          <div className="absolute inset-0 bg-black/50" />
+          <div className="relative flex flex-col gap-4 p-6 md:p-8">
+            <p className="font-sans text-[clamp(1.25rem,2.22vw,2rem)] font-bold leading-tight text-white">
+              A department product team
+            </p>
+            <p className="font-sans text-[clamp(0.9rem,1.39vw,1.25rem)] leading-relaxed text-white">
+              Building a scheme portal on a three-month deadline. Told to use UX4G. Detached the
+              components in week two.
+            </p>
+          </div>
         </div>
-        <div className="flex flex-col gap-2">
-          <BaselineCard value="1" label="Platform (Web)" />
-          <BaselineCard value="0" label="Service Patterns" />
-        </div>
+        <BaselineCard value="1" label="Platform (Web)" />
+        <BaselineCard value="1" label="Theme" />
+        <BaselineCard
+          value="0"
+          description="Only introduced Primitive tokens, which are just values"
+          label="Semantic Tokens"
+          tone="alert"
+        />
+        <BaselineCard value="0" label="Service Patterns" />
       </div>
 
       {/* "Lastly" — the consequence, shown rather than argued: four live
@@ -853,8 +871,8 @@ export function HowWeRebuiltIt() {
     { n: "03", text: "Service patterns, documentation and rollout", offset: "md:mt-[12.432%]" },
   ];
   return (
-    <section className="bg-gradient-to-b from-cs-green-wash to-paper to-[19.292%] py-12 md:py-[2.5vw]">
-      <Shell className="flex flex-col gap-6 md:gap-[1.8vw]">
+    <section className="bg-gradient-to-b from-cs-green-wash to-paper to-[19.292%] py-section">
+      <Shell className="flex flex-col gap-element">
         <Eyebrow className="text-cs-green-ink">Let&apos;s talk about</Eyebrow>
         <h2 className={cn(DISPLAY, LEADING_AUTO, "font-sans text-text-primary")}>How we rebuilt it</h2>
         <p className={cn(LEAD, "font-sans text-text-secondary")}>
@@ -897,7 +915,12 @@ export function HowWeRebuiltIt() {
                   // it's what makes the copy break where Figma breaks it.
                   // 32px of padding on a 370px card — as a percentage, so the
                   // measure inside stays 306px in frame units.
-                  "flex flex-col justify-between gap-8 rounded-chip bg-paper p-5 text-justify shadow-[0px_4px_41px_0px_rgba(0,0,0,0.15)] md:gap-20 md:p-[8.649%]",
+                  // The card is a step above the page in dark, not `bg-paper`:
+                  // the gradient has already resolved to paper by the time the
+                  // cards land on it, and the frame's black shadow is invisible
+                  // against a near-black page — so a paper card had no edge at
+                  // all and dissolved into the background.
+                  "flex flex-col justify-between gap-8 rounded-chip bg-paper p-5 text-justify shadow-[0px_4px_41px_0px_rgba(0,0,0,0.15)] dark:bg-surface md:gap-20 md:p-[8.649%]",
                   p.offset
                 )}
                 style={{ containerType: "inline-size" }}
@@ -947,10 +970,176 @@ export function SectionHeading({
   );
 }
 
+
+/* ── 13b · What the catalogue turned out to contain ───────────────── */
+/** Built for a first scan. The argument is one sentence — ~12,000 services
+    are really ten shapes, and the same few steps recur inside them, so a
+    step gets solved once instead of ten times — and everything here exists
+    to carry it at a glance: four counts, the ten names, five bars.
+
+    Two earlier versions were too slow. A journeys x steps dot matrix showed
+    the data and left the reader to find the finding; the version after it
+    said the finding but buried it under ten description cards, five journey
+    lists and four paragraphs. Names alone carry the ten (they are verbs the
+    reader already knows), and a count plus a bar carries each step. */
+const JOURNEY_STEPS: { id: string; label: string }[] = [
+  { id: "aadhaar", label: "Aadhaar authentication" },
+  { id: "upload", label: "Document upload" },
+  { id: "status", label: "Status tracking" },
+  { id: "payment", label: "Payment" },
+  { id: "booking", label: "Slot booking" },
+];
+
+export function JourneyModel({ journeys }: { journeys: ServiceJourney[] }) {
+  const total = journeys.length;
+  return (
+    <div className="flex flex-col gap-8">
+      {/* The ten, as names. `title` keeps the fuller description available
+          without spending a line of height on each. */}
+      <div className="flex flex-col gap-3">
+        <h3 className={cn(BODY, "font-sans font-semibold text-cs-ink")}>
+          Every service is one of ten journeys
+        </h3>
+        <ul className="flex flex-wrap gap-2">
+          {journeys.map((j) => (
+            <li
+              key={j.name}
+              title={j.summary}
+              className={cn(
+                BODY,
+                "rounded-chip bg-paper px-3 py-1.5 font-sans font-medium text-cs-ink"
+              )}
+            >
+              {j.name}
+            </li>
+          ))}
+        </ul>
+      </div>
+
+      {/* One line per recurring step: label, bar, count. */}
+      <div className="flex flex-col gap-3">
+        <h3 className={cn(BODY, "font-sans font-semibold text-cs-ink")}>
+          And five steps keep coming back
+        </h3>
+        <ul className="flex flex-col gap-2">
+          {JOURNEY_STEPS.map((step) => {
+            const n = journeys.filter((j) => j.steps.includes(step.id)).length;
+            return (
+              <li
+                key={step.id}
+                className="flex items-center gap-3 rounded-chip bg-paper px-4 py-2.5 sm:gap-5"
+              >
+                <span className={cn(BODY, "flex-1 font-sans text-cs-ink")}>{step.label}</span>
+                <span
+                  className="hidden h-1.5 w-28 shrink-0 overflow-hidden rounded-full bg-cs-violet/15 sm:block"
+                  aria-hidden
+                >
+                  <span
+                    className="block h-full rounded-full bg-cs-violet"
+                    style={{ width: `${(n / total) * 100}%` }}
+                  />
+                </span>
+                <span className="shrink-0 font-sans text-sm font-semibold tabular-nums text-cs-violet">
+                  {n} of {total}
+                </span>
+              </li>
+            );
+          })}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
+/** The catalogue analysis. Its own band so it reads as a chapter of the
+    research rather than a tail on the benchmarking. */
+export function ServiceResearch({ block }: { block: ResearchBlock }) {
+  return (
+    <section className="bg-cs-panel py-section">
+      <Shell className="flex flex-col gap-8">
+        <SectionHeading eyebrow={block.eyebrow} title={block.title} accent={block.accent} />
+        {block.lead.map((p, i) => (
+          <p key={i} className={cn(PROSE_TEXT, PROSE, "font-sans text-text-secondary")}>
+            <RichText text={p} />
+          </p>
+        ))}
+        <BigStats stats={block.stats} />
+        <p className="font-sans text-sm text-cs-body">{block.note}</p>
+        <JourneyModel journeys={block.journeys} />
+        {block.outro.map((p, i) => (
+          <p key={i} className={cn(PROSE_TEXT, PROSE, "font-sans text-text-secondary")}>
+            <RichText text={p} />
+          </p>
+        ))}
+      </Shell>
+    </section>
+  );
+}
+
+
+/* ── 17b · Part 3's answer, shown as before and after ─────────────── */
+/** The job here is to read as a solution. Two earlier attempts didn't:
+    a component -> pattern -> journey ladder (too abstract — it defined a
+    term instead of showing a result) and a bar chart of the nine groups
+    (which borrowed the research band's own visual language, so it scanned
+    as a second findings section).
+
+    Before/after is the plainest device for "we fixed this", so that carries
+    the explanation, and the groups drop to plain chips — coverage, stated
+    once, without pretending to be analysis. */
+export function PatternModel({
+  contrast,
+  groups,
+}: {
+  contrast: { before: string; after: string };
+  groups: PatternGroup[];
+}) {
+  return (
+    <div className="flex flex-col gap-8">
+      <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+        <div className="flex flex-col gap-2 rounded-card border border-cs-red-border bg-cs-red-surface p-5">
+          <span className="font-sans text-sm font-semibold uppercase tracking-wide text-cs-red-ink">
+            Before
+          </span>
+          <p className={cn(BODY, "font-sans text-cs-ink")}>{contrast.before}</p>
+        </div>
+        <div className="flex flex-col gap-2 rounded-card border border-cs-green-surface bg-cs-green-surface p-5">
+          <span className="font-sans text-sm font-semibold uppercase tracking-wide text-cs-green">
+            After
+          </span>
+          <p className={cn(BODY, "font-sans text-cs-ink")}>{contrast.after}</p>
+        </div>
+      </div>
+
+      <div className="flex flex-col gap-3">
+        <h3 className={cn(BODY, "font-sans font-semibold text-cs-ink")}>
+          What the 36 cover
+        </h3>
+        {/* The count spells out its unit. As a bare number next to a group
+            name it read as a rank or an index, not "how many patterns". */}
+        <ul className="flex flex-wrap gap-2">
+          {groups.map((g) => (
+            <li
+              key={g.name}
+              className="flex items-baseline gap-2 rounded-chip bg-cs-panel px-3 py-1.5"
+            >
+              <span className={cn(BODY, "font-sans text-cs-ink")}>{g.name}</span>
+              <span className="font-sans text-sm font-semibold text-cs-violet">
+                <span className="tabular-nums">{g.count}</span>{" "}
+                {g.count === 1 ? "pattern" : "patterns"}
+              </span>
+            </li>
+          ))}
+        </ul>
+      </div>
+    </div>
+  );
+}
+
 /* ── 14 · "Gathering insights" — the survey and its charts ────────── */
 export function GatheringInsights() {
   return (
-    <Shell className="flex flex-col gap-6 md:gap-[1.8vw]">
+    <Shell className="flex flex-col gap-element">
       <Eyebrow className="text-cs-body">Gathering insights</Eyebrow>
       <h2 className={cn(DISPLAY, LEADING_AUTO, "font-sans text-text-primary")}>
         What the last version actually felt like to use
@@ -1024,12 +1213,19 @@ export function SolutionDivider() {
     // 18.34cqw makes "The Solution" span exactly the container width — the
     // same 1120 as the collage it tucks behind.
     <div style={{ containerType: "inline-size" }}>
-      {/* At `lg` the box is 1.55em: the letterforms are clear down to the
-          baseline and only the descender space tucks behind the collage.
-          Below `lg` there is no collage to tuck behind — the opener is a
+      {/* From `md` the box is the frame's own 348/252 = 1.381em, which lands
+          ~21px above the solid's baseline — so the collage crops the very
+          bottom of the letterforms, which is the effect. 1.55em looked like
+          it worked and didn't: the 69px it gave up was all descender space
+          below the baseline, so the word still sat fully legible.
+
+          Below `md` there is no collage to tuck behind — the opener is a
           plain stack — so the box takes the word's full 1.885em height and
-          nothing is cut or crowded into the heading underneath. */}
-      <div className="relative h-[1.885em] text-[18.34cqw] lg:h-[1.55em]">
+          nothing is cut or crowded into the heading underneath. The switch
+          has to sit on FoundationsOpener's own `md:block`; left at `lg` it
+          reserved the word's whole height while the collage was already
+          holding. */}
+      <div className="relative h-[1.885em] text-[18.34cqw] md:h-[1.381em]">
         <p
           className={cn(word, "top-0 text-transparent")}
           // The frame draws this at 8% opacity, not a fixed grey. 8% of the
@@ -1169,8 +1365,8 @@ export function FoundationsOpener() {
 /* ── 17 · Closing thank-you ───────────────────────────────────────── */
 export function ThankYou({ email }: { email: string }) {
   return (
-    <Shell className="flex flex-col items-center gap-10 py-16 text-center md:gap-[5vw] md:py-[4vw]">
-      <div className="flex flex-col items-center gap-4 md:gap-[2vw]">
+    <Shell className="flex flex-col items-center gap-block pb-section text-center">
+      <div className="flex flex-col items-center gap-element">
         <p className="font-sans text-[clamp(2.5rem,7.778vw,7rem)] font-extrabold leading-none tracking-[-1.2px] text-cs-blue">
           Thank you
         </p>

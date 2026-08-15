@@ -114,10 +114,41 @@ export interface ContentBlock {
   outroBullets?: string[];
 }
 
+/** One of the ten structural journeys every government service turns out
+    to be, and which of the recurring steps it contains. `steps` holds the
+    ids from `JOURNEY_STEPS` — the matrix is the whole point, so the data is
+    stored as the intersection rather than as prose. */
+export interface ServiceJourney {
+  name: string;
+  /** What the citizen is doing — one line, shown under the name. */
+  summary: string;
+  steps: string[];
+}
+
+/** A research block that sits with the benchmarking, not in the solution. */
+export interface ResearchBlock {
+  eyebrow: string;
+  title: string;
+  accent: string;
+  lead: string[];
+  /** Method, kept to one small line under the counts rather than a
+      paragraph — it earns its place as evidence, not as narration. */
+  note: string;
+  stats: BigStat[];
+  journeys: ServiceJourney[];
+  outro: string[];
+}
+
 /** A big-number stat. `labelWidth` pins the caption's measure where the
     frame gives it one, so it wraps on the same word. */
 export interface BigStat extends Stat {
   labelWidth?: string;
+}
+
+/** A pattern group and how many patterns sit in it. */
+export interface PatternGroup {
+  name: string;
+  count: number;
 }
 
 /** A chapter opener — "Part N" + a display title beside one plate. */
@@ -154,6 +185,8 @@ export interface CaseStudyDetail {
   /** "The Impact" cards — the payoff stated once, early. */
   impactTeaser: { lead: string; value: string; caption: string }[];
   timeline: TimelineStep[];
+  /** The service-catalogue analysis, shown with the benchmarking. */
+  serviceResearch: ResearchBlock;
   /** Part 1 · New Foundations. */
   foundations: ContentBlock[];
   /** Part 2 · The component library. */
@@ -162,12 +195,16 @@ export interface CaseStudyDetail {
     stats: BigStat[];
     blocks: ContentBlock[];
   };
-  /** Part 3 · Service Patterns. */
+  /** Part 3 · Service Patterns. Carried as a ladder and a group breakdown
+      rather than prose — the shape of the answer is the answer. */
   patterns: {
     opener: PartOpenerContent;
     intro: string;
     stats: BigStat[];
-    blocks: ContentBlock[];
+    /** The one-line before/after that makes this a solution, not a finding. */
+    contrast: { before: string; after: string };
+    groups: PatternGroup[];
+    image: MediaItem;
   };
   /** Part 4 · How teams get it. */
   rollout: {
