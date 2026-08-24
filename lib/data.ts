@@ -67,27 +67,6 @@ export const projectsSection = {
 // themselves. UX4G leads as the credibility anchor.
 export const caseStudies: CaseStudy[] = [
   {
-    id: "irctc",
-    year: "2024",
-    wordmark: "IRCTC App Redesign · UI/UX Case Study",
-    discipline: "Mobile App",
-    heading: "IRCTC App Redesigned",
-    statement: "A user-centered approach to streamlining train ticket booking.",
-    color: "hsl(210 38% 50%)",
-    colorDark: "hsl(210 36% 24%)",
-    tags: ["Concept Project", "Mobile App Design", "UI/UX"],
-    overview:
-      "A ground-up redesign of India's national rail-booking app, focused on cutting the friction out of the most common booking flows.",
-    problem: "The existing flow buried common tasks — booking, PNR status, refunds — under inconsistent navigation.",
-    solution:
-      "Restructured the core booking flow around a single search bar and consolidated the most-used tools onto the home screen.",
-    result: "A cleaner, faster booking experience designed around real rider behavior.",
-    labelColor: "hsl(210 45% 30%)",
-    labelColorDark: "hsl(210 45% 72%)",
-    frame: "phone",
-    image: "/work/irctc-cover.png",
-  },
-  {
     id: "ux4g",
     year: "2025",
     wordmark: "UX4G Design System 3.0 · Open Source",
@@ -111,6 +90,27 @@ export const caseStudies: CaseStudy[] = [
     // Figma (node 2938:47578) — 1536x1024.
     image: "/work/ux4g-components.png",
     image2: "/case-studies/ux4g/pattern-library.jpg",
+  },
+  {
+    id: "irctc",
+    year: "2024",
+    wordmark: "IRCTC App Redesign · UI/UX Case Study",
+    discipline: "Mobile App",
+    heading: "IRCTC App Redesigned",
+    statement: "A user-centered approach to streamlining train ticket booking.",
+    color: "hsl(210 38% 50%)",
+    colorDark: "hsl(210 36% 24%)",
+    tags: ["Concept Project", "Mobile App Design", "UI/UX"],
+    overview:
+      "A ground-up redesign of India's national rail-booking app, focused on cutting the friction out of the most common booking flows.",
+    problem: "The existing flow buried common tasks — booking, PNR status, refunds — under inconsistent navigation.",
+    solution:
+      "Restructured the core booking flow around a single search bar and consolidated the most-used tools onto the home screen.",
+    result: "A cleaner, faster booking experience designed around real rider behavior.",
+    labelColor: "hsl(210 45% 30%)",
+    labelColorDark: "hsl(210 45% 72%)",
+    frame: "phone",
+    image: "/work/irctc-cover.png",
   },
   {
     id: "survey-setu",

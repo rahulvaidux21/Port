@@ -25,9 +25,11 @@ import Image from "next/image";
       • base       one column, each tile holding its own aspect ratio so the
                    short / wide / tall rhythm survives.
 
-    The purple tiles and the device bezel are brand artwork (they carry the
-    UX4G mark and the national emblem), so they hold their colour in both
-    themes; only the pale panel follows the surface token. */
+    All four tiles are brand artwork now — including tile 4's panel, which
+    the frame moved off the neutral surface token onto the same fixed
+    from-cs-brand-from/to-cs-brand-to gradient as tiles 1 and 3 (just a
+    78.032% stop instead of 100%) — so every tile holds its colour in both
+    themes; nothing here follows a theme-adaptive token any more. */
 export function BentoGrid() {
   return (
     <div style={{ containerType: "inline-size" }}>
@@ -79,7 +81,7 @@ export function BentoGrid() {
             of the wide tile below it, which left a 21px channel to the phone
             here against 8.5px everywhere else on the board. Squaring it to
             the kit tile's right edge puts every gutter on the same 8.5px. */}
-        <div className="relative flex aspect-[422/310] items-center justify-center overflow-hidden rounded-card bg-cs-brand-deep p-5 sm:col-start-1 sm:row-start-2 md:absolute md:left-[30.379%] md:top-0 md:aspect-auto md:h-[45.388%] md:w-[33.106%] md:p-0">
+        <div className="relative flex aspect-[422/310] items-center justify-center overflow-hidden rounded-card bg-gradient-to-b from-cs-brand-from to-cs-brand-to p-5 sm:col-start-1 sm:row-start-2 md:absolute md:left-[30.379%] md:top-0 md:aspect-auto md:h-[45.388%] md:w-[33.106%] md:p-0">
           {/* 158.279×275.267 centred — 88.8% of the tile's height. */}
           <div className="relative h-[89%] w-[36%] md:w-[11.991cqw]">
             <Image
@@ -94,14 +96,21 @@ export function BentoGrid() {
 
         {/* ── Tile 3 · Figma community kit ────────────────────── */}
         <div className="relative aspect-[838/363] overflow-hidden rounded-card bg-gradient-to-b from-cs-brand-from to-cs-brand-to sm:col-span-2 sm:row-start-3 md:absolute md:left-0 md:top-[46.852%] md:aspect-auto md:h-[53.148%] md:w-[63.485%]">
-          {/* 744×341 centred in 838×363 — 88.8% wide, 11px clear top and bottom. */}
+          {/* Node 3065:2577 — the frame swapped this shot for the kit's
+              Figma community page and let it out to the tile's own edges:
+              818×343 in the 838×363 tile, so 97.61% wide with a flat 10px
+              of the purple gradient showing all the way round. It was
+              88.8% and a 47px margin before. The source is a 3:2 image the
+              frame crops to that letterbox, so it ships pre-cropped rather
+              than object-cover'd — the crop is a design decision, not a
+              side effect of the box. */}
           <Image
             src="/case-studies/ux4g/bento/figma-kit.png"
             alt="The UX4G Design System 3.0 kit published on the Figma community"
-            width={883}
-            height={405}
-            sizes="(min-width: 1180px) 744px, 100vw"
-            className="absolute left-1/2 top-1/2 w-[88.8%] -translate-x-1/2 -translate-y-1/2 rounded-lg"
+            width={1500}
+            height={629}
+            sizes="(min-width: 1180px) 818px, 100vw"
+            className="absolute left-1/2 top-1/2 w-[97.61%] -translate-x-1/2 -translate-y-1/2 rounded-lg"
           />
         </div>
 
@@ -112,12 +121,15 @@ export function BentoGrid() {
             to contain it, which had left the device's rounded bottom jammed
             against the tile's edge instead of running cleanly past it. */}
         <div
-          className="relative aspect-[472/620] overflow-hidden rounded-card bg-cs-chip sm:col-start-2 sm:row-start-1 sm:row-span-2 sm:aspect-auto md:absolute md:left-[64.242%] md:top-0 md:h-full md:w-[35.758%]"
+          className="relative aspect-[472/620] overflow-hidden rounded-card bg-gradient-to-b from-cs-brand-from to-cs-brand-to to-[78.032%] sm:col-start-2 sm:row-start-1 sm:row-span-2 sm:aspect-auto md:absolute md:left-[64.242%] md:top-0 md:h-full md:w-[35.758%]"
           style={{ containerType: "inline-size" }}
         >
           {/* 30px Bold, 44px leading, centred with its line box at y64 —
-              so the box starts 42px down, 8.898% of the 472 tile. */}
-          <p className="px-5 pt-[8.898cqw] text-center font-sans text-lg font-bold leading-[1.4667] text-cs-violet-deep sm:text-xl md:px-0 md:text-[6.356cqw]">
+              so the box starts 42px down, 8.898% of the 472 tile. White now
+              that the panel behind it is the fixed purple gradient rather
+              than the pale surface token — cs-violet-deep was tuned to read
+              on that token in both themes and goes muddy on brand purple. */}
+          <p className="px-5 pt-[8.898cqw] text-center font-sans text-lg font-bold leading-[1.4667] text-white sm:text-xl md:px-0 md:text-[6.356cqw]">
             New scalable design system
           </p>
           {/* Device frame drawn in CSS rather than baked into the export.

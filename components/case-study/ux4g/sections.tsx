@@ -1,6 +1,8 @@
 import type { ReactNode } from "react";
 import Image from "next/image";
 import { cn } from "@/lib/utils";
+import { CategoryBreakdown } from "@/components/case-study/ux4g/CategoryBreakdown";
+import { JourneyExplorer } from "@/components/case-study/ux4g/JourneyExplorer";
 import type {
   BigStat,
   ContentBlock,
@@ -9,7 +11,9 @@ import type {
   PatternGroup,
   ResearchBlock,
   ServiceJourney,
-  Stat,
+  ReleaseBlock,
+  TeamRole,
+  TradeOffBlock,
 } from "@/types";
 
 /* ────────────────────────────────────────────────────────────────────
@@ -65,9 +69,17 @@ const STAT_NUM = "text-[clamp(2rem,4.167vw,3.75rem)] font-bold leading-[1.15]";
 /** 26 → 16px — the role/timeline/platform chips. */
 const CHIP = "text-[clamp(0.875rem,1.111vw,1rem)] font-medium";
 
-/** At 18px the 1120 column is ~100 characters, so running prose is capped
-    to a readable measure. Single-line copy (pills, captions) is not. */
-export const PROSE = "max-w-[68ch]";
+/** Running prose fills the 1120 column, the way the Figma frame sets it.
+
+    This was a 68ch measure — the textbook readable line length. On the page
+    it did not hold up: 68ch renders at 841px inside a 1120 column, so every
+    paragraph stopped a quarter of the way short of the full-width plate
+    directly beneath it, and the ragged right edge read as a mistake rather
+    than as a measure. The column itself is the cap now — at 18px it works
+    out to roughly 90 characters, which is long but even, and it matches the
+    frame. This constant is the single knob: put a `max-w-[NNch]` back here
+    and every running paragraph, bullet list and lead on the page follows. */
+export const PROSE = "max-w-none";
 
 /* ── Inline emphasis ──────────────────────────────────────────────────
    Several strings in the frame bold a phrase mid-sentence. Rather than
@@ -234,7 +246,7 @@ export function TeamAndCollaboration({
   roles,
 }: {
   bullets: string[];
-  roles: Stat[];
+  roles: TeamRole[];
 }) {
   return (
     <div className="flex flex-col gap-block md:flex-row md:items-stretch md:gap-[3.939%]">
@@ -242,10 +254,25 @@ export function TeamAndCollaboration({
         <h2 className={cn(DISPLAY, "leading-[1]", "font-sans text-cs-ink")}>
           Team And Collaboration
         </h2>
+        {/* Set at the panel's own label size, not the page's running-prose
+            size. The frame runs this description at 32px against a 48px
+            heading — two thirds of it — and fills the column with it. Web
+            rescaling pulled prose down to 16px while the plates stayed near
+            their Figma size, so the same block came out half the weight of
+            the "Designers" labels sitting opposite it and read as an
+            afterthought. TITLE_LEAD is exactly what those labels use, which
+            puts both columns on one voice.
+
+            `flex-1` + `justify-around` from `md` is the other half: three
+            statements against three team rows, distributed down the column
+            instead of stacked at the top over 360px of dead space. Below
+            `md` the two stack, there is nothing to align to, and the list
+            keeps its normal rhythm. */}
         <ul
           className={cn(
-            PROSE_TEXT,
-            "list-disc space-y-2 pl-6 font-sans text-cs-body marker:text-cs-body dark:marker:text-text-muted"
+            TITLE_LEAD,
+            "list-disc space-y-3 pl-6 font-sans text-cs-body marker:text-cs-body dark:marker:text-text-muted",
+            "md:flex md:flex-1 md:flex-col md:justify-around md:space-y-0"
           )}
         >
           {bullets.map((b, i) => (
@@ -268,19 +295,24 @@ export function TeamAndCollaboration({
                 {role.label}
               </span>
             </div>
-            {/* A square, not the frame's 300x204 letterbox — these hold a
-                photo of each role's team, and a face doesn't read in a wide
-                slot. Sized by width, not `h-full` — an aspect-square whose
-                height comes from a content-driven row is circular, and it
-                blew the square past the viewport on a phone. The panel's
-                height now follows the squares, and `items-stretch` brings the
-                prose column level with it. */}
-            <div className="aspect-square w-20 shrink-0 overflow-hidden rounded-card bg-paper sm:w-24 md:w-[88px] lg:w-[120px]">
+            {/* The frame's own 300x204 plate, not a square. These were
+                squares while they held a placeholder — a lone face doesn't
+                read in a wide slot — but the photos that landed are group
+                shots, two and four people wide, and a square crop cuts
+                people out of them. Still sized by width, not `h-full`: a
+                height taken from a content-driven row makes the ratio
+                whatever the prose column happens to be. `overflow-hidden`
+                earns its keep too — the exports carry the frame's own 20px
+                corner baked in on the panel's light fill, and clipping to
+                the card radius takes those pixels off, so the corners don't
+                show pale in dark. */}
+            <div className="aspect-[300/204] w-28 shrink-0 overflow-hidden rounded-card bg-paper sm:w-40 md:w-[48%] md:max-w-[300px]">
               <Image
-                src="/case-studies/ux4g/team-placeholder.svg"
-                alt={`${role.label} — photo to come`}
-                width={200}
-                height={200}
+                src={role.photo.src}
+                alt={role.photo.alt}
+                width={role.photo.width}
+                height={role.photo.height}
+                sizes="(min-width: 768px) 300px, 160px"
                 className="h-full w-full object-cover"
               />
             </div>
@@ -585,8 +617,19 @@ export function PartOpener({ content }: { content: PartOpenerContent }) {
         <Eyebrow className="text-cs-violet">{part}</Eyebrow>
         <p className={cn(PART_TITLE, "font-sans text-text-primary")}>{title}</p>
       </div>
+      {/* Node 3022:32451 — the kit shot is now wider than its own cell and
+          fills it left to right, so the tint shows only as a band above and
+          below the plate. Those two bands are baked into the export at the
+          same #4a2bc3 the cell is painted, so the seam is invisible and the
+          tint carries on out to the cell's edges at any width. Hence no
+          padding and no radius on the tinted variant — either one would put
+          a visible edge back. Parts 3 and 4 sit on paper and keep the
+          frame's padding. */}
       <div
-        className="flex items-center justify-center overflow-hidden p-6 md:p-[3vw]"
+        className={cn(
+          "flex items-center justify-center overflow-hidden",
+          !tint && "p-6 md:p-[3vw]"
+        )}
         style={tint ? { backgroundColor: tint } : undefined}
       >
         <Image
@@ -595,7 +638,7 @@ export function PartOpener({ content }: { content: PartOpenerContent }) {
           width={image.width}
           height={image.height}
           sizes="(min-width: 1024px) 660px, 100vw"
-          className={cn("h-auto w-full", tint && "rounded-plate")}
+          className="h-auto w-full"
         />
       </div>
     </div>
@@ -653,9 +696,13 @@ export function ContentBlockView({
         </p>
       ))}
       {block.bullets && <BlockBullets items={block.bullets} />}
-      {block.images?.map((img) => (
-        <Figure key={img.src} {...img} frame />
-      ))}
+      {block.images?.map((img) =>
+        img.bleed ? (
+          <BleedFigure key={img.src} {...img} bleed={img.bleed} />
+        ) : (
+          <Figure key={img.src} {...img} frame />
+        )
+      )}
       {block.outro?.map((p, i) => (
         <p key={i} className={cn(PROSE_TEXT, PROSE, "font-sans text-text-secondary")}>
           <RichText text={p} />
@@ -692,6 +739,33 @@ function BlockBullets({ items }: { items: string[] }) {
     specimen plates (the type sheets, the survey grid) trip it; the wide
     component shots are already under it. */
 const PLATE_MAX_H = 640;
+
+/** A plate that leaves the content column. Node 2944:49403: the frame took
+    the type-styles sheet out of the 1320 column to the full 1440 artboard
+    and squared its corners, so it stops reading as a card sitting on the
+    page and starts reading as a band the page runs through. The band takes
+    the viewport; the sheet inside still sets to the content column, the way
+    the frame keeps its 1320 image inside the 1440 field. The page wrapper
+    carries `overflow-x-clip`, so `w-screen` costs no horizontal scroll. */
+function BleedFigure({ src, alt, width, height, bleed }: MediaItem & { bleed: string }) {
+  return (
+    <div
+      className="relative left-1/2 w-screen -translate-x-1/2 py-10 md:py-12"
+      style={{ backgroundColor: bleed }}
+    >
+      <Shell>
+        <Image
+          src={src}
+          alt={alt}
+          width={width}
+          height={height}
+          sizes="(min-width: 1180px) 1120px, 100vw"
+          className="h-auto w-full"
+        />
+      </Shell>
+    </div>
+  );
+}
 
 export function Figure({
   src,
@@ -994,27 +1068,10 @@ export function JourneyModel({ journeys }: { journeys: ServiceJourney[] }) {
   const total = journeys.length;
   return (
     <div className="flex flex-col gap-8">
-      {/* The ten, as names. `title` keeps the fuller description available
-          without spending a line of height on each. */}
-      <div className="flex flex-col gap-3">
-        <h3 className={cn(BODY, "font-sans font-semibold text-cs-ink")}>
-          Every service is one of ten journeys
-        </h3>
-        <ul className="flex flex-wrap gap-2">
-          {journeys.map((j) => (
-            <li
-              key={j.name}
-              title={j.summary}
-              className={cn(
-                BODY,
-                "rounded-chip bg-paper px-3 py-1.5 font-sans font-medium text-cs-ink"
-              )}
-            >
-              {j.name}
-            </li>
-          ))}
-        </ul>
-      </div>
+      {/* The ten, now selectable — click one to see its definition and
+          example services, in JourneyExplorer (a client component; this
+          function stays plain since the bars below it need no state). */}
+      <JourneyExplorer journeys={journeys} />
 
       {/* One line per recurring step: label, bar, count. */}
       <div className="flex flex-col gap-3">
@@ -1065,6 +1122,7 @@ export function ServiceResearch({ block }: { block: ResearchBlock }) {
         ))}
         <BigStats stats={block.stats} />
         <p className="font-sans text-sm text-cs-body">{block.note}</p>
+        <CategoryBreakdown categories={block.categories} />
         <JourneyModel journeys={block.journeys} />
         {block.outro.map((p, i) => (
           <p key={i} className={cn(PROSE_TEXT, PROSE, "font-sans text-text-secondary")}>
@@ -1189,65 +1247,84 @@ export function GatheringInsights() {
     the solid blue in front stepped down and slightly right, so the two
     read as one offset-printed mark rather than two separate headings. Both
     bleed past the column on each side — that overflow is the effect, not a
-    mistake. Font size is set on the wrapper so the children inherit it and
-    the offsets can be expressed in `em`, keeping the layering proportional
-    at every width. */
-/** Nodes 2962:55069 (outline) and 2944:48978 (solid). Both are 252px DM
-    Sans ExtraBold with -2.3577 tracking on a `normal` 328px line box, and
-    both are centred on the *same* axis — x 720 of the 1440 canvas. The only
-    offset is vertical: the solid sits 147px (0.583em) below the outline.
-    The outline is a transparent fill with an #ebebeb stroke, sampled from
-    the frame's own render. At 252px the word measures 1517px, so it bleeds
-    past the canvas on both sides — that overflow is the effect.
+    mistake. Font size is set on the wrapper (for the outline, which sets
+    the wrapper's own em) so its offsets stay proportional at every width;
+    the solid layer gets its own smaller size directly, everything else
+    below is expressed in `cqw` — the same container-relative unit the rest
+    of this file uses for pixel offsets — so the two differently-sized
+    layers stay comparable. */
+/** Outline is node 2962:55070 (parent 2962:55069, misleadingly named
+    "Outline-the struggle heading" — a stale label from whatever divider it
+    was duplicated from, not an error in which node this is; the text
+    content and position confirm it's this one). Solid is 2944:48979
+    (parent 2944:48978), a sibling of the Part 1 collage (2944:48980,
+    "Container") inside "Solution section" (2944:48977) — both re-pulled
+    from the current frame after the recent edit.
 
-    The block is 348px tall (1.381em), which is where the frame starts the
-    Part 1 collage; the solid's lower half deliberately runs on into it. */
+    The two layers are NOT the same size any more: outline is still 252px,
+    solid is now 218px (0.865x) — both DM Sans ExtraBold, `opsz 14` fixed
+    explicitly (the frame pins it; leaving it unset lets the browser
+    auto-resolve a different optical size at this display scale, which is
+    what made the solid layer's letterforms — 'e' most visibly — drift from
+    the frame). Tracking: outline -2.3577px/252 = -0.00936em (unchanged).
+    Solid -2.16px/218 = -0.0099em.
+
+    Position, all measured from the outline's own top and expressed in the
+    18.34cqw the outline is sized in (1px of Figma's 252-canvas = 18.34/252
+    = 0.07278cqw): solid sits 163px (11.86cqw) below the outline's top: not
+    reproducible in one shared `em` any more since the two layers differ in
+    size. The Part 1 collage's top sits a further 195px down from the
+    solid's own top, i.e. 358px (1.42em, in the wrapper's own em) below the
+    outline's top — that's where `md:h-*` below crops the block, letting
+    the solid layer's lower third run on into the collage as the frame
+    does. Below `md` there's no collage to tuck behind, so the box takes
+    the full uncropped stack instead: 163px + the solid's own 218×1.302
+    line box, both in outline-em, = 1.77em. */
 export function SolutionDivider() {
-  const word =
-    // Tracking is in `em`, not px, so the letterfit stays proportional at
-    // whatever size the container resolves to.
-    "absolute inset-x-0 whitespace-nowrap text-center font-sans font-extrabold tracking-[-0.00936em] leading-[1.302]";
+  const word = "absolute inset-x-0 whitespace-nowrap text-center font-sans font-extrabold";
+  // Kept out of `word` and reapplied on both p's individually, after every
+  // other class: tailwind-merge treats a `text-[size]` override (the solid
+  // layer's smaller size) as conflicting with a `leading-*` set earlier in
+  // the string and drops it, silently falling back to the browser's normal
+  // line-height — which is what was making the solid layer's own line box
+  // taller than Figma's and pushing more of it into the collage below.
+  const leading = "leading-[1.302]";
+  const opsz14 = { fontVariationSettings: '"opsz" 14' } as const;
   return (
-    // Sized to the column, not the viewport. Measured: at this weight and
-    // tracking the word sets 5.452x its own font size, so 100/5.452 =
-    // 18.34cqw makes "The Solution" span exactly the container width — the
-    // same 1120 as the collage it tucks behind.
     <div style={{ containerType: "inline-size" }}>
-      {/* From `md` the box is the frame's own 348/252 = 1.381em, which lands
-          ~21px above the solid's baseline — so the collage crops the very
-          bottom of the letterforms, which is the effect. 1.55em looked like
-          it worked and didn't: the 69px it gave up was all descender space
-          below the baseline, so the word still sat fully legible.
-
-          Below `md` there is no collage to tuck behind — the opener is a
-          plain stack — so the box takes the word's full 1.885em height and
-          nothing is cut or crowded into the heading underneath. The switch
-          has to sit on FoundationsOpener's own `md:block`; left at `lg` it
-          reserved the word's whole height while the collage was already
-          holding. */}
-      <div className="relative h-[1.885em] text-[18.34cqw] md:h-[1.381em]">
+      <div className="relative h-[1.77em] text-[18.34cqw] md:h-[1.42em]">
         <p
-          className={cn(word, "top-0 text-transparent")}
+          className={cn(word, "top-0 text-transparent tracking-[-0.00936em]", leading)}
           // The frame draws this at 8% opacity, not a fixed grey. 8% of the
           // foreground resolves to #ebebeb on white — which is why a
           // hardcoded grey looked right in light and blew out in dark.
-          style={{ WebkitTextStroke: "1.5px rgb(var(--color-hairline) / 0.08)" }}
+          style={{ WebkitTextStroke: "1.5px rgb(var(--color-hairline) / 0.08)", ...opsz14 }}
         >
           The Solution
         </p>
-        <p className={cn(word, "top-[0.583em] text-cs-blue")}>The Solution</p>
+        <p
+          className={cn(word, "top-[11.86cqw] text-[15.87cqw] tracking-[-0.0099em] text-cs-purple", leading)}
+          style={opsz14}
+        >
+          The Solution
+        </p>
       </div>
     </div>
   );
 }
 
-/* ── 16 · Part 1's opener — a 2×2 collage under a blue panel ──────── */
+/* ── 16 · Part 1's opener — a 2×2 collage under a purple panel ────── */
 /** The frame builds this as four 660-wide cells (Part 1 title, India Gate,
-    the flag, and a quote) with one rounded blue panel laid across the
+    the flag, and a quote) with one rounded purple panel laid across the
     bottom half, notched so the flag photo shows through its top-left. The
     notch is a boolean subtract in Figma; here the panel is simply drawn
     behind the two lower cells, which reads the same and keeps the copy as
-    live text. */
+    live text.
+
+    The panel, the quote and the divider's word above them were all the
+    frame's blue and are all now its #4a2bc3 purple. The panel is the one
+    that can't read a token — it ships as an exported path, so its fill
+    lives in panel.svg and is theme-agnostic, exactly as it was in blue. */
 export function FoundationsOpener() {
   const quote =
     "2.0 had components but nothing underneath them. No colour system, no type scale, no spacing rules, no grid. We built the layer everything else stands on, first.";
@@ -1278,7 +1355,7 @@ export function FoundationsOpener() {
           height={774}
           className="h-auto w-full"
         />
-        <div className="rounded-card bg-cs-blue p-6">
+        <div className="rounded-card bg-cs-purple p-6">
           <p className="font-sans text-lg font-medium leading-relaxed text-white">{quote}</p>
           <p className="mt-6 font-sans text-3xl font-medium text-white">Redefined System</p>
         </div>
@@ -1348,7 +1425,7 @@ export function FoundationsOpener() {
             aria-hidden
             className="h-[3.03cqw] w-[3.03cqw]"
           />
-          <p className="font-sans text-[2.424cqw] font-medium leading-[1.875] text-cs-blue">
+          <p className="font-sans text-[2.424cqw] font-medium leading-[1.875] text-cs-purple">
             {quote}
           </p>
         </div>
@@ -1362,33 +1439,226 @@ export function FoundationsOpener() {
   );
 }
 
-/* ── 17 · Closing thank-you ───────────────────────────────────────── */
-export function ThankYou({ email }: { email: string }) {
+/* ── 17b · Where it stands — the shipped states ───────────────────── */
+/** Two states and two links, set as running text rather than cards. The
+    Trade-offs grid follows immediately after, and two card grids back to
+    back read as one long grid — so this section stays quiet on purpose and
+    lets the one after it carry the weight.
+
+    No timeline either, for the same reason the Trade-offs has none: the
+    research chapter already spends the page's timeline budget on the Gantt,
+    and a second horizontal progression this late reads as a repeat. The
+    pills carry the sequence instead. */
+const RELEASE_PILL: Record<string, string> = {
+  done: "bg-cs-green-surface text-cs-green",
+  /** Solid, because this is the one that says where the system is now. */
+  live: "bg-cs-violet text-white",
+};
+
+/** No top pad: Part 4 above already carries its own `pb-section`, and both
+    sit on paper with no band between them, so one section gap is the whole
+    separation. Adding one here doubled it to 192. */
+export function ReleaseStatus({ block }: { block: ReleaseBlock }) {
   return (
-    <Shell className="flex flex-col items-center gap-block pb-section text-center">
-      <div className="flex flex-col items-center gap-element">
-        <p className="font-sans text-[clamp(2.5rem,7.778vw,7rem)] font-extrabold leading-none tracking-[-1.2px] text-cs-blue">
-          Thank you
-        </p>
-        <p className="font-sans text-[clamp(1rem,1.528vw,1.375rem)] font-medium text-text-primary opacity-80">
-          Feel free to share your feedback :)
-        </p>
+    <Shell className="flex flex-col gap-block pb-section">
+      <div className="flex flex-col gap-4">
+        <SectionHeading eyebrow={block.eyebrow} title={block.title} accent={block.accent} />
+        <Prose>{block.lead}</Prose>
       </div>
-      <a
-        href={`mailto:${email}`}
-        className="inline-flex items-center gap-4 opacity-80 transition-opacity hover:opacity-100"
-      >
-        <Image
-          src="/case-studies/ux4g/social-mail.svg"
-          alt=""
-          width={42}
-          height={42}
-          className="h-8 w-8 md:h-[42px] md:w-[42px]"
-        />
-        <span className="font-sans text-[clamp(0.95rem,1.25vw,1.125rem)] font-light text-text-primary">
-          {email}
-        </span>
-      </a>
+
+      <ol className="flex flex-col gap-8">
+        {block.states.map((st) => (
+          <li key={st.title} className="flex flex-col gap-3">
+            <div className="flex flex-wrap items-center gap-3">
+              <span
+                className={cn(
+                  "rounded-chip px-3 py-1 font-sans text-sm font-semibold",
+                  RELEASE_PILL[st.tone]
+                )}
+              >
+                {st.status}
+              </span>
+              <h3 className={cn(BLOCK_TITLE, "font-sans text-text-primary")}>{st.title}</h3>
+            </div>
+            {st.body.map((p, i) => (
+              <p key={i} className={cn(PROSE_TEXT, PROSE, "font-sans text-text-secondary")}>
+                <RichText text={p} />
+              </p>
+            ))}
+          </li>
+        ))}
+      </ol>
+
+      {/* The two places a reader can go and check the claim for themselves.
+          Both open in a new tab — losing the case study to an outbound click
+          is the one thing this section must not do.
+
+          Buttons, not bordered captions. These were a two-line stack — a
+          grey note over the label — which is the shape of a definition
+          list, not of something you click: the whole block read as more
+          running text with a rule round it. One line, the site's own button
+          geometry (rounded-lg, px-4 py-3, 16px medium — same as the hero's
+          pair), and the first one solid: the live system is the single
+          thing this section wants the reader to go and see, and the Figma
+          file is the alternative. The note it used to show is not lost —
+          it carries the accessible name, so "ux4g.gov.in" still announces
+          as "The live system". */}
+      <div className="flex flex-wrap gap-3">
+        {block.links.map((l, i) => (
+          <a
+            key={l.href}
+            href={l.href}
+            target="_blank"
+            rel="noreferrer"
+            aria-label={`${l.note} — ${l.label}`}
+            title={l.note}
+            className={cn(
+              // `border` on both, transparent on the solid one: without it
+              // the outlined button is 2px taller and the pair sits off by
+              // a pixel at every size.
+              "group inline-flex items-center gap-1 rounded-lg border px-4 py-3 font-sans text-base font-medium transition-colors",
+              i === 0
+                // `text-paper`, not `text-white`: dark re-points --cs-violet
+                // at a light tint, so white on it is a 1.7:1 wash. Paper is
+                // the page ground — white in light, near-black in dark —
+                // which is legible against the fill in both.
+                ? "border-transparent bg-cs-violet text-paper hover:bg-cs-violet-deep"
+                : "border-cs-violet/30 text-cs-violet hover:border-cs-violet/60 hover:bg-cs-violet/[0.06]"
+            )}
+          >
+            {l.label}
+            <span
+              aria-hidden="true"
+              className="inline-block transition-transform group-hover:translate-x-1"
+            >
+              →
+            </span>
+          </a>
+        ))}
+      </div>
+    </Shell>
+  );
+}
+
+/* ── 18 · Trade-offs — the closing chapter ────────────────────────── */
+/** Sits after Part 4 because every one of these stories resolves *after*
+    the build is described: #2 ends with 3.0 being resumed, #4 with the Beta
+    shipping. Read before the solution they would spoil outcomes the reader
+    has not met yet. It takes the panel tint for the same reason
+    ServiceResearch does — it is a change of register, from "what we built"
+    to "how we decided", and the tint is how this page marks those.
+
+    There is deliberately no timeline here. A decision spine pinned to
+    Jan → Jun was the obvious second visual, but it would have borrowed
+    DesignTimeline's own language four sections later and scanned as a
+    second Gantt — the same trap PatternModel's bar-chart draft fell into.
+    The question at the head of each card carries the visual load instead:
+    four questions, each with its answer already coloured in.
+
+    The two supporting decisions in the source doc (one experience across
+    four technologies, standardise the foundation not the whole experience)
+    are not cards. Nothing was given up in either, so as cards they would
+    have made the four real ones look smaller — and both are already said
+    on the page, in the Challenge band, the Impact teaser, Part 2 and the
+    semantic-tokens block in Part 1. */
+
+/** The violet half of each headline — the answer we went with. Same
+    `**…**` convention as RichText, but the emphasis has to be a colour
+    here rather than a weight: the headline is already semibold, so bolding
+    a span inside it would not read as anything. */
+function QuestionText({ text }: { text: string }) {
+  return (
+    <>
+      {text.split("**").map((part, i) =>
+        i % 2 === 1 ? (
+          <span key={i} className="text-cs-violet">
+            {part}
+          </span>
+        ) : (
+          <span key={i}>{part}</span>
+        )
+      )}
+    </>
+  );
+}
+
+export function TradeOffs({ block }: { block: TradeOffBlock }) {
+  return (
+    <section className="bg-cs-panel py-section">
+      <Shell className="flex flex-col gap-block">
+        <div className="flex flex-col gap-4">
+          <SectionHeading eyebrow={block.eyebrow} title={block.title} accent={block.accent} />
+          <Prose>{block.lead}</Prose>
+          <p className="font-sans text-sm text-cs-body">{block.note}</p>
+        </div>
+
+        {/* An ordered list, not a grid of divs: the cards are numbered and
+            the order is the project's own chronology, so the numbering is
+            content rather than decoration.
+
+            The three parts of a card — question, body, takeaway — are three
+            grid rows the two cards in a row *share*, via `subgrid`. Each
+            part is a different length in every card (Q2 and Q3 run to an
+            extra line, two of the four close on a shipped date and two do
+            not), and the previous `mt-auto` bottom-aligned the takeaway
+            instead: the rule above it then landed at a different height in
+            each card, and the pair read as two unrelated boxes. Sharing the
+            rows pins all three boundaries — the body starts level, and the
+            rule sits at one height across the row — and the slack from a
+            shorter body falls as whitespace above the rule rather than
+            shifting it. Below `md` there is one card per row and nothing to
+            align to, so the card stays a plain flex column. */}
+        <ol className="grid grid-cols-1 gap-4 md:grid-cols-2 md:gap-6">
+          {block.items.map((t, i) => (
+            <li
+              key={t.question}
+              className="flex flex-col gap-5 rounded-card border border-hairline/[0.10] bg-white p-6 dark:border-hairline/[0.14] dark:bg-surface md:row-span-3 md:grid md:grid-rows-subgrid md:p-8"
+            >
+              <div className="flex flex-col gap-3">
+                <span className="font-sans text-sm font-semibold tabular-nums text-cs-violet">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className={cn(BLOCK_TITLE, "font-sans text-text-primary")}>
+                  <QuestionText text={t.question} />
+                </h3>
+              </div>
+
+              {/* The copy stack sets its own tighter gap. At the card's own
+                  20px the paragraphs read as separate blocks rather than
+                  one argument. No PROSE cap either — the card is already
+                  half a column wide, so the 68ch measure never bites. */}
+              <div className="flex flex-col gap-3">
+                {t.body.map((p, j) => (
+                  <p key={j} className={cn(PROSE_TEXT, "font-sans text-text-secondary")}>
+                    <RichText text={p} />
+                  </p>
+                ))}
+              </div>
+
+              <div className="flex flex-col gap-2 border-t border-cs-violet/20 pt-5">
+                <p className={cn(BODY, "font-sans font-medium text-cs-ink")}>{t.takeaway}</p>
+                {t.result && (
+                  <p className={cn(BODY, "font-sans font-semibold text-cs-violet")}>{t.result}</p>
+                )}
+              </div>
+            </li>
+          ))}
+        </ol>
+      </Shell>
+    </section>
+  );
+}
+
+/* ── 17 · Closing thank-you ───────────────────────────────────────── */
+export function ThankYou() {
+  return (
+    <Shell className="flex flex-col items-center gap-element pb-section text-center">
+      <p className="font-sans text-[clamp(2.5rem,7.778vw,7rem)] font-extrabold leading-none tracking-[-1.2px] text-cs-blue">
+        Thank you
+      </p>
+      <p className="font-sans text-[clamp(1rem,1.528vw,1.375rem)] font-medium text-text-primary opacity-80">
+        Feel free to share your feedback :)
+      </p>
     </Shell>
   );
 }

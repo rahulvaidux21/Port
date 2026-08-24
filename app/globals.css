@@ -33,9 +33,15 @@
      near-black page glares. Nothing in the case study should use a raw hex;
      it all reads from here. */
 
-  /* Blue — the divider, "Thank you", the Part 1 panel. */
+  /* Blue — "Thank you". */
   --cs-blue: 0 48 246;
   --cs-blue-ink: 0 48 246;
+  /* Purple — the frame's #4a2bc3 UX4G brand step. The Solution divider and
+     the whole Part 1 opener (its panel, its quote) were blue and are now
+     this. Same value as --cs-brand-from, but a separate role: that one is
+     baked artwork and holds in both themes, this one is ink and a fill, so
+     dark re-points it at a light tint the way every other role here does. */
+  --cs-purple: 74 43 194;
   /* Violet — the Part opener eyebrows and the big stat numerals. Brighter
      than the frame's #4a2bc2, which read dull once the page was rescaled. */
   --cs-violet: 91 52 232;
@@ -146,6 +152,7 @@
      lightness rather than raw chroma. */
   --cs-blue: 138 163 255;
   --cs-blue-ink: 160 181 255;
+  --cs-purple: 170 146 255;
   --cs-violet: 178 152 255;
   --cs-violet-deep: 201 184 255;
   --cs-red: 240 150 145;

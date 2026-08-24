@@ -31,6 +31,7 @@ const config: Config = {
         cs: {
           blue: "rgb(var(--cs-blue) / <alpha-value>)",
           "blue-ink": "rgb(var(--cs-blue-ink) / <alpha-value>)",
+          purple: "rgb(var(--cs-purple) / <alpha-value>)",
           violet: "rgb(var(--cs-violet) / <alpha-value>)",
           "violet-deep": "rgb(var(--cs-violet-deep) / <alpha-value>)",
           red: "rgb(var(--cs-red) / <alpha-value>)",

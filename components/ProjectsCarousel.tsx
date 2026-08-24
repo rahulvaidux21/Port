@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect } from "react";
 import Image from "next/image";
 import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
@@ -11,9 +12,17 @@ import { caseStudies, projectsSection } from "@/lib/data";
 import { caseStudyDetails } from "@/lib/caseStudies";
 import { useRevealOnScroll } from "@/lib/motion";
 import { useInfiniteCarousel } from "@/lib/useInfiniteCarousel";
-import { EDGE_LEFT, EDGE_RIGHT } from "@/lib/gridEdge";
+import { EDGE_LEFT, EDGE_MASK_LEFT, EDGE_MASK_RIGHT, EDGE_RIGHT } from "@/lib/gridEdge";
+import { LinkPending } from "@/components/LinkPending";
 import { cn } from "@/lib/utils";
 import type { CaseStudy } from "@/types";
+
+/** The card the section should be showing whenever someone arrives at
+    #work. It leads the array, but autoplay moves on every 4s, so by the
+    time a visitor clicks "Work" the carousel is wherever it drifted to —
+    the initial slide alone doesn't hold it there. Found by id rather than
+    hardcoded to 0 so reordering the array can't silently break it. */
+const LEAD_STUDY_ID = "ux4g";
 
 function ProjectCard({ study }: { study: CaseStudy }) {
   const hasDetail = Boolean(caseStudyDetails[study.id]);
@@ -55,6 +64,11 @@ function ProjectCard({ study }: { study: CaseStudy }) {
           </span>
         </div>
       </div>
+
+      {/* Inside the card, so the thing the user pressed is the thing that
+          responds. Only for cards that actually leave the page — the
+          fallback href is this same section, which resolves instantly. */}
+      {hasDetail && <LinkPending />}
     </div>
   );
 
@@ -72,7 +86,28 @@ export function ProjectsCarousel() {
     useInfiniteCarousel(caseStudies.length);
   const virtualStudies = repeatItems(caseStudies);
 
+  /* Snap back to the lead card whenever someone navigates to #work — a nav
+     click, a deep link, or the back button. SmoothScroll dispatches
+     `hashchange` by hand on every in-page anchor click, including when the
+     hash hasn't changed, so clicking "Work" a second time re-snaps rather
+     than doing nothing. */
+  useEffect(() => {
+    const lead = caseStudies.findIndex((s) => s.id === LEAD_STUDY_ID);
+    if (lead < 0) return;
+
+    const snap = () => {
+      if (window.location.hash === "#work") goToReal(lead);
+    };
+    snap();
+    window.addEventListener("hashchange", snap);
+    return () => window.removeEventListener("hashchange", snap);
+  }, [goToReal]);
+
   return (
+    /* Full-width wrapper purely so the edge masks below can be positioned
+       with GridFrame's own `50%`-based formula. Inside the capped section
+       that percentage saturates and the masks miss the line. */
+    <div className="relative">
     <section id="work" className="relative mx-auto max-w-[1032px] scroll-mt-24 overflow-hidden px-9 py-20 md:px-8 md:py-28">
       <motion.div key={headerReveal.key} {...headerReveal.props} className="mx-auto mb-16 text-center">
         <h2 className="font-display text-3xl font-medium tracking-[-2px] text-text-secondary md:text-[48px]">
@@ -149,6 +184,7 @@ export function ProjectsCarousel() {
           style={{ maskImage: "linear-gradient(to left, black, transparent)", WebkitMaskImage: "linear-gradient(to left, black, transparent)" }}
           aria-hidden="true"
         />
+
       </div>
 
       <div className="relative z-10 mt-6 flex items-center justify-center gap-1.5">
@@ -163,5 +199,15 @@ export function ProjectsCarousel() {
         ))}
       </div>
     </section>
+
+      {/* Nothing may render outside the vertical grid lines. The fades above
+          start AT each line and dissolve inward, so they never covered the
+          strip beyond it — and from `sm` up the Swiper is
+          `!overflow-visible`, so peeking cards sat right there, fully
+          opaque. Above the cards, below the lines' own `z-10`, so the lines
+          still draw over them. */}
+      <div className={`pointer-events-none absolute inset-y-0 z-[6] bg-paper ${EDGE_MASK_LEFT}`} aria-hidden="true" />
+      <div className={`pointer-events-none absolute inset-y-0 z-[6] bg-paper ${EDGE_MASK_RIGHT}`} aria-hidden="true" />
+    </div>
   );
 }

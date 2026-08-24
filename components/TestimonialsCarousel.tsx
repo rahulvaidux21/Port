@@ -8,7 +8,7 @@ import { ArrowLeft, ArrowRight, Quote } from "lucide-react";
 import { testimonials, testimonialsSection } from "@/lib/data";
 import { useRevealOnScroll } from "@/lib/motion";
 import { useInfiniteCarousel } from "@/lib/useInfiniteCarousel";
-import { EDGE_LEFT, EDGE_RIGHT } from "@/lib/gridEdge";
+import { EDGE_LEFT, EDGE_MASK_LEFT, EDGE_MASK_RIGHT, EDGE_RIGHT } from "@/lib/gridEdge";
 import { cn } from "@/lib/utils";
 
 export function TestimonialsCarousel() {
@@ -19,6 +19,9 @@ export function TestimonialsCarousel() {
   const virtualTestimonials = repeatItems(testimonials);
 
   return (
+    /* Full-width wrapper so the edge masks resolve `50%` against the same
+       box the grid lines do — see EDGE_MASK_LEFT. */
+    <div className="relative">
     <section id="testimonials" className="relative mx-auto max-w-[1032px] scroll-mt-20 overflow-hidden px-6 py-20 md:px-8 md:py-28">
       <motion.div key={headerReveal.key} {...headerReveal.props} className="mx-auto mb-6 max-w-2xl px-3 text-center md:px-0">
         <h2 className="font-display text-3xl font-medium tracking-[-2px] text-text-secondary md:text-[48px]">
@@ -91,6 +94,7 @@ export function TestimonialsCarousel() {
           style={{ maskImage: "linear-gradient(to left, black, transparent)", WebkitMaskImage: "linear-gradient(to left, black, transparent)" }}
           aria-hidden="true"
         />
+
       </div>
 
       <div className="flex items-center justify-center gap-1.5">
@@ -105,5 +109,11 @@ export function TestimonialsCarousel() {
         ))}
       </div>
     </section>
+
+      {/* Same masks as the Work carousel. This Swiper is
+          `!overflow-visible` at every width, not just from `sm`. */}
+      <div className={`pointer-events-none absolute inset-y-0 z-[6] bg-paper ${EDGE_MASK_LEFT}`} aria-hidden="true" />
+      <div className={`pointer-events-none absolute inset-y-0 z-[6] bg-paper ${EDGE_MASK_RIGHT}`} aria-hidden="true" />
+    </div>
   );
 }

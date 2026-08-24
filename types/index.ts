@@ -18,6 +18,12 @@ export interface Stat {
   label: string;
 }
 
+/** A count of people on the team, with the photo of them the frame sets
+    beside it (node 2944:48208 — a 300x204 plate per row). */
+export interface TeamRole extends Stat {
+  photo: MediaItem;
+}
+
 /** A lighter-weight project card for the secondary "More work" carousel —
     same shape as CaseStudy's display fields, without requiring a full
     case-study detail page. */
@@ -87,6 +93,11 @@ export interface MediaItem {
   caption?: string;
   width: number;
   height: number;
+  /** A colour here runs the plate edge to edge on its own band of that
+      colour, square at every corner, instead of as a rounded card inside
+      the content column. Node 2944:49403 — the frame widened the type-
+      styles sheet to the full 1440 artboard and took its corners off. */
+  bleed?: string;
 }
 
 export interface TimelineStep {
@@ -123,6 +134,34 @@ export interface ServiceJourney {
   /** What the citizen is doing — one line, shown under the name. */
   summary: string;
   steps: string[];
+  /** The fuller definition shown when this journey is selected — what
+      distinguishes it structurally from the other nine, not just what the
+      citizen is doing. */
+  definition: string;
+  /** Real services that are instances of this journey, shown as evidence
+      once it's selected. */
+  exampleServices: string[];
+}
+
+/** One sub-category inside a top-level service category, and how many of
+    the ~12,000 services fall under it. `count` stays a string — the source
+    catalogue mixes exact tallies ("289 services") with rough ones ("~400
+    services"), and that distinction is part of the finding, not noise to
+    normalise away. */
+export interface ServiceSubCategory {
+  name: string;
+  count: string;
+}
+
+/** One of the 14 top-level categories the ~12,000-service catalogue sorts
+    into. `icon` is a key into the category icon map, not a component —
+    keeps this file pure data, same as how `PLATFORM_ICONS` is keyed by
+    chip label rather than storing a `ReactNode` on the chip data. */
+export interface ServiceCategory {
+  name: string;
+  icon: string;
+  totalServices: string;
+  subCategories: ServiceSubCategory[];
 }
 
 /** A research block that sits with the benchmarking, not in the solution. */
@@ -135,6 +174,10 @@ export interface ResearchBlock {
       paragraph — it earns its place as evidence, not as narration. */
   note: string;
   stats: BigStat[];
+  /** The 14-category breakdown behind the top-level counts in `stats` —
+      how the ~12,000 services split up, and how each category's own
+      sub-categories split that further. */
+  categories: ServiceCategory[];
   journeys: ServiceJourney[];
   outro: string[];
 }
@@ -178,7 +221,7 @@ export interface CaseStudyDetail {
   platformChips: string[];
   teamAndCollaboration: {
     bullets: string[];
-    roles: Stat[];
+    roles: TeamRole[];
   };
   /** "The Challenge" pills on the dark band. */
   challenge: string[];
@@ -213,5 +256,53 @@ export interface CaseStudyDetail {
     bullets: string[];
     image: MediaItem;
   };
+  /** Where the system actually stands — shipped states, and where to get it. */
+  release: ReleaseBlock;
+  /** The closing chapter — the four calls behind the system. */
+  tradeoffs: TradeOffBlock;
+}
+
+/** One shipped state. Only states that have actually happened live here —
+    the roadmap is deliberately not on the page. */
+export interface ReleaseState {
+  /** The pill: "Shipped", "Live now". */
+  status: string;
+  /** Which pill treatment — `done` is the quiet green, `live` the solid
+      violet that marks where the system is right now. */
+  tone: "done" | "live";
+  title: string;
+  /** Carries `**bold**` like every other block on the page. */
+  body: string[];
+}
+
+export interface ReleaseBlock {
+  eyebrow: string;
+  title: string;
+  accent: string;
+  lead: string;
+  states: ReleaseState[];
+  /** Where a reader can go and see it. */
+  links: { label: string; note: string; href: string }[];
+}
+
+/** One decision story. The card's headline is the question itself; the
+    `**…**` span inside it is the answer we went with, and renders violet. */
+export interface TradeOff {
+  question: string;
+  /** Running copy. Carries `**bold**` like every other block on the page. */
+  body: string[];
+  takeaway: string;
+  /** The two cards that also close on a shipped date. */
+  result?: string;
+}
+
+export interface TradeOffBlock {
+  eyebrow: string;
+  title: string;
+  accent: string;
+  lead: string;
+  /** Explains the colour — the violet half of each question is the answer. */
+  note: string;
+  items: TradeOff[];
 }
 

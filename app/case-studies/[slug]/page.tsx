@@ -26,6 +26,8 @@ import {
   BigStats,
   ContentBlockView,
   Prose,
+  ReleaseStatus,
+  TradeOffs,
   ThankYou,
 } from "@/components/case-study/ux4g/sections";
 import { MoreCases } from "@/components/case-study/MoreCases";
@@ -211,9 +213,12 @@ export default async function CaseStudyPage({ params }: PageProps) {
         </Shell>
 
         {/* ── Part 4 · How teams get it ────────────────────────── */}
-        {/* Two children — the opener and the one block under it — so the
-            section gap is the whole rhythm here. */}
-        <Shell className="flex flex-col gap-section pb-section">
+        {/* 48px, not 96: the chapter head binds to its own body, the same as
+            Parts 2 and 3 do. This ran at the section gap on the theory that
+            two children need no inner rhythm, but that made Part 4 the one
+            chapter whose heading floated free of the copy under it — the
+            body text was always identical, it was this gap that read wrong. */}
+        <Shell className="flex flex-col gap-block pb-section">
           <PartOpener content={detail.rollout.opener} />
           <ContentBlockView
             prefix=""
@@ -226,11 +231,33 @@ export default async function CaseStudyPage({ params }: PageProps) {
           />
         </Shell>
 
-        <Shell className="pb-section">
+        {/* ── Where it stands ──────────────────────────────────── */}
+        {/* Straight after Part 4: that chapter says how a team gets the
+            system, and the obvious next question — is it actually out? —
+            went unanswered on the whole page until this. Before the
+            Trade-offs, not after, so the outcome lands before the
+            reflection on it, and so trade-off 04's closing "Beta shipped in
+            June 2026" reads as a callback rather than a first mention. */}
+        <ReleaseStatus block={detail.release} />
+
+        {/* ── The closing chapter · Trade-offs ─────────────────── */}
+        {/* Last, and after Part 4 on purpose. Each of these four stories
+            resolves *after* the build — the evidence one ends with 3.0
+            being resumed, the scope one with the Beta shipping — so read
+            any earlier they would spoil outcomes the reader has not met.
+            It is also the only chapter about judgement rather than craft,
+            which makes it the right thing to leave a reader holding.
+
+            On the panel tint, like ServiceResearch: the page marks a change
+            of register with a band, and this is the change from "what we
+            built" to "how we decided". */}
+        <TradeOffs block={detail.tradeoffs} />
+
+        <Shell className="pb-section pt-section">
           <MoreCases currentSlug={slug} />
         </Shell>
 
-        <ThankYou email="rahulvaidux@gmail.com" />
+        <ThankYou />
       </main>
       <Footer />
     </div>
