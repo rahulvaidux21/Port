@@ -5,11 +5,11 @@ import Link from "next/link";
 import { motion, useReducedMotion } from "framer-motion";
 import { useRevealOnScroll } from "@/lib/motion";
 import { caseStudies } from "@/lib/data";
-import { caseStudyDetails } from "@/lib/caseStudies";
+import { caseStudySlugsWithDetail } from "@/lib/caseStudies";
 import type { CaseStudy } from "@/types";
 
 function Card({ study }: { study: CaseStudy }) {
-  const hasDetail = Boolean(caseStudyDetails[study.id]);
+  const hasDetail = caseStudySlugsWithDetail.has(study.id);
   const href = hasDetail ? `/case-studies/${study.id}` : "/#work";
 
   return (

@@ -137,23 +137,27 @@ export const caseStudies: CaseStudy[] = [
     image2: "/case-studies/survey-setu/app-screens.jpg",
   },
   {
-    // Generic placeholder per explicit direction — no real write-up yet.
     id: "ebcas",
     year: "2026",
-    wordmark: "eBCAS Platform",
-    discipline: "Web Platform",
-    heading: "eBCAS Platform",
-    statement: "Case study write-up coming soon.",
+    wordmark: "eBCAS 2.0 · Permit, Manpower & Training",
+    discipline: "Compliance Platform",
+    heading: "eBCAS 2.0",
+    statement: "Permits, staffing and training — turned into governed workflows.",
     color: "hsl(265 30% 42%)",
     colorDark: "hsl(265 30% 22%)",
     tags: ["AI Driven", "Web Platform", "UI/UX"],
-    overview: "A web platform project — case study write-up coming soon.",
-    problem: "Write a concise description.",
-    solution: "Write a concise description.",
-    result: "Write a concise description.",
+    overview:
+      "A national civil aviation security compliance platform, built by a four-designer team with no engineers. I owned three of its five modules — Airport Entry Permit, Manpower, and Training.",
+    problem:
+      "Permit issuance, staffing verification and training accreditation all ran on manual, paper-adjacent process with no governance trail — no defined approval authority, no evidentiary record, and no way to catch a lapsed certification before it silently blocked someone's clearance.",
+    solution:
+      "Governed, role-based approval chains for all three: a national permit lifecycle with committee review and stop-list enforcement, a three-tier manpower strength approval with geofenced attendance, and an accreditation-to-certification pipeline with a 3-tier appeal process.",
+    result:
+      "89 screens shipped across three modules; a self-led audit caught 5 real governance gaps — including a role-conflation bug — before they reached engineering.",
     labelColor: "hsl(265 40% 30%)",
     labelColorDark: "hsl(265 40% 72%)",
     frame: "browser",
+    image: "/work/ebcas-cover.png",
   },
 ];
 

@@ -9,7 +9,7 @@ import "swiper/css";
 import { motion, useReducedMotion } from "framer-motion";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import { caseStudies, projectsSection } from "@/lib/data";
-import { caseStudyDetails } from "@/lib/caseStudies";
+import { caseStudySlugsWithDetail } from "@/lib/caseStudies";
 import { useRevealOnScroll } from "@/lib/motion";
 import { useInfiniteCarousel } from "@/lib/useInfiniteCarousel";
 import { EDGE_LEFT, EDGE_MASK_LEFT, EDGE_MASK_RIGHT, EDGE_RIGHT } from "@/lib/gridEdge";
@@ -25,7 +25,7 @@ import type { CaseStudy } from "@/types";
 const LEAD_STUDY_ID = "ux4g";
 
 function ProjectCard({ study }: { study: CaseStudy }) {
-  const hasDetail = Boolean(caseStudyDetails[study.id]);
+  const hasDetail = caseStudySlugsWithDetail.has(study.id);
 
   const content = (
     <div className="group relative h-[450px] w-full sm:w-[85vw] sm:max-w-[748px] overflow-hidden rounded-lg border border-hairline/[0.04]">
