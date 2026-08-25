@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MoreCases } from "@/components/case-study/MoreCases";
+import { BackToWork } from "@/components/case-study/BackToWork";
 import { socialLinks } from "@/lib/data";
 import {
   Shell,
@@ -41,6 +42,8 @@ export default function EbcasCaseStudyPage() {
       <Navbar />
 
       <main>
+        <BackToWork />
+
         <Hero
           heading="Three of eBCAS 2.0's five modules, built for a regulator with no room for ambiguity"
           subtitle={

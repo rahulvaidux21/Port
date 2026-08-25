@@ -31,6 +31,7 @@ import {
   ThankYou,
 } from "@/components/case-study/ux4g/sections";
 import { MoreCases } from "@/components/case-study/MoreCases";
+import { BackToWork } from "@/components/case-study/BackToWork";
 import { caseStudyDetails } from "@/lib/caseStudies";
 
 interface PageProps {
@@ -71,11 +72,13 @@ export default async function CaseStudyPage({ params }: PageProps) {
           "Service patterns" hugs 231 in Figma, 244 at opsz 14, 230 at the
           default). So the axis is deliberately not set. */}
       <main>
+        <BackToWork />
+
         {/* The frame opens on the bento collage, not a conventional hero.
             Every top-level section in the frame is separated by exactly
-            100px, and the first one sits 100px below the artboard top —
-            that constant is the page's whole vertical rhythm. */}
-        <Shell className="pb-section pt-section">
+            100px; `BackToWork` above now owns that 100px of navbar
+            clearance, so this only needs a small secondary gap under it. */}
+        <Shell className="pb-section pt-6">
           <BentoGrid />
         </Shell>
 

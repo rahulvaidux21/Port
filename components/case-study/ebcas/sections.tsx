@@ -37,7 +37,10 @@ export function Hero({
 }) {
   return (
     <Shell className="pb-section">
-      <div className="flex flex-col gap-4 pt-4">
+      {/* `BackToWork` (rendered just above this in the page) owns the
+          navbar's own clearance now — this only needs a small secondary
+          gap under it, not another full pt-section. */}
+      <div className="flex flex-col gap-4 pt-6">
         <h1 className={cn(DISPLAY_XL, "font-sans text-text-primary")}>{heading}</h1>
         <p className={cn(TITLE_LEAD, "font-sans text-text-secondary")}>{subtitle}</p>
       </div>
