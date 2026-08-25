@@ -157,7 +157,7 @@ export default async function CaseStudyPage({ params }: PageProps) {
             both lines are set at 64px, the eyebrow in Caveat. */}
         <section className="bg-cs-green-deep py-10 md:py-[44px]">
           <Shell className="flex flex-col gap-4">
-            <p className="font-caveat text-[clamp(1.25rem,1.806vw,1.625rem)] leading-none text-white">
+            <p className="font-caveat text-[clamp(1.25rem,2.222vw,2rem)] leading-none text-white">
               The Library
             </p>
             <h2 className="font-sans text-[clamp(1.5rem,2.361vw,2.125rem)] font-semibold leading-[1.2] text-white">
