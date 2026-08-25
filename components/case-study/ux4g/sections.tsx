@@ -109,7 +109,7 @@ export function Prose({ children, className }: { children: ReactNode; className?
 /** Handwritten chapter eyebrow — Caveat, straight from the frame. */
 export function Eyebrow({ children, className }: { children: ReactNode; className?: string }) {
   return (
-    <p className={cn("font-caveat text-[clamp(1.25rem,1.806vw,1.625rem)] leading-none", className)}>
+    <p className={cn("font-caveat text-[clamp(1.25rem,2.222vw,2rem)] leading-none", className)}>
       {children}
     </p>
   );
@@ -1334,9 +1334,7 @@ export function FoundationsOpener() {
           a 1320-wide board — so it degrades to a plain stack. */}
       <div className="relative flex flex-col gap-6 bg-paper md:hidden">
         <div className="flex flex-col gap-4">
-          <p className="font-caveat text-[2.5rem] leading-none text-cs-violet">
-            Part 1
-          </p>
+          <Eyebrow className="text-cs-violet">Part 1</Eyebrow>
           <p className="font-sans text-[2.5rem] font-bold leading-[1.306] text-cs-ink">
             New Foundations
           </p>
