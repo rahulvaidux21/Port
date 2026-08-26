@@ -1,6 +1,7 @@
 "use client";
 
 import Image from "next/image";
+import Link from "next/link";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Autoplay } from "swiper/modules";
 import "swiper/css";
@@ -17,6 +18,9 @@ import type { MoreWorkItem } from "@/types";
 // primary "Things I've designed" carousel, matching the source Figma. Width
 // comes from Swiper's own slidesPerView (see below), not a fixed class here.
 function MoreWorkCard({ item }: { item: MoreWorkItem }) {
+  // Behance explorations carry an absolute URL; the IRCTC card points at its
+  // internal case-study route instead.
+  const isInternal = item.href?.startsWith("/") ?? false;
   const content = (
     <div className="group relative h-[420px] w-full overflow-hidden rounded-lg border border-hairline/[0.08] sm:h-[448px]">
       {item.image ? (
@@ -44,7 +48,7 @@ function MoreWorkCard({ item }: { item: MoreWorkItem }) {
           <p className="font-sans text-sm text-text-secondary line-clamp-3">{item.description}</p>
           {item.href && (
             <span className="mt-1 inline-flex w-fit items-center gap-1.5 font-sans text-sm font-semibold text-text-primary">
-              View on Behance
+              {isInternal ? "View Case study" : "View on Behance"}
               <ArrowUpRight className="h-3.5 w-3.5 transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
             </span>
           )}
@@ -53,12 +57,15 @@ function MoreWorkCard({ item }: { item: MoreWorkItem }) {
     </div>
   );
 
-  return item.href ? (
+  if (!item.href) return content;
+  return isInternal ? (
+    <Link href={item.href} className="block">
+      {content}
+    </Link>
+  ) : (
     <a href={item.href} target="_blank" rel="noopener noreferrer" className="block">
       {content}
     </a>
-  ) : (
-    content
   );
 }
 

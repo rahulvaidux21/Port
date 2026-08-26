@@ -162,81 +162,107 @@ export const caseStudies: CaseStudy[] = [
 ];
 
 // "More work" — the secondary carousel. Real projects that don't (yet) have
-// a full case-study writeup, shown with the same PlaceholderSlot pattern the
-// case-study cards already use when a real screenshot isn't available.
+// a full case-study writeup, each with its card artwork exported from Figma.
 export const moreWorkSection = {
   part1: "More",
   part2: "work",
 };
 
 export const moreWork: MoreWorkItem[] = [
-  {
-    id: "niri",
-    title: "NIRI Platform",
-    description:
-      "A multi-tier web platform where dozens of organisations submit, validate, and approve infrastructure data through a five-role review chain.",
-    tags: ["Web Platform", "UI/UX"],
-    color: "hsl(165 26% 42%)",
-    image: "/case-studies/niri/public-dashboard.jpg",
-  },
-  {
-    id: "salonx",
-    title: "SALONX",
-    description:
-      "Management app for salons — design guidelines, wireframes, and prototypes, validated through usability testing at Skillfoundry Technology.",
-    tags: ["Web App", "UI/UX"],
-    color: "hsl(280 24% 40%)",
-  },
-  {
-    id: "unboxing-community",
-    title: "UnBoxing Community",
-    description:
-      "End-to-end e-commerce experience for electric and electronic products, across mobile app and a responsive web platform.",
-    tags: ["Mobile App", "Web Design"],
-    color: "hsl(24 60% 45%)",
-  },
-  // The five below are personal explorations/assignments from Behance, not
-  // client work — each links out to its real case study there instead of an
-  // internal route (see `href` on MoreWorkItem).
+  // NIRI Platform, SALONX, and UnBoxing Community are temporarily hidden —
+  // restore by uncommenting when ready to show them again.
+  // {
+  //   id: "niri",
+  //   title: "NIRI Platform",
+  //   description:
+  //     "A multi-tier web platform where dozens of organisations submit, validate, and approve infrastructure data through a five-role review chain.",
+  //   tags: ["Web Platform", "UI/UX"],
+  //   color: "hsl(165 26% 42%)",
+  //   image: "/case-studies/niri/public-dashboard.jpg",
+  // },
+  // {
+  //   id: "salonx",
+  //   title: "SALONX",
+  //   description:
+  //     "Management app for salons — design guidelines, wireframes, and prototypes, validated through usability testing at Skillfoundry Technology.",
+  //   tags: ["Web App", "UI/UX"],
+  //   color: "hsl(280 24% 40%)",
+  // },
+  // {
+  //   id: "unboxing-community",
+  //   title: "UnBoxing Community",
+  //   description:
+  //     "End-to-end e-commerce experience for electric and electronic products, across mobile app and a responsive web platform.",
+  //   tags: ["Mobile App", "Web Design"],
+  //   color: "hsl(24 60% 45%)",
+  // },
+  // Copy, tags, order, and card artwork below mirror the source Figma
+  // (MoTA Survey App file, "More work cards" node 3090:23976). Artwork is a
+  // clean 2x export of each card with its text overlay stripped, saved under
+  // /public/more-work. Behance items keep their external `href`; the IRCTC
+  // card links to the internal case study instead.
   {
     id: "gocomet",
-    title: "GoComet",
-    description: "A redesign case study for GoComet's logistics platform, rethinking shipment tracking and visibility.",
-    tags: ["Web Platform", "UI/UX"],
+    title: "Go Comet Redesign",
+    description: "Redesigning GoComet website & Redefining the user experience for Potential Users.",
+    tags: ["SaaS platform", "Design Assignment"],
     color: "hsl(200 55% 38%)",
+    image: "/more-work/gocomet.png",
     href: "https://www.behance.net/gallery/174781273/GoComet-(Logistics-Platform)-Redesign-Case-study",
+  },
+  {
+    id: "swiggy-home",
+    title: "Swiggy homes",
+    description: "Integrate selling furniture for Swiggy.",
+    tags: ["Mobile app", "Design Assignment"],
+    color: "hsl(28 70% 45%)",
+    image: "/more-work/swiggy-homes.png",
+    href: "https://www.behance.net/gallery/164692603/Design-Challenge-Swiggy-Homes",
   },
   {
     id: "skate-thugs",
     title: "Skate Thugs",
-    description: "Main-menu UI for a skateboarding game — a personal design assignment exploring game UI.",
-    tags: ["Game UI", "UI/UX"],
+    description: "Designing a main menu for a skateboard arcade style game based in multiple country for PC and Console.",
+    tags: ["Game UX", "Design Assignment"],
     color: "hsl(340 55% 42%)",
+    image: "/more-work/skate-thugs.png",
     href: "https://www.behance.net/gallery/174535815/Skateboading-Game-Main-Menu-Assignment",
   },
   {
-    id: "swiggy-home",
-    title: "Swiggy Home",
-    description: "A design challenge reimagining Swiggy's food-delivery home screen.",
-    tags: ["Mobile App", "UI/UX"],
-    color: "hsl(28 70% 45%)",
-    href: "https://www.behance.net/gallery/164692603/Design-Challenge-Swiggy-Homes",
+    id: "irctc-redesign",
+    title: "IRCTC App Redesign",
+    description: "A user-centered approach to streamline the Indian railway ticket booking.",
+    tags: ["Mobile App", "UX Redesign", "IRCTC"],
+    color: "hsl(210 38% 50%)",
+    image: "/more-work/irctc.png",
+    href: "/case-studies/irctc",
   },
   {
     id: "whatsapp-enhancement",
-    title: "WhatsApp UI/UX Enhancement",
-    description: "A design assignment proposing three UI/UX upgrades for WhatsApp.",
-    tags: ["Mobile App", "UI/UX"],
+    title: "Whatsapp UI/UX enhancement",
+    description: "To identify 3 key user pain points and propose strategic UI/UX upgrades for WhatsApp.",
+    tags: ["Mobile app", "Design Assignment"],
     color: "hsl(152 45% 32%)",
+    image: "/more-work/whatsapp.png",
     href: "https://www.behance.net/gallery/197913207/3-Upgrades-for-Whatsapp-Design-Assignment",
   },
   {
     id: "unify-tv",
-    title: "Unify TV App",
-    description: "A content-aggregation app concept for Android TV, unifying streaming services into one interface.",
-    tags: ["TV App", "UI/UX"],
+    title: "Unify TV app",
+    description: "Content aggregation app for android TV",
+    tags: ["Smart TV app", "Design Assignment"],
     color: "hsl(260 40% 40%)",
+    image: "/more-work/unify-tv.png",
     href: "https://www.behance.net/gallery/202476173/UNIFY-TV-APP-Content-Aggregation-App-For-Android-TV",
+  },
+  {
+    id: "grubwala",
+    title: "Grubwala app design",
+    description:
+      "UI/UX audit of the Grubwala app, focusing on enhancing product-market for the home-chef food delivery service in Andheri East, Mumbai.",
+    tags: ["Mobile app", "Design Assignment"],
+    color: "hsl(350 70% 45%)",
+    image: "/more-work/grubwala.png",
   },
 ];
 
