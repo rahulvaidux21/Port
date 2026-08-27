@@ -78,7 +78,15 @@ function MoreWorkCard({ item }: { item: MoreWorkItem }) {
   );
 }
 
-export function MoreWork() {
+// The heading is overridable so the case-study pages can reuse the entire
+// section verbatim under a "More Cases" title (see case-study/MoreCases).
+export function MoreWork({
+  part1 = moreWorkSection.part1,
+  part2 = moreWorkSection.part2,
+}: {
+  part1?: string;
+  part2?: string;
+} = {}) {
   const reduced = useReducedMotion();
   const headerReveal = useRevealOnScroll(reduced);
   const { swiperRef, activeIndex, initialSlide, handleSwiper, handleSlideChange, goToReal, prev, next, repeatItems } =
@@ -89,8 +97,7 @@ export function MoreWork() {
     <section className="relative mx-auto max-w-[1032px] scroll-mt-24 overflow-hidden px-6 py-20 md:px-8 md:pb-10 md:pt-28">
       <motion.div key={headerReveal.key} {...headerReveal.props} className="mx-auto mb-16 px-3 text-center md:px-0">
         <h2 className="font-display text-3xl font-medium tracking-[-2px] text-text-secondary md:text-[48px]">
-          {moreWorkSection.part1}{" "}
-          <span className="font-instrument-serif text-3xl italic md:text-[48px]">{moreWorkSection.part2}</span>
+          {part1} <span className="font-instrument-serif text-3xl italic md:text-[48px]">{part2}</span>
         </h2>
       </motion.div>
 

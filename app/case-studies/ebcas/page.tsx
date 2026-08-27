@@ -229,9 +229,9 @@ export default function EbcasCaseStudyPage() {
           </Prose>
         </Shell>
 
-        <Shell className="pb-section">
-          <MoreCases currentSlug="ebcas" />
-        </Shell>
+        {/* MoreCases is the landing page's More Work carousel and brings its
+            own max-width container and vertical padding, so no Shell here. */}
+        <MoreCases />
       </main>
 
       <Footer />

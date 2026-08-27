@@ -256,9 +256,9 @@ export default async function CaseStudyPage({ params }: PageProps) {
             built" to "how we decided". */}
         <TradeOffs block={detail.tradeoffs} />
 
-        <Shell className="pb-section pt-section">
-          <MoreCases currentSlug={slug} />
-        </Shell>
+        {/* MoreCases is the landing page's More Work carousel and brings its
+            own max-width container and vertical padding, so no Shell here. */}
+        <MoreCases />
 
         <ThankYou />
       </main>
