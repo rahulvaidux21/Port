@@ -22,7 +22,10 @@ function MoreWorkCard({ item }: { item: MoreWorkItem }) {
   // internal case-study route instead.
   const isInternal = item.href?.startsWith("/") ?? false;
   const content = (
-    <div className="group relative h-[420px] w-full overflow-hidden rounded-lg border border-hairline/[0.08] sm:h-[448px]">
+    // Locked to the 405x448 ratio of the Figma card exports so the artwork
+    // fits exactly at any slide width instead of being cropped by a fixed
+    // height ("zoomed" edges cut off).
+    <div className="group relative aspect-[405/448] w-full overflow-hidden rounded-lg border border-hairline/[0.08]">
       {item.image ? (
         <Image src={item.image} alt={`${item.title} preview`} fill sizes="405px" className="object-cover object-top" />
       ) : (
@@ -36,7 +39,10 @@ function MoreWorkCard({ item }: { item: MoreWorkItem }) {
           {item.tags.map((tag) => (
             <span
               key={tag}
-              className="rounded-lg border border-hairline/[0.08] bg-paper/[0.16] px-2.5 py-1.5 font-sans text-xs text-accent-foreground backdrop-blur-md"
+              // Figma chip spec: black @ 64% + background blur, 8px radius,
+              // near-white text — fixed colors (not theme tokens) since the
+              // chip always sits on top of the card artwork.
+              className="rounded-[8px] bg-black/[0.64] px-3 py-2 font-sans text-sm leading-4 text-[#F6F3F0] backdrop-blur-md"
             >
               {tag}
             </span>
@@ -45,7 +51,10 @@ function MoreWorkCard({ item }: { item: MoreWorkItem }) {
 
         <div className="flex flex-col gap-2">
           <h3 className="font-display text-lg font-semibold text-text-primary">{item.title}</h3>
-          <p className="font-sans text-sm text-text-secondary line-clamp-3">{item.description}</p>
+          {/* Fixed three-line zone (matching the Figma cards) so the title
+              row sits at the same height on every card regardless of how
+              many lines the description wraps to. */}
+          <p className="min-h-[60px] font-sans text-sm text-text-secondary line-clamp-3">{item.description}</p>
           {item.href && (
             <span className="mt-1 inline-flex w-fit items-center gap-1.5 font-sans text-sm font-semibold text-text-primary">
               {isInternal ? "View Case study" : "View on Behance"}

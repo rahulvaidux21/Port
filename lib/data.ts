@@ -199,8 +199,7 @@ export const moreWork: MoreWorkItem[] = [
   // Copy, tags, order, and card artwork below mirror the source Figma
   // (MoTA Survey App file, "More work cards" node 3090:23976). Artwork is a
   // clean 2x export of each card with its text overlay stripped, saved under
-  // /public/more-work. Behance items keep their external `href`; the IRCTC
-  // card links to the internal case study instead.
+  // /public/more-work. Every card links out to its Behance case study.
   {
     id: "gocomet",
     title: "Go Comet Redesign",
@@ -235,7 +234,7 @@ export const moreWork: MoreWorkItem[] = [
     tags: ["Mobile App", "UX Redesign", "IRCTC"],
     color: "hsl(210 38% 50%)",
     image: "/more-work/irctc.png",
-    href: "/case-studies/irctc",
+    href: "https://www.behance.net/gallery/199253781/IRCTC-APP-REDEFINED",
   },
   {
     id: "whatsapp-enhancement",
@@ -263,6 +262,7 @@ export const moreWork: MoreWorkItem[] = [
     tags: ["Mobile app", "Design Assignment"],
     color: "hsl(350 70% 45%)",
     image: "/more-work/grubwala.png",
+    href: "https://www.behance.net/gallery/254867795/Grubwala-App-Redesign",
   },
 ];
 
