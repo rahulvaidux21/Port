@@ -123,13 +123,13 @@ export const caseStudies: CaseStudy[] = [
     colorDark: "hsl(220 34% 26%)",
     tags: ["Web App", "Mobile App Design", "AI Driven", "UI/UX"],
     overview:
-      "A mobile survey app designed for field teams working in places where the network can't be trusted — built so the data collection never has to stop.",
+      "An offline-first survey platform for field teams in places where the network can't be trusted — designed in 8 days, now live with 40+ lakh tribal household records captured.",
     problem:
       "Field surveyors work in remote regions with unreliable connectivity — but data collection can't wait for a signal.",
     solution:
-      "An offline-first app with local data capture, clear sync status, and dashboards tailored to each of the four field roles.",
+      "An offline-first app with visible sync status and interruption-proof forms, plus State Officer and Ministry Admin portals — designed across all five roles in the chain, from doorstep to policy.",
     result:
-      "Live since April 2026, with 50+ screens shipped and zero data lost to dropped connections.",
+      "Designed in 8 days against a 15-day deadline, approved by MoTA with zero rework, and live with 40+ lakh tribal records captured.",
     labelColor: "hsl(220 45% 32%)",
     labelColorDark: "hsl(220 45% 72%)",
     frame: "phone",
