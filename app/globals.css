@@ -87,24 +87,13 @@
   --cs-tl-label: 29 29 29;
 
   /* ── Survey Setu case-study ramp ───────────────────────────────────
-     Same idea as the --cs-* ramp above: the case study borrows its
-     product's own brand colour — the Ministry of Tribal Affairs green
-     from the app's splash and primary buttons — the way UX4G borrows its
-     violet. Only the brand roles live here; the problem-red and
-     impact-green bands are shared with UX4G and read --cs-red / --cs-green
-     so both case studies speak the same semantic colours. */
-  --ss-green: 22 110 45;
-  --ss-green-deep: 13 72 30;
-  --ss-chip: 236 245 237;
-  --ss-panel: 244 250 244;
-
-  /* ── Survey Setu v2 (editorial layout) ─────────────────────────────
-     The v2 page alternates warm-grey "paper" bands with near-black "ink"
+     The page alternates warm-grey "paper" bands with near-black "ink"
      bands, and every headline mixes ink words with muted ones. Brand roles
      come straight from the MoTA design system (Primary/Source #057724,
-     Secondary #222223, Text/Hint #727272) and the colour logo (navy,
-     saffron, sun). The goal-card fills are artwork, so they hold in both
-     themes; the bands and inks re-point in .dark below. */
+     Secondary #222223, Text/Hint #727272), plus navy, saffron and sun
+     accents for the design-goal cards. The goal-card fills are artwork,
+     so they hold in both themes; the bands and inks re-point in .dark
+     below. */
   --sv-band: 237 237 236;
   --sv-card: 255 255 255;
   --sv-ink-band: 9 9 9;
@@ -217,13 +206,7 @@
   --cs-tl-pillar: 26 28 32;
   --cs-tl-label: 246 243 240;
 
-  /* ── Survey Setu ramp, dark — light tints of the same green. */
-  --ss-green: 134 210 146;
-  --ss-green-deep: 178 228 186;
-  --ss-chip: 23 24 27;
-  --ss-panel: 23 24 27;
-
-  /* ── Survey Setu v2, dark — paper bands become a raised surface, ink
+  /* ── Survey Setu ramp, dark — paper bands become a raised surface, ink
      bands drop to true black so they still read as a change of register
      on a near-black page. */
   --sv-band: 20 21 24;

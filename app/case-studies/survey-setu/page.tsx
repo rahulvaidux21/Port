@@ -1,455 +1,580 @@
 import type { Metadata } from "next";
+import { FileSignature, LayoutList, Save, UsersRound } from "lucide-react";
 import { Navbar } from "@/components/Navbar";
 import { Footer } from "@/components/Footer";
 import { MoreCases } from "@/components/case-study/MoreCases";
 import { BackToWork } from "@/components/case-study/BackToWork";
 import { socialLinks } from "@/lib/data";
-import { Shell, Prose, ChallengeBand, ImpactBand } from "@/components/case-study/ux4g/sections";
 import {
-  TitleBlock,
-  BrandSpan,
-  ChipGroup,
-  Statement,
-  Section,
-  SectionHeading,
-  PanelBand,
-  QAList,
-  Takeaway,
-  TranslationMatrix,
-  CustodyChain,
-  DeadlineBar,
-  ProcessSteps,
-  PartOpener,
-  FeatureBlock,
-  PortalBlock,
-  Placeholder,
-  PhoneShot,
-  Plate,
-  BigStats,
-  StatusList,
-  ReflectionCards,
-  ThankYou,
+  Band,
+  Hero,
+  ProjectTitle,
+  BrandingStyle,
+  PaperSection,
+  NumberGrid,
+  PhoneCard,
+  PhotoSlot,
+  DesignGoals,
+  OverlayPhoto,
+  Personas,
+  RoleChain,
+  ResearchTable,
+  Process,
+  FlowRows,
+  Wireframes,
+  BeforeAfter,
+  TypeAndColour,
+  InkStatement,
+  PhoneShowcase,
+  RoleDashboards,
+  BrowserShowcase,
+  Impact,
+  NextChapter,
+  Thanks,
 } from "@/components/case-study/survey-setu/sections";
 
 export const metadata: Metadata = {
-  title: "Survey Setu — A national data pipeline for 4 million tribal households — Rahul Vaid",
+  title: "Survey Setu — Field survey app and officer portals for the Ministry of Tribal Affairs — Rahul Vaid",
   description:
-    "Designing the Ministry of Tribal Affairs' offline-first survey platform end to end — mobile app, State Officer and Ministry Admin portals — from a 40-page architecture document to production in 8 days of design against a 15-day deadline.",
+    "I designed the Android app field surveyors use to record 4 million tribal households — offline, in 21 languages — and the web portals officers use to onboard and track them. 8 days of design against a 15-day deadline.",
 };
 
-const SHOTS = {
-  appScreens: {
-    src: "/case-studies/survey-setu/app-screens.jpg",
-    alt: "Survey Setu mobile app — splash screen and surveyor home showing online status, current survey, and completed, reviewed, draft and flagged form counts",
-    width: 1600,
-    height: 935,
-  },
-  language: {
-    src: "/case-studies/survey-setu/language-selection.jpg",
-    alt: "Language picker offering 21 Indian languages as large, script-labelled buttons",
-    width: 390,
-    height: 844,
-  },
-  geoTagging: {
-    src: "/case-studies/survey-setu/geo-tagging.jpg",
-    alt: "Household survey step one of eleven — location and geo-tagging with a map pin, recapture button, and an auto-saving indicator",
-    width: 271,
-    height: 830,
-  },
-  stateForms: {
-    src: "/case-studies/survey-setu/submitted-forms.jpg",
-    alt: "State Officer portal — submitted forms for the PVTG Household Survey, filterable by district, block, village, tribe and date",
-    width: 1400,
-    height: 1180,
-  },
-  adminDashboard: {
-    src: "/case-studies/survey-setu/admin-dashboard.jpg",
-    alt: "Ministry Admin dashboard — active surveys, state, district and surveyor counts, quick actions for onboarding officers, and survey-wise progress",
-    width: 1400,
-    height: 1181,
-  },
+/* Survey Setu — an editorial long-scroll case study.
+
+   Story order: overview → context → the problem (as user problems, with
+   How-might-we framing) → who I designed for → desk research → process →
+   user flows → wireframes and what changed → design decisions (field app,
+   then portals) → accessibility and language → design system → outcome →
+   reflection.
+
+   Ownership, as Rahul describes it: the whole surveyor app, the Admin and
+   the State Officer portals are his; a second designer, from day 3,
+   designed the District Officer flow and the login screens. There is no
+   Supervisor role in the final product — the District Officer acts as the
+   surveyors' supervisor. "40+ lakh" counts households.
+
+   Screens are 2× exports from the MoTA Survey App Figma file —
+   "✒️Hi-Fidelity Design" for finals, "Playground" for wireframes (wf-*).
+   All names and numbers in the screens are dummy data. Photography is
+   pending — PhotoSlot marks each slot. */
+
+const ASSETS = "/case-studies/survey-setu";
+const APP = {
+  splash: { src: `${ASSETS}/app-splash.jpg`, alt: "Survey Setu splash screen — the सर्वे सेतु wordmark on Ministry green" },
+  language: { src: `${ASSETS}/app-language.jpg`, alt: "Language picker — 21 Indian languages as large buttons, each written in its own script, English selected" },
+  home: { src: `${ASSETS}/app-home.jpg`, alt: "Surveyor home — You're Online badge, the current survey, and counts of completed, reviewed, draft and flagged forms" },
+  flagged: { src: `${ASSETS}/app-flagged.jpg`, alt: "Survey forms filtered to Flagged — each household card shows the family head, village and surveyor, with a Flagged label" },
+  geo: { src: `${ASSETS}/app-geo.jpg`, alt: "Survey section 1 of 11 — location and geo-tagging with a map pin, a Recapture Location button and an auto-saving indicator" },
+  consent: { src: `${ASSETS}/app-consent.jpg`, alt: "Survey section 11 of 11 — the consent declaration in full, with the head of family's name, date and signature" },
+};
+const WF = {
+  role: { src: `${ASSETS}/wf-role.jpg`, alt: "Wireframe — Select your role: Field Surveyor, Supervisor or Auditor" },
+  mission: { src: `${ASSETS}/wf-mission.jpg`, alt: "Wireframe — My Mission dashboard in purple, with overall progress and a list of assigned villages" },
+  areas: { src: `${ASSETS}/wf-areas.jpg`, alt: "Wireframe — Area assignments: each village with households surveyed and a Start New Survey button" },
+  consent: { src: `${ASSETS}/wf-consent.jpg`, alt: "Wireframe — Data consent as step 1 of 5, with audio consent or a digital signature" },
+  geo: { src: `${ASSETS}/wf-geo.jpg`, alt: "Wireframe — Location and geo-tagging as step 2 of 5, with captured coordinates and Recapture Location" },
+  scheme: { src: `${ASSETS}/wf-scheme.jpg`, alt: "Wireframe — Scheme mapping: welfare schemes the household is enrolled in, with a tip on local terms" },
+  review: { src: `${ASSETS}/wf-review.jpg`, alt: "Wireframe — Review survey: every section summarised with edit links before submitting" },
+  saved: { src: `${ASSETS}/wf-saved.jpg`, alt: "Wireframe — Survey saved, with an offline-mode note that it will send when back online" },
 };
 
-/* Survey Setu follows the UX4G case study's structure and system section
-   for section (see the comment block at the top of
-   survey-setu/sections.tsx): title + hero plate → chip rows → the dark
-   Challenge band → the Impact teaser → the problem framing → research on
-   a panel band → "Part 1 / Part 2" openers with "Introducing – …" blocks →
-   where it stands → reflections on a panel band → More Cases → Thank you.
-   The Challenge and Impact bands are UX4G's own components, so problem-red
-   and payoff-green read identically across both case studies.
-
-   Every number comes straight from Rahul's curated brief: the 15-day
-   deadline closed in 8, 40+ lakh records, live 3 months after sign-off,
-   five roles (three owned, one collaborated, one that never touches the
-   app). Dashed `Placeholder` slots mark real screens still to be exported;
-   each one's hint says exactly what goes there. */
-export default function SurveySetuCaseStudyPage() {
+export default function SurveySetuPage() {
   const linkedin = socialLinks.find((link) => link.icon === "linkedin")?.href ?? "#";
 
   return (
-    <div className="relative overflow-x-clip bg-paper">
+    <div className="relative overflow-x-clip bg-sv-band">
       <Navbar />
 
       <main>
-        <BackToWork />
+        <Band>
+          <BackToWork />
+        </Band>
 
-        <TitleBlock
-          title="Designing a national data pipeline for 4 million tribal households"
-          subtitle={
-            <>
-              Survey Setu for the Ministry of Tribal Affairs —{" "}
-              <BrandSpan>an offline-first mobile app, end to end, plus the State Officer and Ministry Admin portals</BrandSpan>{" "}
-              that turn doorstep visits into national policy data.
-            </>
-          }
-          image={SHOTS.appScreens}
-        />
+        {/* 1 · Hero */}
+        <Hero leftLabel="Field survey app + officer portals" rightLabel="Ministry of Tribal Affairs" back="Survey" front="Setu" phone={APP.home} />
 
-        <Shell className="flex flex-col gap-block pb-section">
-          <ChipGroup
-            title="My Role & Responsibilities"
-            chips={["Lead Product Designer", "Discovery", "Systems architecture", "Flows & wireframes", "Handoff"]}
-          />
-          <ChipGroup title="Timeline" chips={["15-day deadline", "Closed in 8 days", "Live 3 months after sign-off"]} />
-          <ChipGroup title="Platforms" chips={["Mobile", "Web"]} withIcons />
-          <ChipGroup
-            title="Worked With"
-            chips={["Ministry of Tribal Affairs", "NeGD", "Business analysts", "Engineers", "Solution architects", "A second designer, from day 3"]}
-          />
-        </Shell>
-
-        <ChallengeBand
-          items={[
-            "One day of surveyor training",
-            "Low device literacy",
-            "No connectivity across remote tribal regions",
-            "No PRD, no user flows, no admin UI",
-            "A question set already locked by the Ministry",
-            "DPDP Act consent at every doorstep",
-            "A 15-day design deadline",
+        {/* 2 · Overview — the TL;DR */}
+        <ProjectTitle
+          quote="I designed the app **field surveyors use to record 4 million tribal households** — offline, in 21 languages — and the portals **officers use to onboard and track them.**"
+          about="Survey Setu is the Ministry of Tribal Affairs' survey platform for **Particularly Vulnerable Tribal Groups.** Field surveyors go door to door, often with no network, and fill an **11-section household form** on an Android phone. Officers at district, state and ministry level add those surveyors and **follow progress from a web portal.**"
+          meta={[
+            { label: "My role", value: "Lead Product Designer" },
+            { label: "What I designed", value: "The whole surveyor app, plus the Admin and State Officer portals" },
+            { label: "Team", value: "Me, a second designer from day 3, business analysts, engineers, solution architects, and the Ministry" },
+            { label: "Timeline", value: "8 days of design, against a 15-day deadline" },
+            { label: "Platforms", value: "Android app · Web portal" },
+            { label: "Outcome", value: "Signed off with no rework; live 3 months later; 40+ lakh households recorded" },
+          ]}
+          features={[
+            "Works offline",
+            "Auto-save",
+            "21 languages",
+            "Geo-tagging",
+            "Consent at the door",
+            "Flagged forms",
+            "Role-based portals",
+            "Bulk onboarding",
           ]}
         />
 
-        <div className="pb-section pt-section">
-          <ImpactBand
-            items={[
-              { lead: "Design closed in", value: "8 days", caption: "against a 15-day deadline" },
-              { lead: "Approved by MoTA with", value: "0 rework loops", caption: "at Ministry sign-off" },
-              { lead: "Captured", value: "40+ lakh", caption: "authenticated tribal records" },
+        {/* 3 · Branding */}
+        <BrandingStyle note="I designed the wordmark: सर्वे सेतु (“Survey Bridge”) set in two weights, in the Ministry's green. It appears on the splash screen, in the app and across the portals." />
+
+        {/* 4 · Context & constraints */}
+        <PaperSection
+          label={["The", "Context"]}
+          headline="**One day of training,** no signal, and an 11-section form at every door"
+          bubble={{ glyph: "हिं", label: "Hindi script" }}
+          caption="Field surveyors work in remote tribal villages, often hours from a network."
+        >
+          <NumberGrid
+            cells={[
+              null,
+              { body: "**Surveyors get one day of training** — and many aren't used to smartphones." },
+              null,
+              { body: "**No signal for days** in remote areas, so the app has to work fully offline." },
+              { body: "**No brief, no user flows, no portal designs** — only a 40-page technical document." },
+              null,
+              { body: "**The questions were fixed.** The Ministry had already approved them, including a consent declaration under India's data-protection law." },
+              null,
             ]}
           />
-        </div>
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <PhoneCard {...APP.language} className="aspect-[1/1.02]" />
+            <PhotoSlot className="aspect-[1/1.02]" label="At the doorstep" hint="Pending — a surveyor and a household head reading the screen together." />
+          </div>
+        </PaperSection>
 
-        {/* ── The problem framing ─────────────────────────────── */}
-        <Statement
-          before="Everyone assumes the hard part of a national survey is designing a good form."
-          turn="It isn't."
+        {/* 5 · The problem, as user problems */}
+        <DesignGoals
+          label={["The", "Problem"]}
+          headline="What happens when a doorstep visit **gets lost**"
+          caption="If a form is lost, or sent back without a clear reason, the surveyor has to travel back — sometimes 40 km."
+          hmw={[
+            {
+              who: "surveyors",
+              text: "How might we help someone with one day of training fill an 11-section household form correctly, at the door, in their language — even with no signal?",
+            },
+            {
+              who: "officers",
+              text: "How might officers at three levels add their teams and follow survey progress without learning three different tools?",
+            },
+          ]}
+          goals={[
+            { title: "Never lose a form, even with no signal.", icon: <Save className="h-5 w-5" /> },
+            { title: "Show at a glance what's done, drafted and flagged.", icon: <LayoutList className="h-5 w-5" /> },
+            { title: "Ask for consent in words a household understands.", icon: <FileSignature className="h-5 w-5" /> },
+            { title: "Give every officer one place to add and track their team.", icon: <UsersRound className="h-5 w-5" /> },
+          ]}
+        />
+        <OverlayPhoto
+          label="Survey in progress"
+          hint="Pending — a surveyor recording a household, phone in hand, mid-conversation."
+          bubbles={[
+            { chip: "Auto-saving", tone: "green", text: "Location and geo-tagging · section 1 of 11" },
+            { chip: "Location captured", tone: "saffron", text: "Confirm only when you're at the household." },
+          ]}
         />
 
-        <Section
-          eyebrow="The real question"
-          title="15 days, no brief,"
-          accent="4 million lives"
-        >
-          <Prose>
-            <>
-              How do you make four million household visits trustworthy when the people collecting the
-              data have{" "}
-              <strong className="font-semibold text-text-primary">
-                one day of training, low device literacy, and no internet
-              </strong>
-              ? What I was handed: a 15-day deadline, one approved HTML form, and a 40-page technical
-              architecture document. No PRD, no user flows, no admin UI. The design didn&apos;t exist yet.
-            </>
-          </Prose>
-        </Section>
-
-        <Section
-          eyebrow="Day zero"
-          title="De-briefing"
-          accent="the void"
-          lead="Instead of opening Figma and guessing, I ran one intensive alignment call with BAs, engineers, solution architects and NeGD stakeholders."
-        >
-          <QAList
-            items={[
-              { q: "Is there a BRD?", a: "No." },
-              { q: "Then what is there?", a: "A core architecture document — encryption, RBAC, offline sync engines." },
-              { q: "Is the form locked?", a: "Yes. An HTML question set already **signed off by the Ministry**." },
-            ]}
-          />
-          <Takeaway>
-            I wasn&apos;t there to redesign the questions. I was there to design{" "}
-            <span className="text-ss-green">the system of trust around them</span>.
-          </Takeaway>
-        </Section>
-
-        {/* ── Research, on the panel band ─────────────────────── */}
-        <PanelBand>
-          <Shell className="flex flex-col gap-block">
-            <div className="flex flex-col gap-4">
-              <SectionHeading eyebrow="Before drawing a screen" title="Translating code specs into" accent="UX realities" />
-              <Prose>
-                An architecture document is not a design. Every backend clause carries a human
-                consequence — so I mapped each one to what it would demand of the person holding the
-                phone.
-              </Prose>
-            </div>
-            <TranslationMatrix
-              rows={[
-                {
-                  clause: "Offline-first sync engine",
-                  spec: "Delta sync and conflict resolution",
-                  consequence: "Surveyors must always know what's **on the device versus what's synced**. Offline is the default working mode — never a silent failure.",
-                },
-                {
-                  clause: "DPDP Act compliance",
-                  spec: "Purpose-based consent",
-                  consequence: "Consent becomes a **scripted, readable moment read aloud at the doorstep** — not a developer's checkbox.",
-                },
-                {
-                  clause: "Geo-fencing & tamper evidence",
-                  spec: "GPS metadata and boundary tagging",
-                  consequence: "Out-of-boundary visits are **flagged at the doorstep**, with clear guidance on what to do — not discovered weeks later in review.",
-                },
-                {
-                  clause: "LGD village routing",
-                  spec: "Local Government Directory mapping",
-                  consequence: "The home screen opens to an **actionable route and task list**, never a blank form.",
-                },
-                {
-                  clause: "Supervisory rejection loops",
-                  spec: "Approve / reject gateway",
-                  consequence: "A rejection pinpoints the **exact faulty field and reason**, correctable in place — so a surveyor doesn't make a second 40-km trip.",
-                },
-              ]}
-            />
-            <Placeholder
-              label="Architecture-to-UX matrix · working board"
-              hint="Pending — the original FigJam/Figma board where the 40-page architecture document was decoded clause by clause."
-            />
-          </Shell>
-        </PanelBand>
-
-        <Section
+        {/* 6 · Who I designed for */}
+        <PaperSection
           className="pt-section"
-          eyebrow="Who it's really for"
-          title="The form is one node in a much"
-          accent="longer chain"
-          lead="A survey response travels from a remote doorstep to a national policy decision. Every hand-off is a place where trust can break — so I designed across all five roles in that chain, not just the form."
+          label={["Who I", "Designed for"]}
+          headline="Four people use Survey Setu, **each one level above the last**"
+          bubble={{ glyph: "ಕ", label: "Kannada script" }}
+          caption="The personas came from the 40-page technical document, which defined every role and what it can do."
         >
-          <CustodyChain
-            start="Doorstep"
-            end="National policy decision"
-            roles={[
-              { role: "Respondent", duty: "Tribal households who never touch the app, but depend entirely on its accuracy.", ownership: "context" },
-              { role: "Field Surveyor", duty: "Low literacy, offline, high-stakes gathering — owned end to end.", ownership: "owned" },
-              { role: "District Officer", duty: "Covers regional gaps between the field and the state.", ownership: "collaborated" },
-              { role: "State Officer", duty: "Verifies, approves or rejects regional entries.", ownership: "owned" },
-              { role: "Ministry Admin", duty: "Configures surveys and manages role-based access across tenants.", ownership: "owned" },
+          <Personas
+            people={[
+              {
+                role: "Field Surveyor",
+                platform: "Android app",
+                credit: "me",
+                goal: "Finish each household form correctly, in one visit.",
+                context: "Door to door in remote villages, often offline, after one day of training.",
+                pain: "Losing a half-filled form, or having to go back to fix one.",
+                does: "Picks a survey, fills 11 short sections, takes consent, submits.",
+              },
+              {
+                role: "District Officer",
+                aka: "Also the surveyors' supervisor",
+                platform: "Web portal",
+                credit: "shared",
+                goal: "Keep the district's surveyors working and on target.",
+                context: "Manages the surveyors working across the blocks of one district.",
+                pain: "Not knowing who is in the field, or how far a survey has got.",
+                does: "Adds surveyors one at a time or in bulk, and tracks progress.",
+              },
+              {
+                role: "State Officer",
+                platform: "Web portal",
+                credit: "me",
+                goal: "See how every district in the state is doing.",
+                context: "Oversees the district officers of one state.",
+                pain: "Spotting a district that's falling behind before it's too late.",
+                does: "Adds district officers and checks submitted forms by district, block and village.",
+              },
+              {
+                role: "Ministry Admin",
+                platform: "Web portal",
+                credit: "me",
+                goal: "Run national surveys with the right people in every state.",
+                context: "Ministry of Tribal Affairs, across 28 states and 8 union territories.",
+                pain: "Setting up officers state by state, by hand.",
+                does: "Creates surveys, adds state and district officers (also in bulk), tracks national progress.",
+              },
+            ]}
+            note="The households being surveyed never touch the app — but every screen exists to record them accurately."
+          />
+          <RoleChain
+            nodes={[
+              { role: "Ministry Admin", sub: "Creates surveys" },
+              { role: "State Officer", sub: "One state" },
+              { role: "District Officer", sub: "One district" },
+              { role: "Field Surveyor", sub: "Assigned villages" },
+              { role: "Household", sub: "Never uses the app" },
+            ]}
+            down="Each level adds the level below it and assigns them a region, using official location codes."
+            up="Completed forms and progress flow back up, so each level sees only its own area."
+          />
+        </PaperSection>
+
+        {/* 7 · Desk research */}
+        <PaperSection
+          label={["Desk", "Research"]}
+          headline="**What I studied** before drawing a screen"
+          bubble={{ glyph: "த", label: "Tamil script" }}
+          caption="Research was desk-based and took half a day — four sources, each tied to a decision."
+          side="right"
+        >
+          <ResearchTable
+            rows={[
+              {
+                source: "The 40-page technical document",
+                looked: "Who the users are, what each role can do, and the rules the system must follow: offline use, consent, location.",
+                led: "**The four personas** and the role chain above.",
+              },
+              {
+                source: "Videos of field survey apps in use",
+                looked: "How surveyors move through long forms while talking to a household.",
+                led: "**Short sections that save as you go,** with progress always visible.",
+              },
+              {
+                source: "Workflows of similar platforms",
+                looked: "How dashboards for different officer levels are organised.",
+                led: "**One portal layout for every officer,** scoped to their region.",
+              },
+              {
+                source: "Web search",
+                looked: "Patterns for consent and for apps used in many languages.",
+                led: "**Language chosen on the first screen,** and consent written in plain words.",
+              },
             ]}
           />
-          <Placeholder
-            label="End-to-end service blueprint"
-            hint="Pending — the five-role flow from doorstep capture through district, state and ministry review, with the sync and rejection loops marked."
-          />
-        </Section>
+        </PaperSection>
 
-        <Section
-          eyebrow="How it got done"
-          title="Compressing 15 days"
-          accent="into 8"
-          lead="The deadline was already tight. The process was built to remove every step that didn't move the work toward build-ready screens."
+        {/* 8 · Process */}
+        <PaperSection
+          label={["The", "Process"]}
+          headline="15 days given, **8 days used**"
+          bubble={{ glyph: "ଓ", label: "Odia script" }}
+          caption="Every step that didn't move the work toward build-ready screens was cut."
         >
-          <DeadlineBar given={15} used={8} />
-          <ProcessSteps
+          <Process
+            given={15}
+            used={8}
             steps={[
-              { title: "Decode & translate", time: "0.5 days", body: "Turned the architecture document into an architecture-to-UX matrix — the table above." },
-              { title: "Desk research", time: "0.5 days", body: "Studied how offline-first field tools fail: lost drafts, invisible sync, unexplained rejections." },
-              { title: "AI-assisted wireframing", body: "Rapid first-pass layouts, generated to be critiqued by stakeholders — not to be shipped." },
-              { title: "One review gate", body: "A single cross-functional session to lock alignment, instead of rolling sign-offs." },
-              { title: "Straight to high fidelity", body: "Skipped mid-fi and delivered build-ready screens directly to engineering." },
-              { title: "Asked for help on day 3", body: "Requested a second designer for the parallel portal tracks, while I kept Mobile, Admin and State." },
+              { title: "Decode the document", time: "½ day", body: "Turned the 40-page technical document into a list of what each rule means for the person using the screen." },
+              { title: "Desk research", time: "½ day", body: "The four sources above — videos, similar platforms, search." },
+              { title: "Wireframes", body: "Low-fidelity drafts of the whole surveyor flow and the first officer dashboards, with an AI-assisted first pass." },
+              { title: "Peer review", body: "Walked the internal design team through the flows and folded in their feedback." },
+              { title: "Stakeholder review", body: "Stakeholders were aligned with the direction; they asked for branding and minor UI changes." },
+              { title: "High fidelity", body: "Build-ready screens for the app and the portals. A second designer joined on day 3 to take the District Officer flow and the login screens." },
             ]}
           />
-          <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-            <Placeholder label="AI-assisted first pass" hint="Pending — a first-pass wireframe as it went into the review gate." />
-            <Placeholder label="Build-ready high fidelity" hint="Pending — the same screen as it was handed to engineering." />
-          </div>
-        </Section>
+        </PaperSection>
 
-        {/* ── Part 1 · The field app ──────────────────────────── */}
-        <Shell className="flex flex-col gap-section pb-section">
-          <PartOpener
-            part="Part 1"
-            title="The field app"
-            lead="Built for a surveyor with one day of training, no signal, and a household waiting at the door."
-            visual={
-              <Placeholder
-                label="Field app · key screens"
-                hint="Pending — a collage of the surveyor journey: route list, consent, household form, sync queue."
-              />
-            }
-          />
-          <FeatureBlock
-            title="Sync state you can see"
-            lead={[
-              "Placed exactly where surveyors already look, with five unambiguous states — so nobody leaves a village unsure whether their day's work exists anywhere but their phone.",
-            ]}
-            chips={["On device", "Queued", "Syncing", "Synced", "Failed"]}
-            visual={<Placeholder ratio="phone" label="Sync states" hint="Pending — the sync queue showing all five states." />}
-          />
-          <FeatureBlock
-            flip
-            title="Forms that survive interruption"
-            lead={[
-              "Every household form is broken into short sections that save as they go. A dropped call, a dead battery, or a household that asks you to come back later never costs a partial record.",
-              "Location is captured once, at the door, and locked — **GPS coordinates can't be edited later**, which is what makes the record tamper-evident.",
-            ]}
-            visual={<PhoneShot {...SHOTS.geoTagging} />}
-          />
-          <FeatureBlock
-            title="Consent read aloud, not ticked"
-            lead={[
-              "DPDP Act consent is a scripted, readable moment the surveyor reads to the household — the purpose of every data point in plain words — not a checkbox buried in a flow.",
-            ]}
-            visual={<Placeholder ratio="phone" label="Doorstep consent" hint="Pending — the scripted consent screen." />}
-          />
-          <FeatureBlock
-            flip
-            title="Rejections that close the loop"
-            lead={[
-              "When a State Officer rejects an entry, the surveyor sees **what** is wrong and **where** — the exact field and reason — and fixes it in place, without a second 40-km trip.",
-            ]}
-            visual={<Placeholder ratio="phone" label="Field-level rejection" hint="Pending — a flagged form with the faulty field highlighted." />}
-          />
-          <FeatureBlock
-            title="Usable with zero training"
-            lead={[
-              "One action per screen, plain language, and no icon that needs explaining. The app assumes the one-day training didn't stick — and starts by asking which language to speak, in each language's own script.",
-            ]}
-            visual={<PhoneShot {...SHOTS.language} />}
-          />
-        </Shell>
-
-        {/* ── Part 2 · The portals ────────────────────────────── */}
-        <Shell className="flex flex-col gap-section pb-section">
-          <PartOpener
-            part="Part 2"
-            title="The portals"
-            lead="Where doorstep data is verified, approved, and turned into something a ministry can act on."
-            visual={<Plate {...SHOTS.adminDashboard} />}
-          />
-          <PortalBlock
-            title="State Officer review"
-            lead={[
-              "Every submitted household for a state, filterable down to district, block, village and tribe — with approve and reject built around the same field-level reasons the surveyor sees.",
-            ]}
-          >
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <Plate {...SHOTS.stateForms} caption="Submitted forms, filterable to the village." />
-              <Placeholder label="Approve / reject with reason" hint="Pending — the review screen where a rejection is tied to a specific field." />
-            </div>
-          </PortalBlock>
-          <PortalBlock
-            title="Ministry Admin control"
-            lead={[
-              "National oversight across states, districts and surveyors, plus the configuration layer: creating surveys, onboarding officers with pre-mapped LGD codes, and managing role-based access across tenants.",
-            ]}
-          >
-            <div className="grid grid-cols-1 gap-6 md:grid-cols-2">
-              <Placeholder label="Survey configuration" hint="Pending — setting up a new survey and its roles." />
-              <Placeholder label="Officer onboarding · bulk LGD upload" hint="Pending — the bulk upload flow for state and district officers." />
-            </div>
-          </PortalBlock>
-        </Shell>
-
-        {/* ── Where it stands ─────────────────────────────────── */}
-        <Section
-          eyebrow="Where it landed"
-          title="Scale and"
-          accent="real-world impact"
+        {/* 9 · User flows */}
+        <PaperSection
+          label={["User", "Flows"]}
+          headline="Two flows: **one for the field,** one for the office"
+          bubble={{ glyph: "म", label: "Marathi script" }}
+          caption="The surveyor's path is linear and short. The officer's portal is the same five sections for every role."
+          side="right"
         >
-          <BigStats
-            stats={[
-              { value: "8", label: "days, of a 15-day deadline" },
-              { value: "0", label: "rework loops at approval" },
-              { value: "3 mo", label: "sign-off to production" },
-              { value: "40L+", label: "authenticated records" },
+          <FlowRows
+            rows={[
+              {
+                title: "Field Surveyor · Android app",
+                sub: "From opening the app to a submitted household form.",
+                steps: [
+                  { label: "Choose language", note: "21 options" },
+                  { label: "Log in", note: "Mobile number + OTP" },
+                  { label: "Home", note: "Form counts" },
+                  { label: "Pick a survey" },
+                  { label: "Sections 1–10", note: "Household questions, auto-saved", key: true },
+                  { label: "Section 11", note: "Consent", key: true },
+                  { label: "Submit", note: "Or keep as draft" },
+                ],
+              },
+              {
+                title: "Officers · Web portal",
+                sub: "Admin, State Officer and District Officer share one navigation; what's inside is scoped to their region.",
+                steps: [
+                  { label: "Log in" },
+                  { label: "Dashboard", note: "Summary + quick actions", key: true },
+                  { label: "Surveys", note: "Overview, submitted forms" },
+                  { label: "Users", note: "Add one, or bulk upload", key: true },
+                  { label: "Analytics" },
+                  { label: "Settings" },
+                ],
+              },
             ]}
           />
-          <StatusList
-            states={[
+        </PaperSection>
+
+        {/* 10 · Wireframes → feedback → final */}
+        <Wireframes
+          headline="**Low-fidelity first,** reviewed twice before any polish"
+          caption="Peer review with the internal team, then the stakeholders. Both were happy with the direction."
+          frames={[
+            { ...WF.role, label: "Select role" },
+            { ...WF.mission, label: "My mission" },
+            { ...WF.areas, label: "Area assignments" },
+            { ...WF.consent, label: "Data consent" },
+            { ...WF.geo, label: "Location" },
+            { ...WF.scheme, label: "Scheme mapping" },
+            { ...WF.review, label: "Review" },
+            { ...WF.saved, label: "Saved offline" },
+          ]}
+          footnote="Drafts from the Playground page of the Figma file. The purple is a placeholder theme, not a brand colour — the feedback was about branding and small UI details, not the flow."
+        />
+        <PaperSection
+          className="pt-section"
+          label={["Wireframe to", "Final"]}
+          headline="What changed **after feedback**"
+          bubble={{ glyph: "తె", label: "Telugu script" }}
+          caption="Few changes — but each one is visible in the final screens."
+        >
+          <BeforeAfter
+            pairs={[
               {
-                status: "Live",
-                tone: "live",
-                title: "In production across tribal regions",
-                body: "Live three months after sign-off, with **40+ lakh authenticated tribal records** captured so far.",
+                title: "Consent moved from the first step to the last",
+                before: WF.consent,
+                after: APP.consent,
+                body: "The draft asked for consent before any question (step 1 of 5). In the final form it's section 11 of 11, followed only by submit.",
+                why: "It's the common pattern for long forms, and the client asked for consent at the end.",
               },
               {
-                status: "Approved",
-                tone: "done",
-                title: "Cleared by MoTA in one pass",
-                body: "Approved by the Ministry of Tribal Affairs with zero rework loops — the single review gate held.",
+                title: "A purple draft became the Ministry's green",
+                before: WF.mission,
+                after: APP.home,
+                body: "The stakeholders' main feedback was branding. The final screens use the Ministry's green, the सर्वे सेतु wordmark, and form counts in place of the village list.",
+                why: "Branding was the main thing stakeholders asked for: the app had to carry the Ministry's own identity.",
               },
               {
-                status: "Extensible",
-                tone: "done",
-                title: "Built to outlive one survey",
-                body: "Multi-tenant by design — other ministries can run their own surveys on the same roles, sync engine and review loops without a redesign.",
+                title: "Five draft steps became eleven short sections",
+                before: WF.geo,
+                after: APP.geo,
+                body: "Location was step 2 of 5 in the draft. Once the Ministry's full question set went in, it became section 1 of 11 — each section short, with auto-save shown on screen.",
+                why: "Short sections are easier to pick up again after an interruption at the door.",
+              },
+              {
+                title: "The role picker was dropped",
+                before: WF.role,
+                after: APP.language,
+                body: "The draft opened by asking whether you're a surveyor, supervisor or auditor. The final app opens by asking which language to use.",
+                why: "Roles are assigned by the officer who adds you, so the app never needs to ask. Supervising moved to the District Officer.",
               },
             ]}
           />
-        </Section>
+        </PaperSection>
 
-        {/* ── Reflections, on the panel band ──────────────────── */}
-        <PanelBand>
-          <Shell className="flex flex-col gap-block">
-            <SectionHeading eyebrow="Looking back" title="What I'd do" accent="differently" />
-            <ReflectionCards
-              items={[
-                {
-                  title: "Trade a day of polish for **a day in the field**",
-                  body: "I'd give up a day of high-fidelity refinement to watch real enumerators work a village. Everything I knew about them was second-hand.",
-                  takeaway: "Field access beats a cleaner handoff file.",
-                },
-                {
-                  title: "Test with **end users** before handoff",
-                  body: "Stakeholder review was rigorous, but direct usability testing with surveyors was constrained by the timeline.",
-                  takeaway: "It's the gap I'd close first.",
-                },
-                {
-                  title: "Push harder on **the ethics of oversight**",
-                  body: "Tracking surveyor activity makes data trustworthy — it also edges toward surveillance.",
-                  takeaway: "Where oversight should stop deserved more time than it got.",
-                },
-              ]}
-            />
-          </Shell>
-        </PanelBand>
+        {/* 11 · Design decisions — field app */}
+        <InkStatement
+          label={["Design decisions ·", "Field app"]}
+          headline="Every screen answers **one question for the surveyor**"
+          caption="What am I doing, is it saved, and what's next?"
+          bubble={{ glyph: "বা", label: "Bengali script" }}
+        />
+        <PhoneShowcase
+          word="Home"
+          phone={APP.home}
+          left={[
+            { title: "Online status", body: "“You're Online” at the top, so surveyors know when their forms can be sent." },
+            { title: "Current survey", body: "Shown first, with a switch — most surveyors work on one survey at a time." },
+          ]}
+          right={[
+            { title: "Form counts", body: "Completed, reviewed, draft and flagged: the four things a surveyor acts on." },
+            { title: "One main button", body: "Start a new form. Nothing else competes for attention." },
+          ]}
+        />
+        <PhoneShowcase
+          word="Location"
+          wordAt="bottom"
+          phone={APP.geo}
+          left={[
+            { title: "Place first", body: "The household is pinned before any question, so every form is tied to a place." },
+            { title: "Auto-saving", body: "Shown on every section, so closing the app never feels risky." },
+          ]}
+          right={[
+            { title: "Recapture", body: "One tap to try again when the GPS signal is weak." },
+            { title: "Clear instruction", body: "A note reminds the surveyor to be at the household before confirming." },
+          ]}
+        />
+        <PhoneShowcase
+          word="Consent"
+          phone={APP.consent}
+          left={[
+            { title: "Plain declaration", body: "What's collected and why, in full, before anyone signs." },
+            { title: "The law, in words", body: "India's data-protection law, explained without legal language." },
+          ]}
+          right={[
+            { title: "Signed at the door", body: "The head of family's name, date and signature, captured in place." },
+            { title: "Last section", body: "Nothing submits without it." },
+          ]}
+        />
 
-        <Shell className="flex flex-col gap-block pb-section pt-section">
-          <SectionHeading eyebrow="Want the longer version?" title="Let's" accent="talk it through" />
-          <Prose>
-            <>
-              The parts that don&apos;t fit in a write-up — the architecture matrix in full, the review
-              session, the trade-offs we argued about — I&apos;m happy to walk through.{" "}
-              <a
-                href={linkedin}
-                target="_blank"
-                rel="noopener noreferrer"
-                className="text-text-primary underline decoration-hairline/40 underline-offset-4 hover:decoration-text-primary"
-              >
-                Find me on LinkedIn
-              </a>
-              .
-            </>
-          </Prose>
-        </Shell>
+        {/* 12 · Design decisions — portals */}
+        <PaperSection
+          className="pt-section"
+          label={["Design decisions ·", "Portals"]}
+          headline="One portal, **three levels of scope**"
+          bubble={{ glyph: "ગુ", label: "Gujarati script" }}
+          caption="Admin, State Officer and District Officer share the same layout. Each sees only their own region and the people below them."
+        >
+          <RoleDashboards
+            items={[
+              {
+                role: "Ministry Admin",
+                scope: "All of India: surveys, state officers, district officers and surveyors across 28 states and 8 UTs.",
+                credit: "me",
+                screen: { src: `${ASSETS}/portal-admin-dash.jpg`, alt: "Ministry Admin dashboard — summary cards for surveys, state officers, district officers and surveyors, quick actions, and survey-wise progress", height: 1686 },
+              },
+              {
+                role: "State Officer",
+                scope: "One state: its district officers and surveyors, with the same progress table.",
+                credit: "me",
+                screen: { src: `${ASSETS}/portal-so-dash.jpg`, alt: "State Officer dashboard for Rajasthan — district officer and surveyor counts, quick actions, and survey-wise progress", height: 1685 },
+              },
+              {
+                role: "District Officer",
+                scope: "One district: its surveyors, and how many are in the field right now.",
+                credit: "shared",
+                screen: { src: `${ASSETS}/portal-do-dash.jpg`, alt: "District Officer dashboard — active surveys, surveyors with 85% currently in the field, quick actions to add surveyors, and survey-wise progress", height: 1685 },
+              },
+            ]}
+            shared={[
+              { title: "Summary first", body: "Counts at the top answer “how are we doing?” before anything else." },
+              { title: "Quick actions", body: "Each role's most common job — adding the level below — is one click from the dashboard." },
+              { title: "Same progress table", body: "Total, submitted and pending forms per survey, so every level reads progress the same way." },
+            ]}
+          />
+        </PaperSection>
+        <BrowserShowcase
+          word="Onboard"
+          screen={{
+            src: `${ASSETS}/portal-so-create-do.jpg`,
+            alt: "State Officer portal — Create New District Officer: personal details, then Assign Region with state and district",
+            height: 1685,
+            label: "Survey Setu · State Officer",
+          }}
+          inset={{
+            src: `${ASSETS}/portal-bulk-upload.jpg`,
+            alt: "Bulk upload dialog — a CSV template, a drop zone, and how-to steps for adding many officers at once",
+            width: 1740,
+            height: 1030,
+          }}
+          notes={[
+            { title: "Assign a region", body: "Every new officer is given their area at creation, using the government's official location codes." },
+            { title: "One or many", body: "Add a single officer with a short form, or upload a CSV for hundreds." },
+            { title: "Same pattern at every level", body: "Admin adds state officers, states add district officers, districts add surveyors." },
+          ]}
+        />
 
-        <MoreCases />
+        {/* 13 · Accessibility & language */}
+        <PaperSection
+          className="pt-section"
+          label={["Accessibility", "& Language"]}
+          headline="Built for **21 languages** and first-time smartphone users"
+          bubble={{ glyph: "हिं", label: "Hindi script" }}
+          caption="The round glyph beside each headline on this page is one of the scripts the app speaks."
+        >
+          <NumberGrid
+            cells={[
+              { title: "21 languages", body: "Chosen on the very first screen, **each written in its own script.**" },
+              { title: "Plain words", body: "No technical terms in the app; **consent written for a household,** not a lawyer." },
+              { title: "Large targets", body: "**Big buttons and one main action** per screen." },
+              { title: "Status in words", body: "Every status has a label, **not just a colour:** Completed, Draft, Flagged." },
+            ]}
+          />
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
+            <PhoneCard {...APP.language} className="aspect-[1/1.02]" />
+            <PhoneCard {...APP.flagged} className="aspect-[1/1.02]" />
+          </div>
+        </PaperSection>
 
-        <ThankYou />
+        {/* 14 · Design system */}
+        <TypeAndColour
+          note="From the MoTA design system: Noto Sans, from a type family with versions for Indian scripts, and the Ministry's green as the primary colour, with separate colours for success, warning and danger."
+          swatches={[
+            [
+              { hex: "#222223", name: "Secondary", ring: true },
+              { hex: "#FFFFFF", name: "Neutral 0", dark: true },
+              { hex: "#727272", name: "Text hint" },
+            ],
+            [
+              { hex: "#057724", name: "Primary" },
+              { hex: "#3C9718", name: "Success" },
+              { hex: "#B77224", name: "Warning" },
+              { hex: "#B7131A", name: "Danger" },
+            ],
+          ]}
+        />
+
+        {/* 15 · Outcome */}
+        <Impact
+          title="Signed off first time, live three months later"
+          body="Stakeholders signed off without a rework round. Engineering built from the high-fidelity screens, and the app went live three months after sign-off."
+          metrics={[
+            { value: "8 days", label: "Of design, against a 15-day deadline" },
+            { value: "0 rework rounds", label: "At Ministry sign-off" },
+            { value: "3 months", label: "From sign-off to live" },
+            { value: "40+ lakh", label: "Households recorded (4 million+)" },
+            { value: "21 languages", label: "Available in the app" },
+          ]}
+        />
+
+        {/* 16 · Reflection */}
+        <NextChapter
+          headline="What I'd **do differently** next time"
+          bubble={{ glyph: "ಕ", label: "Kannada script" }}
+          items={[
+            {
+              title: "Spend a day in the field",
+              body: "Everything I knew about surveyors came from documents and videos. I'd trade a day of polish to watch them work a village.",
+            },
+            {
+              title: "Test with surveyors",
+              body: "Peer and stakeholder reviews were thorough, but the timeline left no room to test with real surveyors. It's the gap I'd close first.",
+            },
+            {
+              title: "Oversight vs. surveillance",
+              body: "Showing who is in the field makes the data reliable — it can also feel like surveillance. Where that line sits deserved more time.",
+            },
+          ]}
+        />
+
+        <Band className="pt-section">
+          <MoreCases />
+        </Band>
+
+        {/* 17 · Thanks */}
+        <Thanks
+          linkedin={linkedin}
+          phone={APP.splash}
+          body="The full document breakdown, the review sessions, and the trade-offs we argued about — happy to walk through them."
+        />
       </main>
 
       <Footer />

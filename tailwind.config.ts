@@ -62,14 +62,7 @@ const config: Config = {
           "tl-pillar": "rgb(var(--cs-tl-pillar) / <alpha-value>)",
           "tl-label": "rgb(var(--cs-tl-label) / <alpha-value>)",
         },
-        // Survey Setu case-study ramp — see the --ss-* block in globals.css.
-        ss: {
-          green: "rgb(var(--ss-green) / <alpha-value>)",
-          "green-deep": "rgb(var(--ss-green-deep) / <alpha-value>)",
-          chip: "rgb(var(--ss-chip) / <alpha-value>)",
-          panel: "rgb(var(--ss-panel) / <alpha-value>)",
-        },
-        // Survey Setu v2 editorial layout — see the --sv-* block in globals.css.
+        // Survey Setu case-study ramp — see the --sv-* block in globals.css.
         sv: {
           band: "rgb(var(--sv-band) / <alpha-value>)",
           card: "rgb(var(--sv-card) / <alpha-value>)",

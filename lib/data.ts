@@ -134,7 +134,6 @@ export const caseStudies: CaseStudy[] = [
     labelColorDark: "hsl(220 45% 72%)",
     frame: "phone",
     image: "/work/survey-setu-cover.jpeg",
-    image2: "/case-studies/survey-setu/app-screens.jpg",
   },
   {
     id: "ebcas",
