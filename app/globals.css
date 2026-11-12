@@ -133,7 +133,9 @@
   --sp-element: 24px;
   --sp-tight: 16px;
 
-  --font-dm-sans: "DM Sans", system-ui, sans-serif;
+  /* --font-dm-sans is set on <html> by the self-hosted font (app/fonts);
+     don't redeclare it here or it can win the cascade and point at a
+     family name that doesn't exist. */
 }
 
 @media (max-width: 767px) {

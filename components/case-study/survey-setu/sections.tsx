@@ -1,6 +1,6 @@
 import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
-import { Noto_Sans } from "next/font/google";
+import { notoSans } from "@/app/fonts/fonts";
 import { ArrowRight, ArrowUpRight, ImageIcon } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Shell } from "@/components/case-study/ux4g/sections";
@@ -35,13 +35,6 @@ export { Browser, Phone, type Shot };
    is the सर्वे सेतु wordmark only (./Wordmark). Photography is still
    pending — `PhotoSlot` holds each slot at its final aspect ratio.
    ──────────────────────────────────────────────────────────────────── */
-
-// The product's own typeface, for the Typography & Colours specimen only.
-const notoSans = Noto_Sans({
-  subsets: ["latin", "devanagari"],
-  weight: ["400", "500", "600", "700"],
-  display: "swap",
-});
 
 export type Tone = "paper" | "ink";
 
@@ -539,7 +532,7 @@ export function BrandingStyle({ note }: { note: string }) {
                 <MarkTile className="h-16 w-16 md:h-20 md:w-20" />
                 <span
                   className={cn(
-                    notoSans.className,
+                    notoSans,
                     "grid h-16 w-16 place-items-center rounded-[12px] bg-sv-card text-2xl text-sv-mute md:h-20 md:w-20"
                   )}
                 >
@@ -547,7 +540,7 @@ export function BrandingStyle({ note }: { note: string }) {
                 </span>
                 <span
                   className={cn(
-                    notoSans.className,
+                    notoSans,
                     "grid h-16 w-16 place-items-center rounded-[12px] bg-sv-card text-2xl text-sv-mute md:h-20 md:w-20"
                   )}
                 >
@@ -1226,7 +1219,7 @@ export function TypeAndColour({
         className="pointer-events-none absolute inset-0 [mask-image:linear-gradient(to_bottom,transparent,black_30%,black_60%,transparent)]"
         style={GRID_LINES}
       />
-      <Shell className={cn("relative flex flex-col gap-block", notoSans.className)}>
+      <Shell className={cn("relative flex flex-col gap-block", notoSans)}>
         <div className="flex flex-col gap-4">
           <SectionLabel muted="Branding ·" strong="Type and colour" tone="ink" />
           <p className="max-w-[560px] text-sm leading-[1.6] text-white/70">{note}</p>
