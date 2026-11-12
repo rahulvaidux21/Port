@@ -62,6 +62,20 @@ const config: Config = {
           "tl-pillar": "rgb(var(--cs-tl-pillar) / <alpha-value>)",
           "tl-label": "rgb(var(--cs-tl-label) / <alpha-value>)",
         },
+        // Survey Setu case-study ramp — see the --sv-* block in globals.css.
+        sv: {
+          band: "rgb(var(--sv-band) / <alpha-value>)",
+          card: "rgb(var(--sv-card) / <alpha-value>)",
+          "ink-band": "rgb(var(--sv-ink-band) / <alpha-value>)",
+          mute: "rgb(var(--sv-mute) / <alpha-value>)",
+          green: "rgb(var(--sv-green) / <alpha-value>)",
+          forest: "rgb(var(--sv-forest) / <alpha-value>)",
+          navy: "rgb(var(--sv-navy) / <alpha-value>)",
+          saffron: "rgb(var(--sv-saffron) / <alpha-value>)",
+          sun: "rgb(var(--sv-sun) / <alpha-value>)",
+          problem: "rgb(var(--sv-problem) / <alpha-value>)",
+          solution: "rgb(var(--sv-solution) / <alpha-value>)",
+        },
         accent: {
           DEFAULT: "rgb(var(--color-accent) / <alpha-value>)",
           border: "rgb(var(--color-accent-border) / <alpha-value>)",
