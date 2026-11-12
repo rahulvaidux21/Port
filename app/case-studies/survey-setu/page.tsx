@@ -10,6 +10,7 @@ import {
   Hero,
   ProjectTitle,
   BrandingStyle,
+  Inputs,
   PaperSection,
   NumberGrid,
   PhoneCard,
@@ -48,11 +49,12 @@ export const metadata: Metadata = {
 
 /* Survey Setu — an editorial long-scroll case study.
 
-   Story order: overview → context → the problem (as user problems, with
-   How-might-we framing) → who I designed for → desk research → process →
-   user flows → wireframes and what changed → design decisions (field app,
-   then portals) → accessibility and language → design system → outcome →
-   reflection.
+   Story order, in six acts: Setup (overview, context, what I was handed)
+   → Problem (how-might-we, offline story, goals) → Process (timeline,
+   desk research, the personas it produced) → Design (user flows,
+   wireframes, what changed after feedback, the brand that feedback asked
+   for) → Solution (field app, portals, accessibility and language) →
+   Outcome (results, reflection).
 
    Ownership, as Rahul describes it: the whole surveyor app, the Admin and
    the State Officer portals are his; a second designer, from day 3,
@@ -150,8 +152,8 @@ const PORTAL = {
 const CHAPTERS = [
   { id: "setup", label: "Setup" },
   { id: "problem", label: "Problem" },
-  { id: "people", label: "People" },
   { id: "process", label: "Process" },
+  { id: "design", label: "Design" },
   { id: "solution", label: "Solution" },
   { id: "outcome", label: "Outcome" },
 ];
@@ -176,32 +178,36 @@ export default function SurveySetuPage() {
           rightLabel="Ministry of Tribal Affairs"
           back="Survey"
           front="Setu"
-          phone={APP.home}
+          device={{
+            src: `${ASSETS}/hero-splash.webp`,
+            alt: "Survey Setu splash screen on a phone — the सर्वे सेतु wordmark and “Survey Setu” on Ministry green, with the Ministry of Tribal Affairs emblem",
+            width: 975,
+            height: 2000,
+          }}
         />
 
-        {/* Act 1 · Setup */}
+        {/* Act · Setup */}
         <div id="setup">
           {/* 2 · Overview — the TL;DR */}
           <ProjectTitle
-            quote="I designed the app **field surveyors use to record 4 million tribal households** — offline, in 21 languages — and the portals **officers use to onboard and track them.**"
-            about="Survey Setu is the Ministry of Tribal Affairs' survey platform for **Particularly Vulnerable Tribal Groups.** Field surveyors go door to door, often with no network, and fill an **11-section household form** on an Android phone. Officers at district, state and ministry level add those surveyors and **follow progress from a web portal.**"
+            quote="I designed the **offline, 21-language field app** that recorded **4 million tribal households** — and the **officer portals** that run it."
+            about="The Ministry of Tribal Affairs' survey platform for **Particularly Vulnerable Tribal Groups.** Surveyors go door to door, often offline, filling an **11-section household form** on Android. District, state and ministry officers **onboard them and track progress** on the web."
             meta={[
               { label: "My role", value: "Lead Product Designer" },
               {
                 label: "What I designed",
-                value: "The whole surveyor app, plus the Admin and State Officer portals",
+                value: "Surveyor app; Admin and State Officer portals",
               },
               {
                 label: "Team",
                 value:
-                  "Me, a second designer from day 3, business analysts, engineers, solution architects, and the Ministry",
+                  "Me + a second designer (from day 3), analysts, engineers, architects, the Ministry",
               },
-              { label: "Timeline", value: "8 days of design, against a 15-day deadline" },
-              { label: "Platforms", value: "Android app · Web portal" },
+              { label: "Timeline", value: "8 days, against a 15-day deadline" },
+              { label: "Platforms", value: "Android · Web" },
               {
                 label: "Outcome",
-                value:
-                  "Signed off with no rework; live 3 months later; 40+ lakh households recorded",
+                value: "No rework · live in 3 months · 40+ lakh households",
               },
             ]}
             features={[
@@ -216,10 +222,7 @@ export default function SurveySetuPage() {
             ]}
           />
 
-          {/* 3 · Branding */}
-          <BrandingStyle note="I designed the wordmark: सर्वे सेतु (“Survey Bridge”) set in two weights, in the Ministry's green. It appears on the splash screen, in the app and across the portals." />
-
-          {/* 4 · Context & constraints */}
+          {/* 3 · Context & constraints */}
           <PaperSection
             label={["The", "Context"]}
             headline="**One day of training,** no signal, and an 11-section form at every door"
@@ -238,27 +241,62 @@ export default function SurveySetuPage() {
                   art: <SignalBars />,
                 },
                 {
-                  body: "**No brief, no user flows, no portal designs** — only a 40-page technical document.",
+                  body: "**No brief, no user flows, no portal designs** — the experience had to be designed from scratch.",
                 },
                 null,
                 {
-                  body: "**The questions were fixed.** The Ministry had already approved them, including a consent declaration under India's data-protection law.",
+                  body: "**The questions were fixed.** The Ministry had approved every one, consent included — the job was how to ask them.",
                 },
                 null,
               ]}
             />
-            <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-              <PhoneCard {...APP.language} className="aspect-[1/1.02]" />
-              <PhotoSlot
-                className="aspect-[1/1.02]"
-                label="At the doorstep"
-                hint="Pending — a surveyor and a household head reading the screen together."
-              />
-            </div>
+            <PhotoSlot
+              className="aspect-[4/5] sm:aspect-[16/7]"
+              label="At the doorstep"
+              hint="Pending — a surveyor and a household head reading the screen together."
+            />
+          </PaperSection>
+
+          {/* 4 · What I was handed — the inputs, before any design */}
+          <PaperSection
+            label={["What I was", "Handed"]}
+            headline="Two inputs, **and no brief**"
+            bubble={{ glyph: "ਪੰ", label: "Punjabi script" }}
+            caption="Everything the design had to start from."
+            side="right"
+          >
+            <Inputs
+              form={{
+                src: `${ASSETS}/client-html-form.jpg`,
+                alt: "The client's approved HTML survey form, PVTG Government Scheme Verification, with all 8 sections open: demographic and family details, health and nutrition, employment and social security, agriculture, energy, food security, disability, then the declaration and consent",
+                width: 2000,
+                height: 9397,
+                url: "https://gov-scheme-scout.lovable.app/",
+                label: "gov-scheme-scout.lovable.app",
+              }}
+              items={[
+                {
+                  kind: "From the client",
+                  title: "The approved survey form",
+                  body: "An HTML link with 8 sections and a declaration. The Ministry had already signed off every question, so the questions couldn't change.",
+                },
+                {
+                  kind: "From the technical team",
+                  title: "A 40-page technical document",
+                  body: "Roles, offline rules, consent and location requirements — and the source of the four personas.",
+                },
+                {
+                  kind: "Not provided",
+                  title: "No brief, no flows, no portal designs",
+                  body: "No PRD, no user flows and no admin screens. All of it was designed from the two inputs above.",
+                  missing: true,
+                },
+              ]}
+            />
           </PaperSection>
         </div>
 
-        {/* Act 2 · Problem */}
+        {/* Act · Problem */}
         <div id="problem">
           {/* 5 · The problem, as user problems */}
           <DesignGoals
@@ -355,11 +393,93 @@ export default function SurveySetuPage() {
           />
         </div>
 
-        {/* Act 3 · People */}
-        <div id="people">
-          {/* 6 · Who I designed for */}
+        {/* Act · Process */}
+        <div id="process">
+          {/* 6 · Process */}
           <PaperSection
             className="pt-section"
+            label={["The", "Process"]}
+            headline="15 days given, **8 days used**"
+            bubble={{ glyph: "ଓ", label: "Odia script" }}
+            caption="Every step that didn't move the work toward build-ready screens was cut."
+          >
+            <Process
+              given={15}
+              used={8}
+              steps={[
+                {
+                  title: "Decode the inputs",
+                  time: "½ day",
+                  body: "Turned the 40-page technical document and the approved HTML form into a list of what each rule and question means for the person using the screen.",
+                },
+                {
+                  title: "Desk research",
+                  time: "½ day",
+                  body: "The sources below — the inputs, videos, similar platforms, search.",
+                },
+                {
+                  title: "Wireframes",
+                  body: "Low-fidelity drafts of the whole surveyor flow and the first officer dashboards, with an AI-assisted first pass.",
+                },
+                {
+                  title: "Peer review",
+                  body: "Walked the internal design team through the flows and folded in their feedback.",
+                },
+                {
+                  title: "Stakeholder review",
+                  body: "Stakeholders were aligned with the direction; they asked for branding and minor UI changes.",
+                },
+                {
+                  title: "High fidelity",
+                  body: "Build-ready screens for the app and the portals. A second designer joined on day 3 to take the District Officer flow and the login screens.",
+                },
+              ]}
+            />
+          </PaperSection>
+
+          {/* 7 · Desk research */}
+          <PaperSection
+            label={["Desk", "Research"]}
+            headline="**What I studied** before drawing a screen"
+            bubble={{ glyph: "த", label: "Tamil script" }}
+            caption="Research was desk-based and took half a day — five sources, each tied to a decision."
+            side="right"
+          >
+            <ResearchTable
+              rows={[
+                {
+                  source: "The approved HTML survey form",
+                  looked:
+                    "Every question, section and required field the Ministry had already signed off.",
+                  led: "**The app's 11 short sections,** built around the approved questions — the questions themselves didn't change.",
+                },
+                {
+                  source: "The 40-page technical document",
+                  looked:
+                    "Who the users are, what each role can do, and the rules the system must follow: offline use, consent, location.",
+                  led: "**The four personas** and the role chain that follow.",
+                },
+                {
+                  source: "Videos of field survey apps in use",
+                  looked: "How surveyors move through long forms while talking to a household.",
+                  led: "**Short sections that save as you go,** with progress always visible.",
+                },
+                {
+                  source: "Workflows of similar platforms",
+                  looked: "How dashboards for different officer levels are organised.",
+                  led: "**One portal layout for every officer,** scoped to their region.",
+                },
+                {
+                  source: "Web search",
+                  looked: "Patterns for consent and for apps used in many languages.",
+                  led: "**Language chosen on the first screen,** and consent written in plain words.",
+                },
+              ]}
+            />
+          </PaperSection>
+
+          {/* 8 · Who I designed for */}
+          <PaperSection
             label={["Who I", "Designed for"]}
             headline="Four people use Survey Setu, **each one level above the last**"
             bubble={{ glyph: "ಕ", label: "Kannada script" }}
@@ -428,84 +548,8 @@ export default function SurveySetuPage() {
           </PaperSection>
         </div>
 
-        {/* Act 4 · Process */}
-        <div id="process">
-          {/* 7 · Desk research */}
-          <PaperSection
-            label={["Desk", "Research"]}
-            headline="**What I studied** before drawing a screen"
-            bubble={{ glyph: "த", label: "Tamil script" }}
-            caption="Research was desk-based and took half a day — four sources, each tied to a decision."
-            side="right"
-          >
-            <ResearchTable
-              rows={[
-                {
-                  source: "The 40-page technical document",
-                  looked:
-                    "Who the users are, what each role can do, and the rules the system must follow: offline use, consent, location.",
-                  led: "**The four personas** and the role chain above.",
-                },
-                {
-                  source: "Videos of field survey apps in use",
-                  looked: "How surveyors move through long forms while talking to a household.",
-                  led: "**Short sections that save as you go,** with progress always visible.",
-                },
-                {
-                  source: "Workflows of similar platforms",
-                  looked: "How dashboards for different officer levels are organised.",
-                  led: "**One portal layout for every officer,** scoped to their region.",
-                },
-                {
-                  source: "Web search",
-                  looked: "Patterns for consent and for apps used in many languages.",
-                  led: "**Language chosen on the first screen,** and consent written in plain words.",
-                },
-              ]}
-            />
-          </PaperSection>
-
-          {/* 8 · Process */}
-          <PaperSection
-            label={["The", "Process"]}
-            headline="15 days given, **8 days used**"
-            bubble={{ glyph: "ଓ", label: "Odia script" }}
-            caption="Every step that didn't move the work toward build-ready screens was cut."
-          >
-            <Process
-              given={15}
-              used={8}
-              steps={[
-                {
-                  title: "Decode the document",
-                  time: "½ day",
-                  body: "Turned the 40-page technical document into a list of what each rule means for the person using the screen.",
-                },
-                {
-                  title: "Desk research",
-                  time: "½ day",
-                  body: "The four sources above — videos, similar platforms, search.",
-                },
-                {
-                  title: "Wireframes",
-                  body: "Low-fidelity drafts of the whole surveyor flow and the first officer dashboards, with an AI-assisted first pass.",
-                },
-                {
-                  title: "Peer review",
-                  body: "Walked the internal design team through the flows and folded in their feedback.",
-                },
-                {
-                  title: "Stakeholder review",
-                  body: "Stakeholders were aligned with the direction; they asked for branding and minor UI changes.",
-                },
-                {
-                  title: "High fidelity",
-                  body: "Build-ready screens for the app and the portals. A second designer joined on day 3 to take the District Officer flow and the login screens.",
-                },
-              ]}
-            />
-          </PaperSection>
-
+        {/* Act · Design */}
+        <div id="design">
           {/* 9 · User flows */}
           <PaperSection
             label={["User", "Flows"]}
@@ -601,11 +645,32 @@ export default function SurveySetuPage() {
               ]}
             />
           </PaperSection>
+
+          {/* 11 · Branding */}
+          <BrandingStyle note="I designed the wordmark: सर्वे सेतु (“Survey Bridge”) set in two weights, in the Ministry's green. It appears on the splash screen, in the app and across the portals." />
+
+          {/* 12 · Branding: type and colour, from the MoTA design system */}
+          <TypeAndColour
+            note="From the MoTA design system: Noto Sans, from a type family with versions for Indian scripts, and the Ministry's green as the primary colour, with separate colours for success, warning and danger."
+            swatches={[
+              [
+                { hex: "#057724", name: "Primary" },
+                { hex: "#222223", name: "Secondary", ring: true },
+                { hex: "#FFFFFF", name: "Neutral 0", dark: true },
+                { hex: "#727272", name: "Text hint" },
+              ],
+              [
+                { hex: "#3C9718", name: "Success" },
+                { hex: "#B77224", name: "Warning" },
+                { hex: "#B7131A", name: "Danger" },
+              ],
+            ]}
+          />
         </div>
 
-        {/* Act 5 · Solution */}
+        {/* Act · Solution */}
         <div id="solution">
-          {/* 11 · Design decisions — field app */}
+          {/* 13 · Design decisions — field app */}
           <InkStatement
             label={["Design decisions ·", "Field app"]}
             headline="Every screen answers **one question for the surveyor**"
@@ -694,7 +759,7 @@ export default function SurveySetuPage() {
             ]}
           />
 
-          {/* 12 · Design decisions — portals */}
+          {/* 14 · Design decisions — portals */}
           <PaperSection
             className="pt-section"
             label={["Design decisions ·", "Portals"]}
@@ -771,7 +836,7 @@ export default function SurveySetuPage() {
             ]}
           />
 
-          {/* 13 · Accessibility & language */}
+          {/* 15 · Accessibility & language */}
           <PaperSection
             className="pt-section"
             label={["Accessibility", "& Language"]}
@@ -802,29 +867,11 @@ export default function SurveySetuPage() {
               <PhoneCard {...APP.flagged} className="aspect-[1/1.02]" />
             </div>
           </PaperSection>
-
-          {/* 14 · Design system */}
-          <TypeAndColour
-            note="From the MoTA design system: Noto Sans, from a type family with versions for Indian scripts, and the Ministry's green as the primary colour, with separate colours for success, warning and danger."
-            swatches={[
-              [
-                { hex: "#222223", name: "Secondary", ring: true },
-                { hex: "#FFFFFF", name: "Neutral 0", dark: true },
-                { hex: "#727272", name: "Text hint" },
-              ],
-              [
-                { hex: "#057724", name: "Primary" },
-                { hex: "#3C9718", name: "Success" },
-                { hex: "#B77224", name: "Warning" },
-                { hex: "#B7131A", name: "Danger" },
-              ],
-            ]}
-          />
         </div>
 
-        {/* Act 6 · Outcome */}
+        {/* Act · Outcome */}
         <div id="outcome">
-          {/* 15 · Outcome */}
+          {/* 16 · Outcome */}
           <Impact
             title="Signed off first time, live three months later"
             body="Stakeholders signed off without a rework round. Engineering built from the high-fidelity screens, and the app went live three months after sign-off."
@@ -837,7 +884,7 @@ export default function SurveySetuPage() {
             ]}
           />
 
-          {/* 16 · Reflection */}
+          {/* 17 · Reflection */}
           <NextChapter
             headline="What I'd **do differently** next time"
             bubble={{ glyph: "ಕ", label: "Kannada script" }}
@@ -862,7 +909,7 @@ export default function SurveySetuPage() {
           <MoreCases />
         </Band>
 
-        {/* 17 · Thanks */}
+        {/* 18 · Thanks */}
         <Thanks
           linkedin={linkedin}
           phone={APP.splash}

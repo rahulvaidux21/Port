@@ -9,6 +9,7 @@ import { Browser, Phone, type Shot } from "./frames";
 import { CountUp, DayBar, Parallax, Reveal, ScrubText } from "./motion";
 import {
   CompareSlider,
+  FormWindow,
   PinnedPhone,
   RoleSwitcher,
   WireframeTrack,
@@ -361,13 +362,15 @@ export function Hero({
   rightLabel,
   back,
   front,
-  phone,
+  device,
 }: {
   leftLabel: string;
   rightLabel: string;
   back: string;
   front: string;
-  phone: Shot;
+  /** A finished device mockup (bezel included, transparent corners), drawn
+      as-is rather than inside the Phone frame. */
+  device: Shot & { width: number; height: number };
 }) {
   return (
     <Band className="pt-6 md:pt-8">
@@ -389,7 +392,15 @@ export function Hero({
             {back}
           </p>
           <div className="sv-intro-up relative z-10 mx-auto -mt-[clamp(1.4rem,6vw,4.75rem)] h-[clamp(300px,52vw,560px)] w-[clamp(200px,29vw,330px)] overflow-hidden">
-            <Phone src={phone.src} alt={phone.alt} priority sizes="330px" />
+            <Image
+              src={device.src}
+              alt={device.alt}
+              width={device.width}
+              height={device.height}
+              priority
+              sizes="330px"
+              className="h-auto w-full drop-shadow-[0_30px_40px_rgba(0,0,0,0.35)]"
+            />
           </div>
           {/* Script discs flanking the phone — two of the 21 languages,
               drifting at different speeds as the page scrolls. */}
@@ -570,6 +581,64 @@ export function BrandingStyle({ note }: { note: string }) {
         </div>
       </Shell>
     </Band>
+  );
+}
+
+/* ── What I was handed ─────────────────────────────────────────────── */
+
+/** The inputs before any design: the client's approved form at full width,
+    in a window the reader scrolls, then every input — and the one thing
+    that wasn't there — in a row beneath it. */
+export function Inputs({
+  form,
+  items,
+}: {
+  form: Shot & { width: number; height: number; url: string; label: string };
+  items: { kind: string; title: string; body: string; missing?: boolean }[];
+}) {
+  return (
+    <>
+      <Reveal y={50}>
+        <FormWindow {...form} />
+      </Reveal>
+      <ol className={cn("mt-block grid grid-cols-1 border-l border-t md:grid-cols-3", DASHED)}>
+        {items.map((it, i) => (
+          <li key={it.title} className={cn("flex flex-col border-b border-r p-5 md:p-6", DASHED)}>
+            <Reveal delay={i * 0.1} y={24} className="flex flex-1 flex-col justify-between gap-8">
+              <div className="flex items-center justify-between gap-3">
+                <span
+                  aria-hidden
+                  className="text-[clamp(2rem,3vw,2.6rem)] font-light leading-none text-sv-mute/50"
+                >
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <span
+                  className={cn(
+                    "rounded-full px-3 py-1 text-xs",
+                    it.missing
+                      ? "border border-dashed border-hairline/25 text-sv-mute"
+                      : "bg-sv-card text-text-secondary"
+                  )}
+                >
+                  {it.kind}
+                </span>
+              </div>
+              <div className="flex flex-col gap-2">
+                <p
+                  className={cn(
+                    "text-lg font-medium leading-tight tracking-[-0.01em]",
+                    it.missing && "text-sv-mute"
+                  )}
+                >
+                  {it.title}
+                </p>
+                <p className={cn(SMALL, "text-text-secondary")}>{it.body}</p>
+              </div>
+            </Reveal>
+          </li>
+        ))}
+      </ol>
+    </>
   );
 }
 
@@ -1159,7 +1228,7 @@ export function TypeAndColour({
       />
       <Shell className={cn("relative flex flex-col gap-block", notoSans.className)}>
         <div className="flex flex-col gap-4">
-          <SectionLabel muted="Design system ·" strong="Type and colour" tone="ink" />
+          <SectionLabel muted="Branding ·" strong="Type and colour" tone="ink" />
           <p className="max-w-[560px] text-sm leading-[1.6] text-white/70">{note}</p>
         </div>
         <p

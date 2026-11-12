@@ -12,7 +12,7 @@ import Image from "next/image";
 import { animate, motion, useInView, useReducedMotion } from "framer-motion";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-import { Check, ChevronsLeftRight, CloudOff, Cloud, Save, Send } from "lucide-react";
+import { ArrowUpRight, Check, ChevronsLeftRight, CloudOff, Cloud, Save, Send } from "lucide-react";
 import { EXPO_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
 import { Browser, Phone, Sheet, type Shot } from "./frames";
@@ -614,6 +614,107 @@ export function OfflineStory({
             )}
           </div>
         </div>
+      </div>
+    </div>
+  );
+}
+
+/* ── 6 · The client's approved form, in a window you can scroll ────── */
+
+/** The full approved form — a sharp, full-length capture of the client's
+    HTML link — inside a browser window the reader scrolls themselves. While
+    it's on screen and untouched, it drifts slowly downward to show there's
+    more; any wheel, touch, drag or key hands control to the reader.
+    `data-lenis-prevent` lets the wheel scroll the window, not the page. */
+export function FormWindow({
+  src,
+  alt,
+  width,
+  height,
+  url,
+  label,
+}: Shot & { width: number; height: number; url: string; label: string }) {
+  const box = useRef<HTMLDivElement>(null);
+  const inView = useInView(box, { margin: "-20% 0px" });
+  const ok = useMotionOK();
+  const [touched, setTouched] = useState(false);
+
+  useEffect(() => {
+    const el = box.current;
+    if (!el || !ok || !inView || touched) return;
+    let raf = 0;
+    let last = 0;
+    let acc = el.scrollTop;
+    const tick = (t: number) => {
+      if (last) {
+        acc = Math.min(acc + ((t - last) / 1000) * 38, el.scrollHeight - el.clientHeight);
+        el.scrollTop = acc;
+      }
+      last = t;
+      if (acc < el.scrollHeight - el.clientHeight) raf = requestAnimationFrame(tick);
+    };
+    const start = window.setTimeout(() => (raf = requestAnimationFrame(tick)), 1200);
+    return () => {
+      window.clearTimeout(start);
+      cancelAnimationFrame(raf);
+    };
+  }, [ok, inView, touched]);
+
+  const take = () => setTouched(true);
+
+  return (
+    <div className="flex flex-col gap-3">
+      <div className="overflow-hidden rounded-[12px] bg-white shadow-[0_30px_60px_-30px_rgba(0,0,0,0.5)] ring-1 ring-black/10 md:rounded-[16px]">
+        <div className="flex h-9 items-center gap-1.5 bg-[#ececec] px-3 md:h-10 md:px-4">
+          <span className="h-2.5 w-2.5 rounded-full bg-[#ff5f57]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#febc2e]" />
+          <span className="h-2.5 w-2.5 rounded-full bg-[#28c840]" />
+          <span className="mx-auto truncate rounded-md bg-white px-3 py-0.5 text-[11px] text-[#595959] md:text-xs">
+            {label}
+          </span>
+          <a
+            href={url}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="hidden items-center gap-1 rounded-md px-2 py-0.5 text-xs font-medium text-[#0b3478] hover:bg-white sm:inline-flex"
+          >
+            Open live form
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </a>
+        </div>
+        <div
+          ref={box}
+          data-lenis-prevent
+          tabIndex={0}
+          role="region"
+          aria-label="The approved survey form — scroll inside to read all of it"
+          onWheel={take}
+          onTouchStart={take}
+          onPointerDown={take}
+          onKeyDown={take}
+          className="h-[min(72vh,760px)] overflow-y-auto overscroll-contain [scrollbar-color:rgb(0_0_0/0.25)_transparent] focus-visible:outline-2 focus-visible:-outline-offset-2"
+        >
+          <Image
+            src={src}
+            alt={alt}
+            width={width}
+            height={height}
+            sizes="(min-width: 1184px) 1120px, 96vw"
+            className="h-auto w-full"
+          />
+        </div>
+      </div>
+      <div className="flex flex-wrap items-center justify-between gap-3 text-xs text-sv-mute">
+        <span>Scroll inside the window to read the whole form.</span>
+        <a
+          href={url}
+          target="_blank"
+          rel="noopener noreferrer"
+          className="inline-flex items-center gap-1 font-medium text-text-secondary hover:text-text-primary sm:hidden"
+        >
+          Open live form
+          <ArrowUpRight className="h-3.5 w-3.5" />
+        </a>
       </div>
     </div>
   );
