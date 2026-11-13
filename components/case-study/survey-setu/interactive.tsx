@@ -15,7 +15,7 @@ import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ArrowUpRight, Check, ChevronsLeftRight, CloudOff, Cloud, Save, Send } from "lucide-react";
 import { EXPO_OUT } from "@/lib/motion";
 import { cn } from "@/lib/utils";
-import { Browser, Phone, Sheet, type Shot } from "./frames";
+import { Browser, Mockup, Sheet, type Shot } from "./frames";
 import { Parallax, Reveal } from "./motion";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -338,42 +338,45 @@ export function PinnedPhone({
         </ul>
       </div>
       <Parallax speed={-40} className="order-1 mx-auto w-[clamp(220px,28vw,340px)] md:order-2">
-        <Phone src={phone.src} alt={phone.alt} sizes="340px">
-          {all.map((a, i) => (
-            <button
-              key={a.title}
-              type="button"
-              aria-label={`${i + 1}. ${a.title} — ${a.body}`}
-              aria-pressed={active === i}
-              onMouseEnter={() => setActive(i)}
-              onMouseLeave={() => setActive(null)}
-              onFocus={() => setActive(i)}
-              onBlur={() => setActive(null)}
-              onClick={() => setActive((v) => (v === i ? null : i))}
-              className="group absolute grid h-7 w-7 -translate-x-1/2 -translate-y-1/2 place-items-center outline-none"
-              style={{ left: `${a.pin[0]}%`, top: `${a.pin[1]}%` }}
-            >
-              <span
-                aria-hidden
-                className={cn(
-                  "absolute inset-0 rounded-full bg-sv-forest/40",
-                  active === null && "motion-safe:animate-ping"
-                )}
-                style={{ animationDelay: `${i * 0.35}s`, animationDuration: "2.4s" }}
-              />
-              <span
-                className={cn(
-                  "relative grid h-6 w-6 place-items-center rounded-full text-[11px] font-semibold shadow-[0_4px_12px_rgba(0,0,0,0.35)] ring-2 transition-transform duration-300 group-focus-visible:ring-accent",
-                  active === i
-                    ? "scale-125 bg-sv-forest text-white ring-white"
-                    : "bg-[#0c0c0d] text-white ring-white/90"
-                )}
+        {/* data-cine-media: the showcase's "stand" transition lifts this layer. */}
+        <div data-cine-media>
+          <Mockup src={phone.src} alt={phone.alt} sizes="340px">
+            {all.map((a, i) => (
+              <button
+                key={a.title}
+                type="button"
+                aria-label={`${i + 1}. ${a.title} — ${a.body}`}
+                aria-pressed={active === i}
+                onMouseEnter={() => setActive(i)}
+                onMouseLeave={() => setActive(null)}
+                onFocus={() => setActive(i)}
+                onBlur={() => setActive(null)}
+                onClick={() => setActive((v) => (v === i ? null : i))}
+                className="group absolute grid h-7 w-7 -translate-x-1/2 -translate-y-1/2 place-items-center outline-none"
+                style={{ left: `${a.pin[0]}%`, top: `${a.pin[1]}%` }}
               >
-                {i + 1}
-              </span>
-            </button>
-          ))}
-        </Phone>
+                <span
+                  aria-hidden
+                  className={cn(
+                    "absolute inset-0 rounded-full bg-sv-forest/40",
+                    active === null && "motion-safe:animate-ping"
+                  )}
+                  style={{ animationDelay: `${i * 0.35}s`, animationDuration: "2.4s" }}
+                />
+                <span
+                  className={cn(
+                    "relative grid h-6 w-6 place-items-center rounded-full text-[11px] font-semibold shadow-[0_4px_12px_rgba(0,0,0,0.35)] ring-2 transition-transform duration-300 group-focus-visible:ring-accent",
+                    active === i
+                      ? "scale-125 bg-sv-forest text-white ring-white"
+                      : "bg-[#0c0c0d] text-white ring-white/90"
+                  )}
+                >
+                  {i + 1}
+                </span>
+              </button>
+            ))}
+          </Mockup>
+        </div>
       </Parallax>
       <div className="order-3 md:py-16">
         <ul className="flex flex-col gap-8 md:items-end md:justify-around">
@@ -413,6 +416,7 @@ export function WireframeTrack({ frames }: { frames: (Shot & { label: string })[
           pin: true,
           scrub: 0.6,
           anticipatePin: 1,
+          refreshPriority: 1,
           invalidateOnRefresh: true,
         },
       });

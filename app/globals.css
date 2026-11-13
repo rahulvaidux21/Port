@@ -283,22 +283,24 @@ html.lenis.lenis-stopped {
 }
 
 /* Survey Setu hero intro. CSS rather than JS so it plays at first paint —
+   fill-mode `backwards` (not `both`) so that once it ends, scroll-driven
+   transforms on the same elements can take over —
    no flash of the final state before hydration — and is simply skipped
    under reduced motion, leaving everything in place. */
 @media (prefers-reduced-motion: no-preference) {
   .sv-intro-l {
-    animation: sv-intro-x 1.1s cubic-bezier(0.16, 1, 0.3, 1) both;
+    animation: sv-intro-x 1.1s cubic-bezier(0.16, 1, 0.3, 1) backwards;
     --sv-from: -9%;
   }
   .sv-intro-r {
-    animation: sv-intro-x 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.12s both;
+    animation: sv-intro-x 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.12s backwards;
     --sv-from: 9%;
   }
   .sv-intro-up {
-    animation: sv-intro-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s both;
+    animation: sv-intro-up 1.2s cubic-bezier(0.16, 1, 0.3, 1) 0.2s backwards;
   }
   .sv-intro-pop {
-    animation: sv-intro-pop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s both;
+    animation: sv-intro-pop 0.9s cubic-bezier(0.34, 1.56, 0.64, 1) 0.6s backwards;
   }
 }
 

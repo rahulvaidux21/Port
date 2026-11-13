@@ -101,3 +101,88 @@ export function Browser({
     </div>
   );
 }
+
+/* ── Device mockups from the Figma "Real Mockups" section ──────────── */
+
+/** Where the screen sits inside a Samsung mockup image (731×1499), as a
+    percentage of the image — measured once; every Samsung export shares it. */
+const MOCK_SCREEN = { left: "3.42%", right: "3.56%", top: "1.6%", bottom: "1.6%" };
+
+/** A straight phone mockup — bezel, notch and shadow baked into a
+    transparent WebP. `children` are laid over the screen in screen
+    coordinates (left/top % of the screen), e.g. numbered pins. */
+export function Mockup({
+  src,
+  alt,
+  className,
+  priority,
+  sizes = "320px",
+  children,
+}: Shot & { className?: string; priority?: boolean; sizes?: string; children?: ReactNode }) {
+  return (
+    <div className={cn("relative", className)}>
+      <Image
+        src={src}
+        alt={alt}
+        width={731}
+        height={1499}
+        sizes={sizes}
+        priority={priority}
+        className="h-auto w-full drop-shadow-[0_30px_40px_rgba(0,0,0,0.35)]"
+      />
+      {children && (
+        <div className="absolute" style={MOCK_SCREEN}>
+          {children}
+        </div>
+      )}
+    </div>
+  );
+}
+
+/** A photographed device scene. The Figma scenes are shot on a #444 canvas,
+    so the plate is the same grey and the baked-in shadows blend into it.
+    `inner` marks the image for scroll effects that zoom it inside the plate. */
+export function Plate({
+  src,
+  alt,
+  width,
+  height,
+  className,
+  sizes = "(min-width: 1184px) 1120px, 96vw",
+  fit = "cover",
+  bg = "#444444",
+  position,
+  priority,
+  children,
+}: Shot & {
+  width: number;
+  height: number;
+  className?: string;
+  sizes?: string;
+  fit?: "cover" | "contain";
+  bg?: string;
+  /** object-position for cover crops, e.g. "72% 50%" to keep a subject in frame. */
+  position?: string;
+  priority?: boolean;
+  children?: ReactNode;
+}) {
+  return (
+    <div
+      className={cn("relative overflow-hidden rounded-plate", className)}
+      style={{ backgroundColor: bg }}
+    >
+      <Image
+        data-cine-inner
+        src={src}
+        alt={alt}
+        width={width}
+        height={height}
+        sizes={sizes}
+        priority={priority}
+        className={cn("h-full w-full", fit === "cover" ? "object-cover" : "object-contain")}
+        style={position ? { objectPosition: position } : undefined}
+      />
+      {children}
+    </div>
+  );
+}

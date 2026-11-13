@@ -5,7 +5,7 @@ import { ArrowRight } from "lucide-react";
 import { gsap } from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { cn } from "@/lib/utils";
-import { Browser, Phone, type Shot } from "./frames";
+import { Browser, Mockup, type Shot } from "./frames";
 import { Reveal } from "./motion";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -100,7 +100,7 @@ function Scene({ people }: { people: Persona[] }) {
 
       gsap.set(words.slice(1), { autoAlpha: 0, yPercent: 40 });
       gsap.set(cards.slice(1), { autoAlpha: 0, y: 70 });
-      gsap.set(devices.slice(1), { autoAlpha: 0, y: 180, rotate: 4 });
+      gsap.set(devices.slice(1), { autoAlpha: 0, y: 180 });
       gsap.set(q("[data-rings]"), { scale: scaleFor(0) });
 
       let current = -1;
@@ -124,6 +124,7 @@ function Scene({ people }: { people: Persona[] }) {
           pin: true,
           scrub: 0.6,
           anticipatePin: 1,
+          refreshPriority: 1,
           invalidateOnRefresh: true,
         },
         onUpdate: () => mark(Math.min(n - 1, Math.floor(tl.time() + 0.4))),
@@ -146,8 +147,8 @@ function Scene({ people }: { people: Persona[] }) {
           .to(words[k + 1], { autoAlpha: 1, yPercent: 0, duration: 0.45 }, at + 0.15)
           .to(cards[k], { autoAlpha: 0, y: -60, duration: 0.4 }, at)
           .to(cards[k + 1], { autoAlpha: 1, y: 0, duration: 0.45 }, at + 0.15)
-          .to(devices[k], { autoAlpha: 0, y: -160, rotate: -4, duration: 0.45 }, at)
-          .to(devices[k + 1], { autoAlpha: 1, y: 0, rotate: 0, duration: 0.5 }, at + 0.1);
+          .to(devices[k], { autoAlpha: 0, y: -160, duration: 0.45 }, at)
+          .to(devices[k + 1], { autoAlpha: 1, y: 0, duration: 0.5 }, at + 0.1);
       }
       tl.set({}, {}, total);
     }, el);
@@ -218,11 +219,11 @@ function Scene({ people }: { people: Persona[] }) {
               {people.map((p) => (
                 <div key={p.role} data-device className="absolute inset-0 grid place-items-center">
                   {p.device.kind === "phone" ? (
-                    <Phone
+                    <Mockup
                       src={p.device.src}
                       alt={p.device.alt}
                       sizes="260px"
-                      className="w-[min(25vh,250px)] rotate-[-5deg]"
+                      className="w-[min(26vh,240px)]"
                     />
                   ) : (
                     <Browser
@@ -231,7 +232,7 @@ function Scene({ people }: { people: Persona[] }) {
                       height={p.device.height ?? 1685}
                       label={`Survey Setu · ${p.role}`}
                       sizes="560px"
-                      className="w-full max-w-[560px] rotate-[2deg] md:rounded-[12px]"
+                      className="w-full max-w-[560px] md:rounded-[12px]"
                     />
                   )}
                 </div>

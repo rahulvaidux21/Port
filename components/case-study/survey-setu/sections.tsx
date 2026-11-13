@@ -1,11 +1,11 @@
 import type { CSSProperties, ReactNode } from "react";
 import Image from "next/image";
 import { notoSans } from "@/app/fonts/fonts";
-import { ArrowRight, ArrowUpRight, ImageIcon } from "lucide-react";
+import { ArrowUpRight, BarChart3, ImageIcon, KeyRound, Settings2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 import { Shell } from "@/components/case-study/ux4g/sections";
 import { Wordmark } from "./Wordmark";
-import { Browser, Phone, type Shot } from "./frames";
+import { Browser, Mockup, Phone, Plate, type Shot } from "./frames";
 import { CountUp, DayBar, Parallax, Reveal, ScrubText } from "./motion";
 import {
   CompareSlider,
@@ -16,7 +16,9 @@ import {
   type Pinned,
 } from "./interactive";
 
-export { Browser, Phone, type Shot };
+export { Browser, Mockup, Phone, Plate, type Shot };
+
+export type Scene = Shot & { width: number; height: number };
 
 /* ────────────────────────────────────────────────────────────────────
    Survey Setu — an editorial case-study layout.
@@ -297,7 +299,7 @@ export function PhotoSlot({
   );
 }
 
-/** A white card that frames a phone, as in the paired image rows. */
+/** A card that frames a straight phone mockup, cropped at the bottom. */
 export function PhoneCard({
   src,
   alt,
@@ -319,9 +321,9 @@ export function PhoneCard({
         className="pointer-events-none absolute inset-0 text-hairline/[0.08]"
         style={DOTS}
       />
-      <Reveal y={90} className="relative -mb-[18%] w-[min(64%,280px)]">
-        <Phone src={src} alt={alt} className="rotate-[-4deg]" />
-      </Reveal>
+      <div data-cine-media className="relative -mb-[24%] w-[min(58%,250px)]">
+        <Mockup src={src} alt={alt} sizes="250px" />
+      </div>
     </div>
   );
 }
@@ -366,7 +368,9 @@ export function Hero({
   device: Shot & { width: number; height: number };
 }) {
   return (
-    <Band className="pt-6 md:pt-8">
+    // Above the next section and unclipped, so the phone can zoom and turn
+    // out over it on the way out (Cine preset "hero").
+    <Band className="relative z-10 overflow-visible pt-6 md:pt-8">
       <Shell>
         <div className="flex items-center justify-between gap-4 text-sm font-medium md:text-base">
           <span>{leftLabel}</span>
@@ -377,6 +381,7 @@ export function Hero({
               first paint with no flash and needs no JavaScript. */}
           <p
             aria-hidden
+            data-cine-word="l"
             className={cn(
               GIANT,
               "sv-intro-l whitespace-nowrap text-center text-[clamp(2.6rem,11.6vw,9.4rem)] text-sv-mute/45"
@@ -384,7 +389,10 @@ export function Hero({
           >
             {back}
           </p>
-          <div className="sv-intro-up relative z-10 mx-auto -mt-[clamp(1.4rem,6vw,4.75rem)] h-[clamp(300px,52vw,560px)] w-[clamp(200px,29vw,330px)] overflow-hidden">
+          <div
+            data-cine-media
+            className="sv-intro-up relative z-10 mx-auto -mt-[clamp(1.4rem,6vw,4.75rem)] h-[clamp(300px,52vw,560px)] w-[clamp(200px,29vw,330px)] overflow-hidden"
+          >
             <Image
               src={device.src}
               alt={device.alt}
@@ -404,6 +412,7 @@ export function Hero({
           >
             <span
               aria-hidden
+              data-cine-item
               className="sv-intro-pop grid h-[78%] w-[78%] place-items-center rounded-full bg-sv-forest text-[clamp(2rem,4.4vw,3.6rem)] font-semibold text-white"
             >
               हिं
@@ -416,6 +425,7 @@ export function Hero({
           >
             <span
               aria-hidden
+              data-cine-item
               className="sv-intro-pop grid h-[78%] w-[78%] place-items-center rounded-full bg-[#0c0c0d] text-[clamp(1.8rem,4vw,3.3rem)] font-semibold text-white"
               style={{ animationDelay: "0.85s" }}
             >
@@ -425,6 +435,7 @@ export function Hero({
         </div>
       </Shell>
       <p
+        data-cine-word="r"
         className={cn(
           GIANT,
           "sv-intro-r relative z-20 -mt-[clamp(1.5rem,5vw,4rem)] whitespace-nowrap pb-[0.06em] text-center text-[clamp(3.6rem,17vw,13.5rem)]"
@@ -451,11 +462,13 @@ export function ProjectTitle({
   return (
     <Band className="py-section">
       <Shell className="flex flex-col gap-block">
-        <SectionLabel muted="Project" strong="Overview" />
-        <h1 className="text-[clamp(2.1rem,5.2vw,4.5rem)] font-medium leading-[1.05] tracking-[-0.035em]">
-          <ScrubText text={quote} />
-        </h1>
-        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
+        <div data-cine-head className="flex flex-col gap-block">
+          <SectionLabel muted="Project" strong="Overview" />
+          <h1 className="text-[clamp(2.1rem,5.2vw,4.5rem)] font-medium leading-[1.05] tracking-[-0.035em]">
+            <ScrubText text={quote} />
+          </h1>
+        </div>
+        <div data-cine-body className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-8">
           <dl className="order-2 grid grid-cols-1 content-start gap-x-6 gap-y-5 sm:grid-cols-2 md:order-1 md:max-w-[480px]">
             {meta.map((m, i) => (
               <Reveal key={m.label} delay={i * 0.06} y={16} className="flex flex-col gap-1">
@@ -471,7 +484,7 @@ export function ProjectTitle({
             </p>
           </Reveal>
         </div>
-        <div className="flex flex-col gap-4">
+        <div data-cine-item className="flex flex-col gap-4">
           <p className="text-sm font-medium">Key product features</p>
           <ul className="flex flex-wrap gap-y-2">
             {features.map((f, i) => (
@@ -499,17 +512,20 @@ export function ProjectTitle({
 }
 
 /* ── Branding style — the सर्वे सेतु wordmark ─────────────────────── */
-export function BrandingStyle({ note }: { note: string }) {
+export function BrandingStyle({ note, photo }: { note: string; photo: Scene }) {
   return (
     <Band className="pb-section">
       <Shell className="flex flex-col gap-block">
-        <div className="flex flex-col gap-4">
+        <div data-cine-head className="flex flex-col gap-4">
           <SectionLabel muted="Branding" strong="Style" />
           <p className={cn(SMALL, "max-w-[560px] text-text-secondary")}>{note}</p>
         </div>
         <div className="flex flex-col gap-3">
           <Reveal y={40} className="grid grid-cols-1 gap-3 md:grid-cols-[2fr_1fr]">
-            <div className="flex flex-wrap items-center justify-center gap-6 rounded-card bg-sv-card px-6 py-12 md:justify-between md:px-12 md:py-20">
+            <div
+              data-cine-item
+              className="flex flex-wrap items-center justify-center gap-6 rounded-card bg-sv-card px-6 py-12 md:justify-between md:px-12 md:py-20"
+            >
               <div className="flex items-center gap-4 md:gap-6">
                 <MarkTile
                   tone="green"
@@ -527,7 +543,10 @@ export function BrandingStyle({ note }: { note: string }) {
                 <MarkTile tone="green" className="h-8 w-8 md:h-9 md:w-9" />
               </div>
             </div>
-            <div className="flex items-center justify-center rounded-card bg-sv-card p-8">
+            <div
+              data-cine-item
+              className="flex items-center justify-center rounded-card bg-sv-card p-8"
+            >
               <div className="flex gap-3 rounded-[20px] bg-sv-band p-3">
                 <MarkTile className="h-16 w-16 md:h-20 md:w-20" />
                 <span
@@ -550,13 +569,18 @@ export function BrandingStyle({ note }: { note: string }) {
             </div>
           </Reveal>
           <Reveal y={40} delay={0.1} className="grid grid-cols-1 gap-3 md:grid-cols-[1fr_2fr]">
-            <PhotoSlot
-              className="aspect-[4/5] md:aspect-auto"
-              label="Field photograph"
-              hint="Pending — a surveyor in a tribal village, phone in hand, with the wordmark set large behind them."
-            />
+            <div data-cine-media>
+              <Plate
+                {...photo}
+                className="aspect-[4/5] h-full md:aspect-auto"
+                sizes="(min-width: 768px) 380px, 92vw"
+              />
+            </div>
             {/* The lockup plate stays white in both themes — the wordmark is drawn for it. */}
-            <div className="flex min-h-[260px] flex-col items-center justify-center gap-6 rounded-card bg-white px-6 py-14 md:flex-row md:gap-10 md:py-24">
+            <div
+              data-cine-item
+              className="flex min-h-[260px] flex-col items-center justify-center gap-6 rounded-card bg-white px-6 py-14 md:flex-row md:gap-10 md:py-24"
+            >
               <Wordmark
                 className="h-auto w-[200px] text-[#057724] md:w-[260px]"
                 title="सर्वे सेतु — Survey Setu wordmark"
@@ -577,6 +601,55 @@ export function BrandingStyle({ note }: { note: string }) {
   );
 }
 
+/* ── The Context — where the work happens ──────────────────────────── */
+
+/** The field, shown before it's described: a full-width scene that opens
+    like an iris (Cine preset "iris"), then four stat tiles that set the
+    constraints in numbers. */
+export function ContextScene({
+  image,
+  caption,
+  stats,
+}: {
+  image: Scene;
+  caption: string;
+  stats: { value: string; label: string; body: string; art?: ReactNode }[];
+}) {
+  return (
+    <>
+      <div data-cine-media>
+        <Plate {...image} position="74% 50%" className="aspect-[4/5] sm:aspect-[16/9]">
+          <div className="absolute inset-x-0 bottom-0 bg-gradient-to-t from-black/75 via-black/30 to-transparent p-5 pt-24 md:p-8 md:pt-32">
+            <p className="max-w-[460px] text-sm leading-[1.6] text-white/90 md:text-base">
+              {caption}
+            </p>
+          </div>
+        </Plate>
+      </div>
+      <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        {stats.map((st) => (
+          <div
+            key={st.label}
+            data-cine-item
+            className="flex min-h-[230px] flex-col justify-between gap-8 rounded-card bg-sv-card p-6"
+          >
+            <div className="flex items-start justify-between gap-3">
+              <span className="whitespace-nowrap text-[clamp(2.4rem,3.6vw,3.4rem)] font-medium leading-none tracking-[-0.045em]">
+                <CountUp value={st.value} />
+              </span>
+              {st.art}
+            </div>
+            <div className="flex flex-col gap-1.5">
+              <p className="text-base font-medium leading-tight">{st.label}</p>
+              <p className={cn(SMALL, "text-text-secondary")}>{st.body}</p>
+            </div>
+          </div>
+        ))}
+      </div>
+    </>
+  );
+}
+
 /* ── What I was handed ─────────────────────────────────────────────── */
 
 /** The inputs before any design: the client's approved form at full width,
@@ -591,12 +664,16 @@ export function Inputs({
 }) {
   return (
     <>
-      <Reveal y={50}>
+      <div data-cine-media>
         <FormWindow {...form} />
-      </Reveal>
+      </div>
       <ol className={cn("mt-block grid grid-cols-1 border-l border-t md:grid-cols-3", DASHED)}>
         {items.map((it, i) => (
-          <li key={it.title} className={cn("flex flex-col border-b border-r p-5 md:p-6", DASHED)}>
+          <li
+            key={it.title}
+            data-cine-item
+            className={cn("flex flex-col border-b border-r p-5 md:p-6", DASHED)}
+          >
             <Reveal delay={i * 0.1} y={24} className="flex flex-1 flex-col justify-between gap-8">
               <div className="flex items-center justify-between gap-3">
                 <span
@@ -671,6 +748,7 @@ export function NumberGrid({ cells, cols = 4 }: { cells: Cell[]; cols?: 3 | 4 })
         return (
           <div
             key={i}
+            data-cine-item
             className={cn(base, "flex min-h-[200px] flex-col p-5 md:min-h-[260px] md:p-6")}
           >
             <Reveal
@@ -715,6 +793,7 @@ export function PaperSection({
   children,
   className,
   id,
+  still,
 }: {
   label: [string, string];
   headline: string;
@@ -724,16 +803,22 @@ export function PaperSection({
   children?: ReactNode;
   className?: string;
   id?: string;
+  /** Keep the body untransformed — required when it holds a pinned scene. */
+  still?: boolean;
 }) {
   return (
     <Band id={id} className={cn("pb-section", className)}>
       <Shell className="flex flex-col gap-section">
-        <div className="flex flex-col gap-block">
+        <div data-cine-head className="flex flex-col gap-block">
           <SectionLabel muted={label[0]} strong={label[1]} />
           <HeadlineBlock headline={headline} bubble={bubble} caption={caption} side={side} />
         </div>
       </Shell>
-      {children && <Shell className="mt-section flex flex-col gap-3">{children}</Shell>}
+      {children && (
+        <div {...(still ? {} : { "data-cine-body": "" })}>
+          <Shell className="mt-section flex flex-col gap-3">{children}</Shell>
+        </div>
+      )}
     </Band>
   );
 }
@@ -822,6 +907,7 @@ export function DesignGoals({
   label,
   headline,
   caption,
+  chain,
   hmw,
   story,
   goals,
@@ -829,6 +915,8 @@ export function DesignGoals({
   label: [string, string];
   headline: string;
   caption: ReactNode;
+  /** The cost of one lost visit, step by step — drawn as a red chain. */
+  chain?: { title: string; steps: { title: string; body: string }[] };
   hmw: { who: string; text: string }[];
   /** Optional set piece between the questions and the goals. */
   story?: ReactNode;
@@ -837,7 +925,7 @@ export function DesignGoals({
   return (
     <Band tone="ink" className="py-section">
       <Shell className="flex flex-col gap-section">
-        <div className="flex flex-col gap-block">
+        <div data-cine-head className="flex flex-col gap-block">
           <SectionLabel muted={label[0]} strong={label[1]} tone="ink" />
           <HeadlineBlock
             headline={headline}
@@ -847,21 +935,50 @@ export function DesignGoals({
             bubble={{ glyph: "বা", label: "Bengali script" }}
           />
         </div>
-        <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-          {hmw.map((h, i) => (
-            <Reveal
+
+        {chain && (
+          <div className="flex flex-col gap-8">
+            <p className="text-xs uppercase tracking-[0.08em] text-white/60">{chain.title}</p>
+            <div className="relative">
+              {/* The chain draws itself left to right as the section scrolls in. */}
+              <span
+                data-cine-line
+                aria-hidden
+                className="absolute left-[18px] right-0 top-[18px] hidden h-px bg-gradient-to-r from-[#e5484d] via-[#e5484d]/60 to-[#e5484d]/10 md:block"
+              />
+              <ol className="relative grid grid-cols-1 gap-6 md:grid-cols-4 md:gap-5">
+                {chain.steps.map((st, i) => (
+                  <li key={st.title} data-cine-item className="flex flex-col gap-5">
+                    <span className="grid h-9 w-9 place-items-center rounded-full bg-[#e5484d] text-sm font-semibold text-white ring-8 ring-sv-ink-band">
+                      {i + 1}
+                    </span>
+                    <div className="flex flex-1 flex-col gap-2 rounded-card border border-white/10 bg-white/[0.04] p-5 md:p-6">
+                      <p className="text-[clamp(1.35rem,2vw,1.75rem)] font-medium leading-[1.1] tracking-[-0.02em] text-white">
+                        {st.title}
+                      </p>
+                      <p className="text-sm leading-[1.6] text-white/65">{st.body}</p>
+                    </div>
+                  </li>
+                ))}
+              </ol>
+            </div>
+          </div>
+        )}
+
+        <div className="grid grid-cols-1 gap-12 md:grid-cols-2 md:gap-14">
+          {hmw.map((h) => (
+            <div
               key={h.who}
-              delay={i * 0.12}
-              y={36}
-              className="flex flex-col gap-4 rounded-card border border-white/15 p-6 md:p-8"
+              data-cine-item
+              className="flex flex-col gap-5 border-l-2 border-[#3C9718] pl-6 md:pl-8"
             >
-              <p className="text-xs uppercase tracking-[0.06em] text-white/60">
-                How might we — {h.who}
+              <p className="text-xs uppercase tracking-[0.08em] text-white/60">
+                How might we · for {h.who}
               </p>
-              <p className="text-[clamp(1.2rem,2vw,1.6rem)] font-medium leading-[1.3] tracking-[-0.01em] text-white">
+              <p className="text-[clamp(1.45rem,2.4vw,2.1rem)] font-medium leading-[1.22] tracking-[-0.02em] text-white">
                 {h.text}
               </p>
-            </Reveal>
+            </div>
           ))}
         </div>
         {story}
@@ -903,53 +1020,56 @@ export function DesignGoals({
   );
 }
 
-/* ── Photo with chat-style overlays ────────────────────────────────── */
+/* ── Device scene with chat-style overlays ──────────────────────────── */
 export function OverlayPhoto({
-  label,
-  hint,
+  image,
   bubbles,
 }: {
-  label: string;
-  hint: string;
+  image: Scene;
   bubbles: { chip: string; tone: "green" | "saffron"; text: string }[];
 }) {
   return (
     <Band className="py-3">
       <div className="mx-auto w-full max-w-[1400px] px-3">
-        <PhotoSlot
-          label={label}
-          hint={hint}
-          className="aspect-[4/5] rounded-plate sm:aspect-[16/9] md:aspect-[16/8.5]"
-        >
-          <MarkTile
-            tone="green"
-            className="absolute left-5 top-5 h-14 w-14 rounded-full md:left-10 md:top-10 md:h-20 md:w-20"
-          />
-          {bubbles.map((b, i) => (
-            <Reveal
-              key={b.text}
-              delay={0.25 + i * 0.35}
-              y={18}
-              scale={0.9}
-              className={cn(
-                "absolute hidden max-w-[260px] flex-col gap-2 rounded-[20px] bg-white p-4 text-left shadow-[0_20px_40px_-16px_rgba(0,0,0,0.3)] sm:flex",
-                i === 0
-                  ? "right-[10%] top-[14%] rounded-bl-[6px]"
-                  : "bottom-[12%] left-[12%] rounded-br-[6px]"
-              )}
-            >
-              <span
+        <div data-cine-media>
+          <Plate
+            {...image}
+            fit="contain"
+            className="aspect-[4/5] sm:aspect-[16/9] md:aspect-[16/8.5]"
+            sizes="(min-width: 1400px) 1400px, 100vw"
+          >
+            <MarkTile
+              tone="green"
+              className="absolute left-5 top-5 h-14 w-14 rounded-full md:left-10 md:top-10 md:h-20 md:w-20"
+            />
+            {bubbles.map((b, i) => (
+              <Reveal
+                key={b.text}
+                delay={0.25 + i * 0.35}
+                y={18}
+                scale={0.9}
                 className={cn(
-                  "w-fit rounded-full px-2.5 py-1 text-[11px] font-medium",
-                  b.tone === "green" ? "bg-[#DCFAD8] text-[#057724]" : "bg-[#FCE9D4] text-[#8a4a0a]"
+                  "absolute hidden max-w-[260px] flex-col gap-2 rounded-[20px] bg-white p-4 text-left shadow-[0_20px_40px_-16px_rgba(0,0,0,0.3)] sm:flex",
+                  i === 0
+                    ? "right-[8%] top-[18%] rounded-bl-[6px]"
+                    : "bottom-[16%] left-[8%] rounded-br-[6px]"
                 )}
               >
-                {b.chip}
-              </span>
-              <span className="text-[13px] leading-snug text-[#212121]">{b.text}</span>
-            </Reveal>
-          ))}
-        </PhotoSlot>
+                <span
+                  className={cn(
+                    "w-fit rounded-full px-2.5 py-1 text-[11px] font-medium",
+                    b.tone === "green"
+                      ? "bg-[#DCFAD8] text-[#057724]"
+                      : "bg-[#FCE9D4] text-[#8a4a0a]"
+                  )}
+                >
+                  {b.chip}
+                </span>
+                <span className="text-[13px] leading-snug text-[#212121]">{b.text}</span>
+              </Reveal>
+            ))}
+          </Plate>
+        </div>
       </div>
     </Band>
   );
@@ -982,7 +1102,7 @@ export function ResearchTable({
         ))}
       </div>
       {rows.map((r, i) => (
-        <div key={r.source} role="row" className={cn("border-b border-r", DASHED)}>
+        <div key={r.source} role="row" data-cine-item className={cn("border-b border-r", DASHED)}>
           <Reveal
             delay={i * 0.08}
             y={20}
@@ -1039,6 +1159,7 @@ export function Process({
         {steps.map((s, i) => (
           <li
             key={s.title}
+            data-cine-item
             className={cn("flex min-h-[200px] flex-col border-b border-r p-5 md:p-6", DASHED)}
           >
             <Reveal delay={i * 0.08} y={24} className="flex flex-1 flex-col gap-4">
@@ -1067,64 +1188,119 @@ export function Process({
   );
 }
 
-/* ── User flows ────────────────────────────────────────────────────── */
-/** Steps light up one after another, left to right, like a path walked. */
+/* ── User flows — storyboards ──────────────────────────────────────── */
+export type FlowStep = {
+  label: string;
+  note?: string;
+  key?: boolean;
+  /** A phone mockup or a portal screenshot for this step… */
+  screen?: string;
+  /** …or an icon, for steps without a screen of their own. */
+  icon?: "login" | "analytics" | "settings";
+};
+
+const FLOW_ICONS = { login: KeyRound, analytics: BarChart3, settings: Settings2 };
+
+/** Each flow as a storyboard on a dotted canvas, like a prototype flow in
+    Figma: every step shows its real screen, a connector draws itself
+    across the row as it scrolls in, and key steps are marked in green. */
 export function FlowRows({
   rows,
 }: {
-  rows: { title: string; sub: string; steps: { label: string; note?: string; key?: boolean }[] }[];
+  rows: { title: string; sub: string; device: "phone" | "browser"; steps: FlowStep[] }[];
 }) {
   return (
     <>
-      {rows.map((row) => (
-        <Reveal
-          key={row.title}
-          y={32}
-          className="flex flex-col gap-5 rounded-card bg-sv-card p-6 md:p-8"
-        >
-          <div className="flex flex-col gap-1">
-            <p className="text-lg font-medium tracking-[-0.01em]">{row.title}</p>
-            <p className="text-[13px] text-text-muted md:text-sm">{row.sub}</p>
-          </div>
-          <ol className="flex flex-wrap items-center gap-x-2 gap-y-3">
-            {row.steps.map((s, i) => (
-              <Reveal
-                as="li"
-                key={s.label}
-                delay={0.2 + i * 0.1}
-                x={-14}
-                y={0}
-                scale={0.94}
-                className="flex items-center gap-2"
-              >
+      {rows.map((row) => {
+        const thumbH = row.device === "phone" ? 186 : 132;
+        return (
+          <div
+            key={row.title}
+            className="relative overflow-hidden rounded-card bg-sv-card p-6 md:p-8"
+          >
+            <div
+              aria-hidden
+              className="pointer-events-none absolute inset-0 text-hairline/[0.1]"
+              style={DOTS}
+            />
+            <div className="relative flex flex-wrap items-end justify-between gap-3">
+              <div className="flex flex-col gap-1">
+                <p className="text-lg font-medium tracking-[-0.01em]">{row.title}</p>
+                <p className="text-[13px] text-text-muted md:text-sm">{row.sub}</p>
+              </div>
+              <span className="rounded-full bg-sv-band px-3 py-1 text-xs text-text-secondary ring-1 ring-hairline/10">
+                {row.steps.length} steps
+              </span>
+            </div>
+            <div className="relative -mx-6 mt-8 overflow-x-auto px-6 pb-2 md:mx-0 md:overflow-visible md:px-0">
+              <ol className="relative flex min-w-max items-start gap-5 md:min-w-0 md:justify-between md:gap-2">
                 <span
-                  className={cn(
-                    "flex flex-col rounded-[14px] px-4 py-2.5",
-                    s.key ? "bg-sv-forest text-white" : "bg-sv-band text-text-primary"
-                  )}
-                >
-                  <span className="text-[13px] font-medium leading-tight md:text-sm">
-                    {s.label}
-                  </span>
-                  {s.note && (
-                    <span
-                      className={cn(
-                        "text-[11px] leading-tight md:text-xs",
-                        s.key ? "text-white/80" : "text-text-muted"
-                      )}
+                  data-cine-line
+                  aria-hidden
+                  className="absolute left-10 right-10 h-0.5 rounded-full bg-sv-forest/60"
+                  style={{ top: thumbH / 2 }}
+                />
+                {row.steps.map((st, i) => {
+                  const Icon = st.icon ? FLOW_ICONS[st.icon] : null;
+                  return (
+                    <li
+                      key={st.label}
+                      data-cine-item
+                      className="relative flex w-[118px] shrink-0 flex-col items-center gap-3 text-center md:w-auto md:min-w-0 md:flex-1"
                     >
-                      {s.note}
-                    </span>
-                  )}
-                </span>
-                {i < row.steps.length - 1 && (
-                  <ArrowRight aria-hidden className="h-3.5 w-3.5 shrink-0 text-sv-mute" />
-                )}
-              </Reveal>
-            ))}
-          </ol>
-        </Reveal>
-      ))}
+                      <div className="grid w-full place-items-center" style={{ height: thumbH }}>
+                        {st.screen && row.device === "phone" ? (
+                          <Mockup src={st.screen} alt="" sizes="96px" className="w-[88px]" />
+                        ) : st.screen ? (
+                          <Browser
+                            src={st.screen}
+                            alt=""
+                            height={1685}
+                            label=""
+                            sizes="180px"
+                            className="w-[min(100%,168px)] shadow-[0_16px_32px_-18px_rgba(0,0,0,0.5)] md:rounded-[8px]"
+                          />
+                        ) : (
+                          Icon && (
+                            <span className="grid h-16 w-16 place-items-center rounded-2xl bg-sv-band text-text-secondary ring-1 ring-hairline/10">
+                              <Icon className="h-6 w-6" aria-hidden />
+                            </span>
+                          )
+                        )}
+                      </div>
+                      <span
+                        className={cn(
+                          "grid h-7 w-7 place-items-center rounded-full text-xs font-semibold",
+                          st.key
+                            ? "bg-sv-forest text-white"
+                            : "bg-sv-band text-text-secondary ring-1 ring-hairline/10"
+                        )}
+                      >
+                        {i + 1}
+                      </span>
+                      <div className="flex flex-col gap-0.5 px-1">
+                        <span
+                          className={cn(
+                            "text-[13px] font-medium leading-tight md:text-sm",
+                            st.key && "text-sv-forest dark:text-sv-green"
+                          )}
+                        >
+                          {st.label}
+                        </span>
+                        {st.note && (
+                          <span className="text-[11px] leading-snug text-text-muted md:text-xs">
+                            {st.note}
+                          </span>
+                        )}
+                      </div>
+                    </li>
+                  );
+                })}
+              </ol>
+            </div>
+          </div>
+        );
+      })}
     </>
   );
 }
@@ -1145,7 +1321,7 @@ export function Wireframes({
     <Band tone="ink" className="py-section">
       <div aria-hidden className="pointer-events-none absolute inset-0" style={GRID_LINES} />
       <Shell className="relative flex flex-col gap-section">
-        <div className="flex flex-col gap-block">
+        <div data-cine-head className="flex flex-col gap-block">
           <SectionLabel muted="Low-fidelity" strong="Wireframes" tone="ink" />
           <HeadlineBlock
             headline={headline}
@@ -1175,10 +1351,9 @@ export function BeforeAfter({
   return (
     <ul className="flex flex-col gap-3">
       {pairs.map((p, i) => (
-        <Reveal
-          as="li"
+        <li
           key={p.title}
-          y={48}
+          data-cine-item
           className="grid grid-cols-1 gap-8 rounded-card bg-sv-card p-6 md:grid-cols-[1.1fr_1fr] md:items-center md:gap-12 md:p-10"
         >
           <div className="mx-auto w-full max-w-[300px]">
@@ -1197,7 +1372,7 @@ export function BeforeAfter({
               {p.why}
             </p>
           </div>
-        </Reveal>
+        </li>
       ))}
     </ul>
   );
@@ -1211,7 +1386,6 @@ export function TypeAndColour({
   note: string;
   swatches: { hex: string; name: string; ring?: boolean; dark?: boolean }[][];
 }) {
-  let n = 0;
   return (
     <Band tone="ink" className="py-section">
       <div
@@ -1220,15 +1394,16 @@ export function TypeAndColour({
         style={GRID_LINES}
       />
       <Shell className={cn("relative flex flex-col gap-block", notoSans)}>
-        <div className="flex flex-col gap-4">
+        <div data-cine-head className="flex flex-col gap-4">
           <SectionLabel muted="Branding ·" strong="Type and colour" tone="ink" />
           <p className="max-w-[560px] text-sm leading-[1.6] text-white/70">{note}</p>
         </div>
         <p
           aria-hidden
+          data-cine-word
           className={cn(
             GIANT,
-            "whitespace-nowrap text-[clamp(3.6rem,17vw,13.5rem)] tracking-[-0.03em]"
+            "origin-left whitespace-nowrap text-[clamp(3.6rem,17vw,13.5rem)] tracking-[-0.03em]"
           )}
         >
           <Parallax
@@ -1281,12 +1456,9 @@ export function TypeAndColour({
           {swatches.map((row, r) => (
             <ul key={r} className="flex flex-wrap justify-center gap-4 md:gap-6">
               {row.map((s) => (
-                <Reveal
-                  as="li"
+                <li
                   key={s.hex + s.name}
-                  delay={n++ * 0.07}
-                  y={0}
-                  scale={0.6}
+                  data-cine-item
                   className="grid h-[clamp(108px,15vw,200px)] w-[clamp(108px,15vw,200px)] place-items-center rounded-full border"
                   style={{ borderColor: s.ring ? "rgb(255 255 255 / 0.55)" : `${s.hex}99` }}
                 >
@@ -1303,7 +1475,7 @@ export function TypeAndColour({
                       <span className="opacity-80">{s.name}</span>
                     </span>
                   </span>
-                </Reveal>
+                </li>
               ))}
             </ul>
           ))}
@@ -1334,6 +1506,7 @@ export function PhoneShowcase({
   const giant = (
     <p
       aria-hidden
+      data-cine-word
       className={cn(
         GIANT,
         "relative whitespace-nowrap text-center text-[clamp(3.4rem,15.5vw,12.75rem)] text-white",
@@ -1380,6 +1553,7 @@ export function BrowserShowcase({
       <div aria-hidden className="pointer-events-none absolute inset-0" style={GRID_LINES} />
       <p
         aria-hidden
+        data-cine-word
         className={cn(
           GIANT,
           "relative whitespace-nowrap text-center text-[clamp(3.4rem,15.5vw,12.75rem)] text-white"
@@ -1390,7 +1564,7 @@ export function BrowserShowcase({
         </Parallax>
       </p>
       <Shell className="relative z-10 -mt-[clamp(2rem,7vw,6rem)] flex flex-col gap-block">
-        <Reveal y={60} className="relative">
+        <div data-cine-media className="relative">
           <Browser src={screen.src} alt={screen.alt} height={screen.height} label={screen.label} />
           {inset && (
             // The inset rides faster than the screen behind it.
@@ -1408,7 +1582,7 @@ export function BrowserShowcase({
               />
             </Parallax>
           )}
-        </Reveal>
+        </div>
         <ul
           className={cn(
             "grid grid-cols-1 gap-8 sm:grid-cols-2",
@@ -1439,6 +1613,7 @@ export function BrowserShowcase({
 export function RoleDashboards({
   items,
   shared,
+  hero,
 }: {
   items: {
     role: string;
@@ -1447,9 +1622,16 @@ export function RoleDashboards({
     screen: Shot & { height: number };
   }[];
   shared: Annotation[];
+  /** A device scene that opens the section, before the switcher. */
+  hero?: Scene;
 }) {
   return (
     <>
+      {hero && (
+        <div data-cine-media className="mb-block">
+          <Plate {...hero} bg="#cdcfd0" className="aspect-[16/10]" />
+        </div>
+      )}
       <Reveal y={50}>
         <RoleSwitcher items={items} />
       </Reveal>
@@ -1481,15 +1663,17 @@ export function InkStatement({
 }) {
   return (
     <Band tone="ink" className="pt-section">
-      <Shell className="flex flex-col gap-block">
-        {label && <SectionLabel muted={label[0]} strong={label[1]} tone="ink" />}
-        <HeadlineBlock
-          headline={headline}
-          caption={caption}
-          side="right"
-          tone="ink"
-          bubble={bubble}
-        />
+      <Shell>
+        <div data-cine-head className="flex flex-col gap-block">
+          {label && <SectionLabel muted={label[0]} strong={label[1]} tone="ink" />}
+          <HeadlineBlock
+            headline={headline}
+            caption={caption}
+            side="right"
+            tone="ink"
+            bubble={bubble}
+          />
+        </div>
       </Shell>
     </Band>
   );
@@ -1500,17 +1684,22 @@ export function Impact({
   title,
   body,
   metrics,
+  devices,
 }: {
   title: string;
   body: string;
   metrics: { value: string; label: string }[];
+  /** Device scenes shown beneath the numbers: the product in use. */
+  devices?: Scene[];
 }) {
   return (
     <Band className="py-section">
       <Shell className="flex flex-col gap-block">
-        <SectionLabel muted="The" strong="Outcome" />
-        <Reveal
-          y={60}
+        <div data-cine-head>
+          <SectionLabel muted="The" strong="Outcome" />
+        </div>
+        <div
+          data-cine-item
           className="grid grid-cols-1 gap-3 rounded-[28px] bg-[#0c0c0d] p-3 text-white md:ml-[30%] md:grid-cols-2 md:rounded-[32px]"
         >
           <div className="flex min-h-[220px] flex-col justify-between gap-10 p-4 md:p-5">
@@ -1539,7 +1728,27 @@ export function Impact({
               </Reveal>
             ))}
           </ul>
-        </Reveal>
+        </div>
+        {devices && devices.length > 0 && (
+          <div className="grid grid-cols-1 gap-3 md:grid-cols-[1.25fr_1fr]">
+            <div className="grid grid-cols-1 gap-3">
+              {devices.slice(0, 2).map((d) => (
+                <div key={d.src} data-cine-media>
+                  <Plate {...d} className="aspect-[16/8]" sizes="(min-width: 768px) 640px, 92vw" />
+                </div>
+              ))}
+            </div>
+            {devices[2] && (
+              <div data-cine-media>
+                <Plate
+                  {...devices[2]}
+                  className="aspect-square h-full md:aspect-auto"
+                  sizes="(min-width: 768px) 500px, 92vw"
+                />
+              </div>
+            )}
+          </div>
+        )}
       </Shell>
     </Band>
   );
@@ -1564,10 +1773,12 @@ export function NextChapter({
   return (
     <Band className="pb-section">
       <Shell className="flex flex-col gap-block">
-        <SectionLabel muted="Looking" strong="Back" />
-        <h2 className={cn(DISPLAY, "mx-auto max-w-[760px] py-block text-center")}>
-          <ScrubText text={headline} tail={bubble && <ScriptBubble {...bubble} />} />
-        </h2>
+        <div data-cine-head className="flex flex-col">
+          <SectionLabel muted="Looking" strong="Back" />
+          <h2 className={cn(DISPLAY, "mx-auto max-w-[760px] py-block text-center")}>
+            <ScrubText text={headline} tail={bubble && <ScriptBubble {...bubble} />} />
+          </h2>
+        </div>
         <div className="relative grid grid-cols-1 gap-10 md:grid-cols-[1fr_auto_1fr] md:items-start md:gap-8">
           <div className="md:pl-[10%]">{col(items[0], 0)}</div>
           <Reveal
@@ -1597,10 +1808,18 @@ export function NextChapter({
 }
 
 /* ── Thanks ────────────────────────────────────────────────────────── */
-export function Thanks({ linkedin, phone, body }: { linkedin: string; phone: Shot; body: string }) {
+export function Thanks({
+  linkedin,
+  scene,
+  body,
+}: {
+  linkedin: string;
+  scene: Scene;
+  body: string;
+}) {
   return (
-    <Band className="pt-block">
-      <Shell className="relative flex min-h-[clamp(480px,52vw,640px)] flex-col">
+    <Band className="pb-section pt-block">
+      <Shell className="flex flex-col gap-block">
         <div className="flex items-center justify-between">
           <MarkTile className="h-12 w-12 rounded-full" />
           <a
@@ -1613,24 +1832,25 @@ export function Thanks({ linkedin, phone, body }: { linkedin: string; phone: Sho
             <ArrowUpRight className="h-4 w-4" />
           </a>
         </div>
-        <p className="relative z-10 mt-12 text-[clamp(2.4rem,7.6vw,6.5rem)] font-bold uppercase leading-[0.95] tracking-[-0.035em]">
-          <span className="text-text-primary">Thanks for </span>
-          <span className="text-sv-mute">scrolling.</span>
-          <br />
-          <span className="text-sv-mute">Let&apos;s connect.</span>
-        </p>
-        <Reveal className="relative z-10 mt-auto flex flex-col gap-3 pb-10 pt-16">
-          <p className="max-w-[300px] text-[clamp(1.2rem,2vw,1.6rem)] font-medium uppercase leading-[1.15]">
-            Want the longer version?
-          </p>
-          <p className="max-w-[340px] text-sm leading-[1.6] text-text-secondary">{body}</p>
-        </Reveal>
-        <Parallax
-          speed={-60}
-          className="pointer-events-none absolute -bottom-[34%] right-[2%] hidden w-[min(30%,320px)] md:block"
-        >
-          <Phone src={phone.src} alt={phone.alt} sizes="460px" className="rotate-[28deg]" />
-        </Parallax>
+        <div className="grid grid-cols-1 items-end gap-10 md:grid-cols-[1.25fr_1fr]">
+          <div data-cine-head className="flex flex-col gap-16">
+            <p className="text-[clamp(2.4rem,6.4vw,5.75rem)] font-bold uppercase leading-[0.95] tracking-[-0.035em]">
+              <span className="text-text-primary">Thanks for </span>
+              <span className="text-sv-mute">scrolling.</span>
+              <br />
+              <span className="text-sv-mute">Let&apos;s connect.</span>
+            </p>
+            <div className="flex flex-col gap-3">
+              <p className="max-w-[300px] text-[clamp(1.2rem,2vw,1.6rem)] font-medium uppercase leading-[1.15]">
+                Want the longer version?
+              </p>
+              <p className="max-w-[340px] text-sm leading-[1.6] text-text-secondary">{body}</p>
+            </div>
+          </div>
+          <div data-cine-media>
+            <Plate {...scene} className="aspect-square" sizes="(min-width: 768px) 460px, 92vw" />
+          </div>
+        </div>
       </Shell>
     </Band>
   );
